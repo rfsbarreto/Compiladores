@@ -133,3 +133,14 @@ mng_exp inicializaexp(tipo_no tipoexp){
 	(*p_exp).tipoexp = tipoexp;
 	return (*p_exp);
 }
+
+mng_op* inicializaop(mng_exp exp1,mng_operadores op,mng_exp exp2){
+	int tamanho= sizeof(mng_op);
+	DECP(op) = (mng_op*) malloc(tamanho);
+	(*p_op).exp1 = exp1;
+	(*p_op).exp2 = exp2;
+	(*p_op).op = op;
+	return p_op;
+}
+
+

@@ -165,11 +165,6 @@ comando : IF APAR exp FPAR comando parteelse {$$= inicializacmd(MNG_IF); $$.deci
 ;
 
 
-
-
-
-
-
 parteelse :           {$$ = NULL;}
 	| ELSE comando {$$ = inicializaptelse($2);} //precisa verificar se está correto
 ;
@@ -189,15 +184,15 @@ exp : NUMINT { $$=inicializaexp(MNG_TIPBASE);    $$.tipo = TIPO_INT; $$.numint=$
 			$$=inicializaexp(MNG_TIPBASE); $$.tipo = $2.tipo; 
 			($2.tipo=TIPO_INT)?($$.numint.valor=(-1 * $2.numint.valor)):($$.numfloat.valor=(-1*$2.numfloat.valor)); 
 		  }  
-	| exp SOMA exp {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_SOMA; (*$$.op).exp2 = $3; }
-	| exp SUB exp {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_SUB; (*$$.op).exp2 = $3;}
-	| exp MULT exp {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_MULT; (*$$.op).exp2 = $3;}
-	| exp DIV exp  {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_DIV; (*$$.op).exp2 = $3;}
-	| exp IGUAL exp {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_IGUAL; (*$$.op).exp2 = $3;}
-	| exp MENORIG exp {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_MENORIG; (*$$.op).exp2 = $3;}
-	| exp MAIORIG exp  {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_MAIORIG; (*$$.op).exp2 = $3;}
-	| exp MENORQ exp {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_MENORQ; (*$$.op).exp2 = $3;}
-	| exp MAIORQ exp {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_MAIORQ; (*$$.op).exp2 = $3;}
+	| exp SOMA exp {$$=inicializaexp(MNG_OP); $$.op=inicializaop($1,OP_SOMA,$3);  }//(*$$.op).exp1= $1; (*$$.op).op= OP_SOMA; (*$$.op).exp2 = $3; }
+	| exp SUB exp {$$=inicializaexp(MNG_OP); $$.op=inicializaop($1,OP_SUB,$3);  }//(*$$.op).exp1= $1; (*$$.op).op= OP_SUB; (*$$.op).exp2 = $3;}
+	| exp MULT exp {$$=inicializaexp(MNG_OP); $$.op=inicializaop($1,OP_MULT,$3);  }//(*$$.op).exp1= $1; (*$$.op).op= OP_MULT; (*$$.op).exp2 = $3;}
+	| exp DIV exp  {$$=inicializaexp(MNG_OP); $$.op=inicializaop($1,OP_DIV,$3);  }//(*$$.op).exp1= $1; (*$$.op).op= OP_DIV; (*$$.op).exp2 = $3;}
+	| exp IGUAL exp {$$=inicializaexp(MNG_OP); $$.op=inicializaop($1,OP_IGUAL,$3);  }//(*$$.op).exp1= $1; (*$$.op).op= OP_IGUAL; (*$$.op).exp2 = $3;}
+	| exp MENORIG exp {$$=inicializaexp(MNG_OP); $$.op=inicializaop($1,OP_MENORIG,$3);  }//(*$$.op).exp1= $1; (*$$.op).op= OP_MENORIG; (*$$.op).exp2 = $3;}
+	| exp MAIORIG exp  {$$=inicializaexp(MNG_OP); $$.op=inicializaop($1,OP_MAIORIG,$3);  }//(*$$.op).exp1= $1; (*$$.op).op= OP_MAIORIG; (*$$.op).exp2 = $3;}
+	| exp MENORQ exp {$$=inicializaexp(MNG_OP); $$.op=inicializaop($1,OP_MENORQ,$3);  }//(*$$.op).exp1= $1; (*$$.op).op= OP_MENORQ; (*$$.op).exp2 = $3;}
+	| exp MAIORQ exp {$$=inicializaexp(MNG_OP); $$.op=inicializaop($1,OP_MAIORQ,$3);  }//(*$$.op).exp1= $1; (*$$.op).op= OP_MAIORQ; (*$$.op).exp2 = $3;}
 	| NAO exp {$$=inicializaexp(MNG_NAO); $$.nao.op = OP_NAO; $$.nao.exp = &($2);}
 	| exp E exp {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_E; (*$$.op).exp2 = $3;}
 	| exp OU exp {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_OU; (*$$.op).exp2 = $3;}
