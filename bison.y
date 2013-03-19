@@ -1,6 +1,7 @@
 %{ 
-#include <stdio.h>
-#include "bib1.c"
+//#include <stdio.h>
+//#include "bib1.c"
+#include "bib_inic.h"
 //#include "teste.h"
 #include "lex.c"
 #define YYDEBUG 1
@@ -186,9 +187,9 @@ exp : NUMINT { $$=inicializaexp(MNG_TIPBASE);    $$.tipo = TIPO_INT; $$.numint=$
     	| NEW tipo ACOL exp FCOL {$$=inicializaexp(MNG_TIPEXP); $$.tipexp.tip = &$2; $$.exp = &$4;}
 	| SUB exp {
 			$$=inicializaexp(MNG_TIPBASE); $$.tipo = $2.tipo; 
-		//	$2.tipo=TIPO_INT?$$.numint=(-1 * $2.numint.valor):       
-		  }  //(*$$.op).exp1= 0;(*$$.op)= OP_SUB; (*$$.op).exp2 = $2;}
-	| exp SOMA exp {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_SOMA; (*$$.op).exp2 = $3;}
+			($2.tipo=TIPO_INT)?($$.numint.valor=(-1 * $2.numint.valor)):($$.numfloat.valor=(-1*$2.numfloat.valor)); 
+		  }  
+	| exp SOMA exp {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_SOMA; (*$$.op).exp2 = $3; }
 	| exp SUB exp {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_SUB; (*$$.op).exp2 = $3;}
 	| exp MULT exp {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_MULT; (*$$.op).exp2 = $3;}
 	| exp DIV exp  {$$=inicializaexp(MNG_OP); (*$$.op).exp1= $1; (*$$.op).op= OP_DIV; (*$$.op).exp2 = $3;}
