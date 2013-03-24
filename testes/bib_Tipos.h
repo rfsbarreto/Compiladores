@@ -48,8 +48,13 @@ typedef struct mng_numfloat{
     float valor;
 } mng_numfloat;
 
+typedef struct mng_chr{
+    char valor;
+} mng_chr;
+
 typedef struct mng_string{
     char* valor;
+	mng_tipbase tipo;
 } mng_string;
 
 
