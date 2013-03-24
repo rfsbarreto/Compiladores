@@ -185,35 +185,35 @@ mng_op* inicializaop(mng_exp exp1,mng_operadores op,mng_exp exp2){
 
 
 void verificaReturn(mng_bloco bloco, mng_tip tip){
-	printf("Tipo da func= %d\n", tip.tipbase);
+	//printf("Tipo da func= %d\n", tip.tipbase);
 	
 
 	if ((bloco.cmds)!=NULL){
 		
-		printf("%d ", (*bloco.cmds).cmd.tipocmd);
-		/*	
+		//printf("%d ", (*bloco.cmds).cmd.tipocmd);
+			
 		if((*bloco.cmds).cmd.tipocmd == MNG_RETURN){
-			if((*bloco.cmds).cmd.ret.tipret == RET_EXP){
-				printf("Tipo do return= %d\n", (*bloco.cmds).cmd.ret.exp.tipo);
-				if(tip.tipbase != (*bloco.cmds).cmd.ret.exp.tipo){
+			if((*bloco.cmds).cmd.ret.tipret == RET_EXP && tip.tipbase == TIPO_VAZIO){
+				//printf("Tipo do return= %d\n", (*bloco.cmds).cmd.ret.exp.tipo);
+				//if(tip.tipbase != (*bloco.cmds).cmd.ret.exp.tipo){
 					printf("Erro de retorno  na lha: %d ", (*bloco.cmds).cmd.linha);
 				exit(0);
-			}	
+			//}	
 			}		
 		}
-		*/
+		
 		if((*bloco.cmds).cmd.tipocmd == MNG_RETURN){
-			if((*bloco.cmds).cmd.ret.tipret == RET_EXP){
+			/*if((*bloco.cmds).cmd.ret.tipret == RET_EXP){
 				printf("Tipo do return= %d\n", (*bloco.cmds).cmd.ret.exp.tipo);
 				if(((tip.tipbase == 0) && ((*bloco.cmds).cmd.ret.exp.tipo) == 3)){
 					printf("Erro de retorno na la: %d ", (*bloco.cmds).cmd.linha);
 					exit(0);
 				}			
-			}
+			}*/
 			if((*bloco.cmds).cmd.ret.tipret == RET_VAZIO){
-				printf("Tipo vazio");
+				//printf("Tipo vazio");
 				if((tip.tipbase == 0) || (tip.tipbase == 3)){
-					printf("Erro de retorno na la: %d ", (*bloco.cmds).cmd.linha);
+					printf("Erro de retorno na linha: %d ", (*bloco.cmds).cmd.linha);
 					exit(0);
 				}			
 			} 
@@ -222,17 +222,20 @@ void verificaReturn(mng_bloco bloco, mng_tip tip){
 		mng_cmds * proximo= (*bloco.cmds).cmds;
 		while(proximo !=NULL){
 			if((*proximo).cmd.tipocmd == MNG_RETURN){
-				if((*proximo).cmd.ret.tipret == RET_EXP){
-					printf("Tipo do return= %d\n", (*proximo).cmd.ret.exp.tipo);
-					if(((tip.tipbase == 0) && ((*proximo).cmd.ret.exp.tipo) == 3)){
-						printf("Erro de retorno na la: %d ", (*proximo).cmd.linha);
-						exit(0);
-					}			
-				}
+				if((*bloco.cmds).cmd.tipocmd == MNG_RETURN){
+					if((*bloco.cmds).cmd.ret.tipret == RET_EXP && tip.tipbase == TIPO_VAZIO){
+				//printf("Tipo do return= %d\n", (*bloco.cmds).cmd.ret.exp.tipo);
+				//if(tip.tipbase != (*bloco.cmds).cmd.ret.exp.tipo){
+					printf("Erro de retorno  na lha: %d ", (*bloco.cmds).cmd.linha);
+					exit(0);
+			//}	
+			}		
+		}
+		
 				if((*proximo).cmd.ret.tipret == RET_VAZIO){
-					printf("Tipo vazio");
+					//printf("Tipo vazio");
 					if((tip.tipbase == 0) || (tip.tipbase == 3)){
-						printf("Erro de retorno na la: %d ", (*proximo).cmd.linha);
+						printf("Erro de retorno na linha: %d ", (*proximo).cmd.linha);
 						exit(0);
 					}			
 				} 
