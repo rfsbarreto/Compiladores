@@ -177,11 +177,20 @@ while	{ return WHILE ; }
 										}
 										i++;
 									}
-									int tamanho = strlen(yytext)*sizeof(char);
-					mng_string* aux= (mng_string*) malloc(sizeof(mng_string));
-						(*aux).valor=yytext;
-						yylval.string=*aux;	
-						
+								int tamanho = strlen(yytext) *sizeof(char);
+								mng_string* aux= (mng_string*) malloc(sizeof(tamanho));
+								(*aux).valor=yytext;
+//								(*aux).tam=strlen(yytext);
+																		
+								if ( strlen(yytext)>1 ){
+									(*aux).tipo=TIPO_STRING;	
+									yylval.string=*aux;	
+								} else {
+									(*aux).tipo=TIPO_CHAR;
+									(*aux).valor= yytext;
+									yylval.string=*aux;	
+								}
+							
 //									yylval = (YYSTYPE) yytext;		
 									return STRING;
 									} 

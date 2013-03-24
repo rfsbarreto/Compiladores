@@ -53,6 +53,7 @@ void yyerror(const char* errmsg);
 	DEC(numint);
 	DEC(numfloat);
 	DEC(string);
+	DEC(chr);
 	//DEC(prg);
 	//int token;
 }
@@ -191,7 +192,7 @@ exp : NUMINT { $$=inicializaexp(MNG_TIPBASE);
 		$$.tipo=TIPO_FLOAT;
 		$$.numfloat=$1;   }
 	| STRING {$$=inicializaexp(MNG_TIPBASE); 
-		$$.tipo= TIPO_STRING; 
+		$$.tipo= $1.tipo; 
 		$$.string=$1; }
 	| var {$$=inicializaexp(MNG_VAR); $$.var= &$1;}                 
 	| APAR exp FPAR{$$=inicializaexp(MNG_EXP); $$.exp= &$2; $$.tipo = (*$$.exp).tipo;
