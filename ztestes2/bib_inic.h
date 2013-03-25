@@ -1,6 +1,7 @@
 #define DEC(dec) mng_##dec dec
 #define DECP(dec) mng_##dec* p_##dec
 #include "bib_Tipos.h"
+#include "pilha.h"
 void Percorredecvar(mng_decvar decvar);
 void PercorreCmds(mng_cmds*cmds);
 void PercorreCmd(mng_cmd cmd);
