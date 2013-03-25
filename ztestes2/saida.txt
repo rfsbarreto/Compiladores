@@ -12,24 +12,29 @@ tipo decvar
 tipo no dec : 6 
 tipo decfunc
   id f
-tem parametros
+tip par: 
+nome id par: 
+tip par: 
+nome id par: 
+tip par: 
+nome id par: 
 tipo decvar
   id c 
 tipo decvar
-  id d cmdsMNG_ATRIBcmdsMNG_ATRIBcmdsMNG_RETURN
+  id d cmds=cmds=cmdspercorrendo exp
 tipo no dec : 6 
 tipo decfunc
-  id h
-não tem parametroscmdsMNG_RETURN
+  id hcmdspercorrendo exp
 tipo no dec : 6 
 tipo decfunc
-  id g
-não tem parametroscmdsMNG_CHMET
+  id gcmds
+chamada ao método id : 
 tipo no dec : 6 
 tipo decfunc
   id f2
-tem parametros
+tip par: 
+nome id par: 
 tipo decvar
   id a 
 tipo decvar
-  id i cmdsMNG_ATRIBcmdsMNG_ATRIBcmdsMNG_WHILEcmdsMNG_RETURNacabou o/
+  id i cmds=cmds=cmdsMNG_WHILEcmdspercorrendo expacabou o/
