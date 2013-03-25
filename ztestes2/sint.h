@@ -98,7 +98,7 @@ typedef union YYSTYPE
 	mng_listnom* listnom;
 	mng_decvars* decvars;
 	mng_cmds* cmds;
-	mng_cmd cmd;
+	mng_cmd* cmd;
 	mng_ptelse* ptelse;
 	mng_chmet chmet;
 	mng_listexp* listexp;

@@ -196,7 +196,7 @@ typedef struct mng_cmd{
 
 
 typedef struct mng_cmds{
-	mng_cmd cmd;
+	mng_cmd* cmd;
 	struct mng_cmds* cmds;
 } mng_cmds;
 
@@ -302,6 +302,27 @@ lista_simb* adicionaVar(lista_simb* s,mng_listnom* listnom, mng_tip tip){
 
 }
 
+lista_simb* adicionaVar1(lista_simb* s,mng_id id, mng_tip tip){
+			printf("adicionavar1 %s \n",id.name);
+        	//mng_listnom var = (*listnom);
+			lista_simb* sim = (lista_simb*) malloc(sizeof(lista_simb));
+        	(*sim).simb.name=id.name;
+        	(*sim).simb.linha=id.linha;
+        	(*sim).simb.tipo=tip.tipbase;
+        	(*sim).tipono=0;
+			//printf("simbolo %s %d \n",(*sim).simb.name,(*sim).simb.tipo);
+			if (s!=NULL){
+				//printf("s not null \n");
+				(*sim).prox=(*s).prox;
+				(*s).prox=sim;			// cabeça apontará para o nó atual
+    		}else{
+				//printf("s null \n");
+				s= (lista_simb*) malloc(sizeof(lista_simb));            
+				(*s).prox=sim;
+	}
+	return s;
+}
+
 lista_simb* adicionaVars(lista_simb* s,mng_bloco bloco){
 			//printf("adicionavars  \n");//,(*listnom).id.name);
     		mng_decvars* var = bloco.decvars;
@@ -339,17 +360,17 @@ lista_simb* adicionaFunc(lista_simb* s,mng_decfunc decfunc,mng_pars* pars, lista
 }
 
 void imprimirlista(lista_simb* s){
-		//printf("implista ");
+		printf("implista ");
 		lista_simb* aux=s;
 		while ((*aux).prox!=NULL){
 			aux=(*aux).prox;
 			//variável
 			if ((*aux).tipono == 0){
-				//printf("\nvar: %s  ",(*aux).simb.name);
-				//printf("\ntipo: %d  ",(*aux).simb.tipo);			
+				printf("\nvar: %s  ",(*aux).simb.name);
+				printf("\ntipo: %d  ",(*aux).simb.tipo);			
 			}else{
-				//printf("\nfunc: %s  ",(*aux).funcao.name);
-//				printf("\ntipo: %d  ",(*aux).funcao.tipo);
+				printf("\nfunc: %s  ",(*aux).funcao.name);
+				printf("\ntipo: %d  ",(*aux).funcao.tipo);
 				if((*aux).funcao.lista != NULL){
 					imprimirlista((*aux).funcao.lista);
 				}
