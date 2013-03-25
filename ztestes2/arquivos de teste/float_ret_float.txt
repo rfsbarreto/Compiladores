@@ -1,0 +1,4 @@
+float a(){
+	
+	return 0.2;
+}
