@@ -245,12 +245,17 @@ typedef struct simbolo{
 } simbolo;
 
 
+typedef struct funcao{
+        mng_tipbase tipo;
+        char* name;
+		struct lista_simb* lista;
+} funcao;
 
 typedef struct lista_simb{
         int tipono;
         union{
                  simbolo simb;
-                struct lista_simb* lista;
+                funcao funcao;
         };
         struct lista_simb* prox;
 } lista_simb;
@@ -263,7 +268,6 @@ lista_simb* adicionaVar(lista_simb* s,mng_decvar decvar){
         	(*sim).simb.tipo=decvar.tip.tipbase;
         	(*sim).tipono=0;
 			printf("simbolo %s %d \n",(*sim).simb.name,(*sim).simb.tipo);
-        	//(*sim).prox=(*s).prox;   //novo no aponta pra quem a cabeça está apontando
 			if (s!=NULL){
 				printf("s not null \n");
 				(*sim).prox=(*s).prox;
@@ -293,24 +297,41 @@ lista_simb* adicionaVar(lista_simb* s,mng_decvar decvar){
 
 }
 
+lista_simb* adicionaFunc(lista_simb* s,mng_decfunc decfunc){
+			printf("adicionavar %s \n",decfunc.id.name);
+        	//mng_listnom var = (*decvar.p_listnom);
+			lista_simb* sim = (lista_simb*) malloc(sizeof(lista_simb));
+        	(*sim).funcao.name=decfunc.id.name;
+        	(*sim).simb.tipo=decfunc.tip.tipbase;
+        	(*sim).tipono=1;
+			printf("simbolo %s %d \n",(*sim).simb.name,(*sim).simb.tipo);
+			if (s!=NULL){
+				printf("s not null \n");
+				(*sim).prox=(*s).prox;
+				(*s).prox=sim;			// cabeça apontará para o nó atual
+//				(*sim).prox=(*s).prox;
+				//return s;
+    		}else{
+				printf("s null \n");
+				s= (lista_simb*) malloc(sizeof(lista_simb));            
+				(*s).prox=sim;
+				if (s==NULL){
+					printf("comoooo vá");}						
+				//(*s).prox=sim;
+				//return s;
+			}
+			return s;
+
+}
+
 void imprimirlista(lista_simb* s){
-//	if (s!=NULL){
 		printf("implista ");
 		lista_simb* aux=s;
-//		aux=(*aux).prox;				
-//	if ((*aux).prox!=NULL)		{
-	//		aux=(*aux).prox;				
-		//printf("var: %s  ",(*aux).simb.name);
-//}
 		while ((*aux).prox!=NULL){
 			aux=(*aux).prox;				
 			printf("var: %s  ",(*aux).simb.name);
 			
         }
-//		printf("var: %s  ",(*s).simb.name);
-	//	printf("fim implista\n");
-
-	
 }
 
 

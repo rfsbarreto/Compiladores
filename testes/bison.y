@@ -106,23 +106,12 @@ programa : { $$=NULL; } // $$.teste = test;
            | declaracao programa {   $$=inicializaprog($1,$2); }
 ; 
 
-declaracao : decvariavel  { 
-				$$=inicializadec(); 
-				$$.decvar =$1;
-				 $$.tipodec=MNG_DECVAR;  
-				tbl=adicionaVar(tbl,$1); 
-				if ((*tbl).prox!=NULL){
-					printf("not null \n");
-				//(*s).prox=sim;			// cabeça apontará para o nó atual
-				//(*sim).prox=(*s).prox;
-    			}else{
-					printf(" null \n");
-			//	s= (lista_simb*) malloc(sizeof(lista_simb));            
-				//(*s).prox=sim;
+declaracao : decvariavel  { $$=inicializadec(); $$.decvar =$1;  $$.tipodec=MNG_DECVAR; 
+							tbl=adicionaVar(tbl,$1); imprimirlista(tbl);
 			}
-								imprimirlista(tbl);
-			}//
-	| decfuncao {  $$=inicializadec(); $$.decfunc =$1;  $$.tipodec=MNG_DECFUNC;}
+	| decfuncao {  $$=inicializadec(); $$.decfunc =$1;  $$.tipodec=MNG_DECFUNC;
+							tbl=adicionaFunc(tbl,$1); imprimirlista(tbl);
+				}
 ;
 
 decvariavel : tipo listanomes PTVIRG { $$=inicializadecvar($1,$2); }
