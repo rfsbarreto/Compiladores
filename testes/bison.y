@@ -10,7 +10,7 @@
 //extern mng_tipbase ;
 
 //No_ast* arvore;
-
+lista_simb* tbl;
 mng_prg* arvore;
 
 //int test=1;
@@ -100,13 +100,28 @@ void yyerror(const char* errmsg);
 
 %%
 
-principal: programa { arvore= $1;  };
+principal: programa { arvore= $1;  /*tbl=NULL;*/};
 
 programa : { $$=NULL; } // $$.teste = test;
            | declaracao programa {   $$=inicializaprog($1,$2); }
 ; 
 
-declaracao : decvariavel  { $$=inicializadec(); $$.decvar =$1; $$.tipodec=MNG_DECVAR;}//
+declaracao : decvariavel  { 
+				$$=inicializadec(); 
+				$$.decvar =$1;
+				 $$.tipodec=MNG_DECVAR;  
+				tbl=adicionaVar(tbl,$1); 
+				if ((*tbl).prox!=NULL){
+					printf("not null \n");
+				//(*s).prox=sim;			// cabeça apontará para o nó atual
+				//(*sim).prox=(*s).prox;
+    			}else{
+					printf(" null \n");
+			//	s= (lista_simb*) malloc(sizeof(lista_simb));            
+				//(*s).prox=sim;
+			}
+								imprimirlista(tbl);
+			}//
 	| decfuncao {  $$=inicializadec(); $$.decfunc =$1;  $$.tipodec=MNG_DECFUNC;}
 ;
 

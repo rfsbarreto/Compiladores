@@ -238,6 +238,82 @@ typedef struct mng_prg {
 	int teste;
 } mng_prg; //programa
 
+typedef struct simbolo{
+        mng_tipbase tipo;
+        char* name;
+
+} simbolo;
+
+
+
+typedef struct lista_simb{
+        int tipono;
+        union{
+                 simbolo simb;
+                struct lista_simb* lista;
+        };
+        struct lista_simb* prox;
+} lista_simb;
+
+lista_simb* adicionaVar(lista_simb* s,mng_decvar decvar){
+			printf("adicionavar %s \n",(*decvar.p_listnom).id.name);
+        	mng_listnom var = (*decvar.p_listnom);
+			lista_simb* sim = (lista_simb*) malloc(sizeof(lista_simb));
+        	(*sim).simb.name=var.id.name;
+        	(*sim).simb.tipo=decvar.tip.tipbase;
+        	(*sim).tipono=0;
+			printf("simbolo %s %d \n",(*sim).simb.name,(*sim).simb.tipo);
+        	//(*sim).prox=(*s).prox;   //novo no aponta pra quem a cabeça está apontando
+			if (s!=NULL){
+				printf("s not null \n");
+				(*sim).prox=(*s).prox;
+				(*s).prox=sim;			// cabeça apontará para o nó atual
+//				(*sim).prox=(*s).prox;
+				//return s;
+    		}else{
+				printf("s null \n");
+				s= (lista_simb*) malloc(sizeof(lista_simb));            
+				(*s).prox=sim;
+				if (s==NULL){
+					printf("comoooo vá");}						
+				//(*s).prox=sim;
+				//return s;
+			}
+		while (var.list!=NULL){
+			var=(*var.list);			
+			sim = (lista_simb*) malloc(sizeof(lista_simb));
+        	(*sim).simb.name=var.id.name;
+        	(*sim).simb.tipo=decvar.tip.tipbase;
+        	(*sim).tipono=0;
+        	(*sim).prox=(*s).prox;   //novo no aponta pra quem a cabeça está apontando
+			(*s).prox=sim;			// cabeça apontará para o nó atual
+			
+        }
+		return s;
+
+}
+
+void imprimirlista(lista_simb* s){
+//	if (s!=NULL){
+		printf("implista ");
+		lista_simb* aux=s;
+//		aux=(*aux).prox;				
+//	if ((*aux).prox!=NULL)		{
+	//		aux=(*aux).prox;				
+		//printf("var: %s  ",(*aux).simb.name);
+//}
+		while ((*aux).prox!=NULL){
+			aux=(*aux).prox;				
+			printf("var: %s  ",(*aux).simb.name);
+			
+        }
+//		printf("var: %s  ",(*s).simb.name);
+	//	printf("fim implista\n");
+
+	
+}
+
+
 /*
 typedef struct no_ast {
     tipo_no tipo;
