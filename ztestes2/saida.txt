@@ -1,0 +1,10 @@
+adicionavar a 
+linha : 1 linha : 1 
+implista var: a  adicionavars  
+adicionavar a 
+linha : 4 linha : 4 
+adicionafunc f 
+linha : 3 linha : 3 
+implista var: f  var: a  
+lista final: 
+implista var: f  var: a  acabou o/

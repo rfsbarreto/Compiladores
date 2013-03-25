@@ -1,0 +1,40 @@
+int main(){
+if (2)
+if (3+5)
+c=1;
+else
+d=2;
+
+return 2;
+}
+
+
+
+
+typedef struct simbolo{
+	mng_tipbase tipo;
+	char name;	
+	
+} simbolo;
+
+
+
+typedef struct lista_simb{
+	int tipono;	
+	union{
+		 simbolo simb;
+		struct lista_simb* lista;
+	};
+	struct lista_simb* prox;
+} lista_simb;
+
+
+void adicionaVar(lista_simb s,mng_decvar decvar){
+	var = decvar.listnom; 	
+	simbolo* sim = (simbolo*) malloc(sizeof(simbolo)); 
+	sim.name=var.id;
+	sim.tipo=decvar.tip;
+	while (var.list!=NULL){
+		
+	}
+
