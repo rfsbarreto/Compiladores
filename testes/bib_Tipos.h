@@ -53,7 +53,7 @@ typedef struct mng_chr{
 } mng_chr;
 
 typedef struct mng_string{
-    char* valor;
+   	char* valor;
 	mng_tipbase tipo;
 } mng_string;
 
@@ -74,13 +74,27 @@ typedef struct mng_tipexp{
 	struct mng_exp* exp;//DEC(exp);
 }mng_tipexp;
 
+typedef struct mng_tip{
+	int qtdACOL;
+	DEC(tipbase);
+}mng_tip;
+
+
+
+typedef struct mng_var{
+	DEC(id);
+	struct mng_exp * exp;
+	int qtdACOL;
+} mng_var;
+
+
 
 typedef struct mng_exp{
 	tipo_no tipoexp;
-	mng_tipbase tipo;
+	mng_tip tipo;
 	union{
 		struct mng_tip *tip;
-		struct mng_var* var;//DEC(var);
+		mng_var var;//DEC(var);
 		struct mng_exp* exp;//DEC(exp);
 		DEC(chmet);
 		DEC(nao);
@@ -106,15 +120,6 @@ typedef struct mng_op{
 }mng_op;
 
 
-typedef struct mng_tip{
-	DEC(tipbase);
-}mng_tip;
-
-
-typedef struct mng_var{
-	DEC(id);
-	mng_exp * exp;
-} mng_var;
 
 
 typedef struct { 
@@ -238,6 +243,7 @@ typedef struct mng_prg {
 	int teste;
 } mng_prg; //programa
 
+
 typedef struct simbolo{
         mng_tipbase tipo;
         char* name;
@@ -335,11 +341,4 @@ void imprimirlista(lista_simb* s){
 }
 
 
-/*
-typedef struct no_ast {
-    tipo_no tipo;
-	struct No_ast* a;
-    union {
-		mng_prg prg;
-    } val;
-} No_ast; */ // nó da árvore 
+

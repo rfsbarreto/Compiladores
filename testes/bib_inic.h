@@ -139,32 +139,47 @@ mng_exp inicializaexp(tipo_no tipoexp){
 }
 mng_tipbase verificatipoexpOP(mng_op* op){
 	mng_tipbase tip;
-	printf("Tipo da exp1= %d\n", (*op).exp1.tipo);
-	printf("Tipo da exp2= %d\n", (*op).exp2.tipo);
+
 	if((*op).op == OP_SUB || (*op).op == OP_SOMA || (*op).op == OP_DIV || (*op).op == OP_MULT){
-		if((*op).exp1.tipo==TIPO_INT && (*op).exp2.tipo==TIPO_INT) {
-		tip = TIPO_INT;
-		printf("Tipo da op= %d\n", tip);
+		if ((*op).exp1.tipoexp == MNG_VAR && (*op).exp2.tipoexp == MNG_VAR){
+			
+			if ((*op).exp1.var.qtdACOL != (*op).exp2.var.qtdACOL){
+					printf("Erro, operação com tipos incompatíveis,  na linha: %d ", (*op).linha);
+					exit(0);
+			}
+		}
+		if(((*op).exp1.tipo.tipbase==TIPO_INT && (*op).exp2.tipo.tipbase==TIPO_INT)
+		|| ((*op).exp1.tipo.tipbase==TIPO_INT && (*op).exp2.tipo.tipbase==TIPO_CHAR)
+		|| ((*op).exp1.tipo.tipbase==TIPO_CHAR && (*op).exp2.tipo.tipbase==TIPO_INT)
+		) {
+				tip = TIPO_INT;
+				
 		}else {
-			if(((*op).exp1.tipo==TIPO_FLOAT && (*op).exp2.tipo==TIPO_FLOAT) 
-			|| ((*op).exp1.tipo==TIPO_FLOAT && (*op).exp2.tipo==TIPO_INT)
-			|| ((*op).exp1.tipo==TIPO_INT && (*op).exp2.tipo==TIPO_FLOAT))
+			if(((*op).exp1.tipo.tipbase==TIPO_FLOAT && (*op).exp2.tipo.tipbase==TIPO_FLOAT) 
+			|| ((*op).exp1.tipo.tipbase==TIPO_FLOAT && (*op).exp2.tipo.tipbase==TIPO_INT)
+			|| ((*op).exp1.tipo.tipbase==TIPO_INT && (*op).exp2.tipo.tipbase==TIPO_FLOAT))
 			{
 				tip = TIPO_FLOAT;
-				printf("Tipo da op= %d", tip);
+			
 			}else{ 
 				printf("Erro, operação com tipos incompatíveis,  na linha: %d ", (*op).linha);
 				exit(0);
 			}
 		}
 	}else{
-		if(    ((*op).exp1.tipo==TIPO_INT && (*op).exp2.tipo==TIPO_INT) 
-			|| ((*op).exp1.tipo==TIPO_FLOAT && (*op).exp2.tipo==TIPO_FLOAT) 
-			|| ((*op).exp1.tipo==TIPO_FLOAT && (*op).exp2.tipo==TIPO_INT)
-			|| ((*op).exp1.tipo==TIPO_INT && (*op).exp2.tipo==TIPO_FLOAT)){
+		if ((*op).exp1.tipoexp == MNG_VAR && (*op).exp2.tipoexp == MNG_VAR){
+			if ((*op).exp1.var.qtdACOL != (*op).exp2.var.qtdACOL){
+					printf("Erro, operação com tipos incompatíveis,  na linha: %d ", (*op).linha);
+					exit(0);
+			}
+		}
+		if(    ((*op).exp1.tipo.tipbase==TIPO_INT && (*op).exp2.tipo.tipbase==TIPO_INT) 
+			|| ((*op).exp1.tipo.tipbase==TIPO_FLOAT && (*op).exp2.tipo.tipbase==TIPO_FLOAT) 
+			|| ((*op).exp1.tipo.tipbase==TIPO_FLOAT && (*op).exp2.tipo.tipbase==TIPO_INT)
+			|| ((*op).exp1.tipo.tipbase==TIPO_INT && (*op).exp2.tipo.tipbase==TIPO_FLOAT)){
 			
 				tip = TIPO_INT;
-				printf("Tipo da op= %d", tip);
+				
 		}else{ 
 				printf("Erro, operação com tipos incompatíveis,  na linha: %d ", (*op).linha);
 				exit(0);
@@ -185,60 +200,53 @@ mng_op* inicializaop(mng_exp exp1,mng_operadores op,mng_exp exp2){
 
 
 void verificaReturn(mng_bloco bloco, mng_tip tip){
-	printf("Tipo da func= %d\n", tip.tipbase);
-	
-
-	if ((bloco.cmds)!=NULL){
 		
-		printf("%d ", (*bloco.cmds).cmd.tipocmd);
-		/*	
-		if((*bloco.cmds).cmd.tipocmd == MNG_RETURN){
-			if((*bloco.cmds).cmd.ret.tipret == RET_EXP){
-				printf("Tipo do return= %d\n", (*bloco.cmds).cmd.ret.exp.tipo);
-				if(tip.tipbase != (*bloco.cmds).cmd.ret.exp.tipo){
-					printf("Erro de retorno  na lha: %d ", (*bloco.cmds).cmd.linha);
-				exit(0);
-			}	
-			}		
-		}
-		*/
-		if((*bloco.cmds).cmd.tipocmd == MNG_RETURN){
-			if((*bloco.cmds).cmd.ret.tipret == RET_EXP){
-				printf("Tipo do return= %d\n", (*bloco.cmds).cmd.ret.exp.tipo);
-				if(((tip.tipbase == 0) && ((*bloco.cmds).cmd.ret.exp.tipo) == 3)){
-					printf("Erro de retorno na la: %d ", (*bloco.cmds).cmd.linha);
-					exit(0);
-				}			
-			}
-			if((*bloco.cmds).cmd.ret.tipret == RET_VAZIO){
-				printf("Tipo vazio");
-				if((tip.tipbase == 0) || (tip.tipbase == 3)){
-					printf("Erro de retorno na la: %d ", (*bloco.cmds).cmd.linha);
-					exit(0);
-				}			
-			} 
-		}
-		
-		mng_cmds * proximo= (*bloco.cmds).cmds;
+		mng_cmds * proximo= bloco.cmds;
 		while(proximo !=NULL){
 			if((*proximo).cmd.tipocmd == MNG_RETURN){
-				if((*proximo).cmd.ret.tipret == RET_EXP){
-					printf("Tipo do return= %d\n", (*proximo).cmd.ret.exp.tipo);
-					if(((tip.tipbase == 0) && ((*proximo).cmd.ret.exp.tipo) == 3)){
-						printf("Erro de retorno na la: %d ", (*proximo).cmd.linha);
+				
+					if((*proximo).cmd.ret.tipret == RET_EXP && tip.tipbase == TIPO_VAZIO){
+						printf("Erro de retorno na linha: %d ", (*proximo).cmd.linha);
 						exit(0);
-					}			
-				}
+					}	
+					if((*proximo).cmd.ret.tipret == RET_EXP){
+
+						if(((tip.tipbase == TIPO_INT) && ((*proximo).cmd.ret.exp.tipo.tipbase == TIPO_STRING))
+						|| ((tip.tipbase == TIPO_FLOAT) && ((*proximo).cmd.ret.exp.tipo.tipbase == TIPO_STRING))
+						){
+							printf("Erro de retorno na linha: %d ", (*proximo).cmd.linha);
+							exit(0);
+						}
+						if((tip.tipbase == TIPO_CHAR) 
+						&& (tip.qtdACOL>1 || tip.qtdACOL==0) 
+						&& ((*proximo).cmd.ret.exp.tipo.tipbase == TIPO_STRING || (*proximo).cmd.ret.exp.tipo.tipbase == TIPO_CHAR)
+						){
+							printf("Erro de retorno na linha: %d ", (*proximo).cmd.linha);
+							exit(0);
+						}
+						
+						
+						if ((*proximo).cmd.ret.exp.tipoexp == MNG_VAR)
+							//printf("estou aqui");
+							//printf("quantida de ACOL func %d", tip.qtdACOL);
+							//printf("quantida de ACOL var %d", (*proximo).cmd.ret.exp.var.qtdACOL);
+							if((tip.qtdACOL != (*proximo).cmd.ret.exp.var.qtdACOL)){
+								
+								printf("Erro de retorno na linha: %d ", (*proximo).cmd.linha);
+								exit(0);
+							}
+					
+							
+					}		
+
 				if((*proximo).cmd.ret.tipret == RET_VAZIO){
-					printf("Tipo vazio");
-					if((tip.tipbase == 0) || (tip.tipbase == 3)){
-						printf("Erro de retorno na la: %d ", (*proximo).cmd.linha);
+					if((tip.tipbase == 0) || (tip.tipbase == 3) || tip.tipbase == TIPO_CHAR || tip.tipbase == TIPO_STRING){
+						printf("Erro de retorno na linha: %d ", (*proximo).cmd.linha);
 						exit(0);
 					}			
 				} 
 			} proximo = (*proximo).cmds;
 		}
 	}
-}
 
 

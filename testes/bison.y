@@ -13,7 +13,7 @@
 lista_simb* tbl;
 mng_prg* arvore;
 
-//int test=1;
+
 
 void yyerror(const char* errmsg);
 
@@ -100,18 +100,28 @@ void yyerror(const char* errmsg);
 
 %%
 
-principal: programa { arvore= $1;  /*tbl=NULL;*/};
+principal: programa { arvore= $1;  };
 
 programa : { $$=NULL; } // $$.teste = test;
            | declaracao programa {   $$=inicializaprog($1,$2); }
 ; 
 
-declaracao : decvariavel  { $$=inicializadec(); $$.decvar =$1;  $$.tipodec=MNG_DECVAR; 
-							tbl=adicionaVar(tbl,$1); imprimirlista(tbl);
+declaracao : decvariavel  { $$=inicializadec(); 
+			$$.decvar =$1; 
+			$$.tipodec=MNG_DECVAR;
+			tbl=adicionaVar(tbl,$1); 
+			if ((*tbl).prox!=NULL){
+				printf("not null \n");
+   			}else{
+				printf(" null \n");
 			}
-	| decfuncao {  $$=inicializadec(); $$.decfunc =$1;  $$.tipodec=MNG_DECFUNC;
-							tbl=adicionaFunc(tbl,$1); imprimirlista(tbl);
-				}
+				imprimirlista(tbl);
+			}
+	| decfuncao {  $$=inicializadec(); 
+			$$.decfunc =$1;  
+			$$.tipodec=MNG_DECFUNC;
+			tbl=adicionaFunc(tbl,$1); 
+			imprimirlista(tbl);}
 ;
 
 decvariavel : tipo listanomes PTVIRG { $$=inicializadecvar($1,$2); }
@@ -119,21 +129,20 @@ decvariavel : tipo listanomes PTVIRG { $$=inicializadecvar($1,$2); }
 
 listanomes : ID { $$=inicializalistnom($1,NULL); }
 	| ID VIRG listanomes  {  $$=inicializalistnom($1,$3); }
-					//|  {}|
 ;
 
-//id: ID  {}   ;
 
-//tiporetorno: tipo ID 
-//		| VOID ID;
-
-tipo : tipobase  { $$.tipbase = $1;  } //$.tipbase=$1; }
-	| tipo ACOL FCOL {$$=inicializatipo();}// $.tip=  }
+tipo : tipobase  { $$.tipbase = $1; $$.qtdACOL= 0;}
+	| tipo ACOL FCOL { 
+			$$=inicializatipo();
+			$$.tipbase = $1.tipbase;			
+			$$.qtdACOL = $1.qtdACOL+1;
+			}
 ;
 
-tipobase : INT {  $$=TIPO_INT;}// printf("%d",TIPO_INT);}
-	| CHAR { $$=TIPO_INT;}// printf("TIPO_INT");}
-	| FLOAT { $$=TIPO_FLOAT;}// printf("TIPO_FLOAT"); }
+tipobase : INT {  $$=TIPO_INT;}
+	| CHAR { $$=TIPO_CHAR;}
+	| FLOAT { $$=TIPO_FLOAT;}
 ; 
 
 decfuncao : VOID ID APAR parametros FPAR bloco {$$=inicializadecfunc($2, $4, $6); 
@@ -162,7 +171,7 @@ decvariaveis : decvariavel  decvariaveis { $$ = inicializadecvars($1,$2); }
 ;
 
 comandos: comando comandos {$$ = inicializacmds($1,$2); 
-			}//printf("exp em cmd %d\n", $1.ret.exp.tipo);}
+			}
 	|  {$$ = NULL;}
 ;
 		
@@ -173,8 +182,14 @@ comando : IF APAR exp FPAR comando parteelse {$$= inicializacmd(MNG_IF);
         | WHILE APAR exp FPAR comando {$$= inicializacmd(MNG_WHILE); 
 					$$.decwhile.exp=$3; 
 					$$.decwhile.cmd = &($5); $$.linha=lineno;}
-        | var ATRIB exp PTVIRG {$$= inicializacmd(MNG_ATRIB); $$.atrib.var = $1; $$.atrib.exp = $3; $$.linha=lineno;}
-        | RETURN exp PTVIRG {$$= inicializacmd(MNG_RETURN); $$.ret.exp = $2; $$.ret.tipret=RET_EXP; $$.linha=lineno;}
+        | var ATRIB exp PTVIRG {$$= inicializacmd(MNG_ATRIB); 
+				$$.atrib.var = $1; 
+				$$.atrib.exp = $3; 
+				$$.linha=lineno;}
+        | RETURN exp PTVIRG {$$= inicializacmd(MNG_RETURN); 
+				$$.ret.exp = $2; 
+				$$.ret.tipret=RET_EXP; 
+				$$.linha=lineno; }
 	| RETURN PTVIRG {$$= inicializacmd(MNG_RETURN); $$.ret.tipret=RET_VAZIO; $$.linha=lineno;  }
 	| chamadaMetodo PTVIRG {$$= inicializacmd(MNG_CHMET); $$.chmet= $1;$$.linha=lineno;}
 	| bloco {$$=inicializacmd(MNG_BLOCO); $$.bloco = &($1);$$.linha=lineno;}
@@ -185,94 +200,99 @@ parteelse :           {$$ = NULL;}
 	| ELSE comando {$$ = inicializaptelse($2);} //precisa verificar se está correto
 ;
 
-var : ID  { $$ = inicializavar(NULL); $$.id = $1; }// $$.id=$1; }
-	| var ACOL exp FCOL {$$=inicializavar(&($3));}
+var : ID  { $$ = inicializavar(NULL); $$.id = $1; $$.qtdACOL=0;}
+	| var ACOL exp FCOL {$$=inicializavar(&($3)); 
+				$$.qtdACOL=
+				$1.qtdACOL+1;}
 ;
 
 exp : NUMINT { $$=inicializaexp(MNG_TIPBASE);    
-		$$.tipo =TIPO_INT; 
+		$$.tipo.tipbase =TIPO_INT; 
 		$$.numint=$1;}
 	| NUMFLOAT {$$=inicializaexp(MNG_TIPBASE); 
-		$$.tipo=TIPO_FLOAT;
+		$$.tipo.tipbase=TIPO_FLOAT;
 		$$.numfloat=$1;   }
 	| STRING {$$=inicializaexp(MNG_TIPBASE); 
-		$$.tipo= $1.tipo; 
+		$$.tipo.tipbase= $1.tipo; 
 		$$.string=$1; }
-	| var {$$=inicializaexp(MNG_VAR); $$.var= &$1;}                 
-	| APAR exp FPAR{$$=inicializaexp(MNG_EXP); $$.exp= &$2; $$.tipo = (*$$.exp).tipo;
+	| var {$$=inicializaexp(MNG_VAR); 
+		$$.var= $1; 
+		$$.var.qtdACOL= $1.qtdACOL; 
+		}                 
+	| APAR exp FPAR{$$=inicializaexp(MNG_EXP); $$.exp= &$2; $$.tipo.tipbase = (*$$.exp).tipo.tipbase;
 			}
 	| chamadaMetodo {$$=inicializaexp(MNG_CHMET); $$.chmet= $1;}
     	| NEW tipo ACOL exp FCOL {$$=inicializaexp(MNG_TIPEXP); 
 			$$.tipexp.tip = &$2; 
 			$$.exp = &$4;}
 	| SUB exp {
-			$$=inicializaexp(MNG_TIPBASE); $$.tipo = $2.tipo; 
-			($2.tipo==TIPO_INT)?($$.numint.valor=(-1 * $2.numint.valor)):($$.numfloat.valor=(-1*$2.numfloat.valor)); 
+			$$=inicializaexp(MNG_TIPBASE); $$.tipo.tipbase = $2.tipo.tipbase; 
+			($2.tipo.tipbase==TIPO_INT)?($$.numint.valor=(-1 * $2.numint.valor)):($$.numfloat.valor=(-1*$2.numfloat.valor)); 
 		  }  
 	| exp SOMA exp {
 			$$=inicializaexp(MNG_OP);
 			$$.op=inicializaop($1,OP_SOMA,$3); 
 			(*$$.op).linha = lineno;
-			$$.tipo=verificatipoexpOP($$.op);
+			$$.tipo.tipbase=verificatipoexpOP($$.op);
 			}
 
 	| exp SUB exp {$$=inicializaexp(MNG_OP); 
 			$$.op=inicializaop($1,OP_SUB,$3);  
 			(*$$.op).linha = lineno;
-			$$.tipo=verificatipoexpOP($$.op);
+			$$.tipo.tipbase=verificatipoexpOP($$.op);
 			}
 	| exp MULT exp {$$=inicializaexp(MNG_OP); 
 			$$.op=inicializaop($1,OP_MULT,$3);  
 			(*$$.op).linha = lineno;
-			$$.tipo=verificatipoexpOP($$.op);
+			$$.tipo.tipbase=verificatipoexpOP($$.op);
 			}
 	| exp DIV exp  {$$=inicializaexp(MNG_OP); 
 			$$.op=inicializaop($1,OP_DIV,$3);  
 			(*$$.op).linha = lineno;
-			$$.tipo=verificatipoexpOP($$.op);
+			$$.tipo.tipbase=verificatipoexpOP($$.op);
 			}
 	| exp IGUAL exp {$$=inicializaexp(MNG_OP); 
 			$$.op=inicializaop($1,OP_IGUAL,$3);
 			(*$$.op).linha = lineno;
-			$$.tipo=verificatipoexpOP($$.op);
+			$$.tipo.tipbase=verificatipoexpOP($$.op);
 			}
 	| exp MENORIG exp {$$=inicializaexp(MNG_OP); 
 			$$.op=inicializaop($1,OP_MENORIG,$3); 
 			(*$$.op).linha = lineno;
-			$$.tipo=verificatipoexpOP($$.op);
+			$$.tipo.tipbase=verificatipoexpOP($$.op);
 			}
 	| exp MAIORIG exp  {$$=inicializaexp(MNG_OP); 
 			$$.op=inicializaop($1,OP_MAIORIG,$3);  
 			(*$$.op).linha = lineno;
-			$$.tipo=verificatipoexpOP($$.op);
+			$$.tipo.tipbase=verificatipoexpOP($$.op);
 			}
 	| exp MENORQ exp {$$=inicializaexp(MNG_OP); 
 			$$.op=inicializaop($1,OP_MENORQ,$3);  
 			(*$$.op).linha = lineno;
-			$$.tipo=verificatipoexpOP($$.op);
+			$$.tipo.tipbase=verificatipoexpOP($$.op);
 			}
 	| exp MAIORQ exp {$$=inicializaexp(MNG_OP); 
 			$$.op=inicializaop($1,OP_MAIORQ,$3); 
 			(*$$.op).linha = lineno; 
-			$$.tipo=verificatipoexpOP($$.op);
+			$$.tipo.tipbase=verificatipoexpOP($$.op);
 			}//(*$$.op).exp1= $1; (*$$.op).op= OP_MAIORQ; (*$$.op).exp2 = $3;}
 	| NAO exp {	$$=inicializaexp(MNG_NAO); 
 			$$.nao.op = OP_NAO; 
 			$$.nao.exp = &($2); 
-			$$.tipo = $2.tipo;}
+			$$.tipo.tipbase = $2.tipo.tipbase;}
 	| exp E exp {$$=inicializaexp(MNG_OP); 
 			(*$$.op).exp1= $1; 
 			(*$$.op).op= OP_E; 
 			(*$$.op).exp2 = $3;
 			(*$$.op).linha = lineno;
-			$$.tipo=verificatipoexpOP($$.op);
+			$$.tipo.tipbase=verificatipoexpOP($$.op);
 			} //verificar o tipo
 	| exp OU exp {$$=inicializaexp(MNG_OP); 
 			(*$$.op).exp1= $1; 
 			(*$$.op).op= OP_OU; 
 			(*$$.op).exp2 = $3;
 			(*$$.op).linha = lineno;
-			$$.tipo=verificatipoexpOP($$.op);}
+			$$.tipo.tipbase=verificatipoexpOP($$.op);}
 ;
 
 chamadaMetodo : ID APAR listaexp FPAR {$$ = inicializachmet($1,$3);}
