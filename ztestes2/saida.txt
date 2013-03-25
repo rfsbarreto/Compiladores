@@ -1,0 +1,35 @@
+adicionavar a 
+adicionavar c 
+adicionavar d 
+adicionavar a 
+adicionavar i 
+
+lista final: 
+
+tipo no dec : 2 
+tipo decvar
+  id a 
+tipo no dec : 6 
+tipo decfunc
+  id f
+tem parametros
+tipo decvar
+  id c 
+tipo decvar
+  id d cmdsMNG_ATRIBcmdsMNG_ATRIBcmdsMNG_RETURN
+tipo no dec : 6 
+tipo decfunc
+  id h
+não tem parametroscmdsMNG_RETURN
+tipo no dec : 6 
+tipo decfunc
+  id g
+não tem parametroscmdsMNG_CHMET
+tipo no dec : 6 
+tipo decfunc
+  id f2
+tem parametros
+tipo decvar
+  id a 
+tipo decvar
+  id i cmdsMNG_ATRIBcmdsMNG_ATRIBcmdsMNG_WHILEcmdsMNG_RETURNacabou o/
