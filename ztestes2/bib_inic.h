@@ -2,6 +2,7 @@
 #define DECP(dec) mng_##dec* p_##dec
 #include "bib_Tipos.h"
 #include "pilha.h"
+<<<<<<< HEAD
 void Percorredecvar(mng_decvar decvar,lista_simb* tbl);
 void PercorreCmds(mng_cmds*cmds,lista_simb* tbl);
 void PercorreCmd(mng_cmd* cmd,lista_simb* tbl);
@@ -13,6 +14,18 @@ void PercorreListexp(mng_listexp *listexp,lista_simb* tbl);
 void PercorreExp(mng_exp *exp,lista_simb* tbl);
 void PercorreVar(mng_var var,lista_simb* tbl);
 pilha* p1;
+=======
+void Percorredecvar(mng_decvar decvar);
+void PercorreCmds(mng_cmds*cmds);
+void PercorreCmd(mng_cmd cmd);
+void PercorreDecvars(mng_decvars * dec);
+void Percorrebl(mng_bloco bl);
+void PercorrePar(mng_par *par);
+void PercorrePars(mng_pars *pars);
+void PercorreListexp(mng_listexp *listexp);
+void PercorreExp(mng_exp *exp);
+void PercorreVar(mng_var var);
+>>>>>>> cb1685e880796a550313a01b95107a4fcad116ab
 
 mng_prg* inicializaprog(mng_dec dec,mng_prg* prg){
 	int tamanho= sizeof(mng_prg);
@@ -327,6 +340,7 @@ void PercorreCmds(mng_cmds*cmds,lista_simb* tbl){
 
 }
 
+<<<<<<< HEAD
 void PercorreListexp(mng_listexp *listexp,lista_simb* tbl){
 	if(listexp != NULL){
 		PercorreExp(&(*listexp).exp,tbl);
@@ -343,10 +357,27 @@ void PercorreCmd(mng_cmd* cmd,lista_simb* tbl){
 	printf("\n\n\n\n Comandos %u  \n",cmd);
 	mng_cmd* aux = cmd;
 	if((*aux).tipocmd == MNG_IF){
+=======
+void PercorreListexp(mng_listexp *listexp){
+	if(listexp != NULL){
+		PercorreExp(&(*listexp).exp);
+		PercorreListexp((*listexp).listexp);
+	}
+}
+void PercorreExp(mng_exp *exp){
+	printf("exp");
+}
+void PercorreVar(mng_var var){
+
+}
+void PercorreCmd(mng_cmd cmd){
+	if(cmd.tipocmd == MNG_IF){
+>>>>>>> cb1685e880796a550313a01b95107a4fcad116ab
 		printf("if");
 	}
 	if((*aux).tipocmd == MNG_WHILE){
 		printf("MNG_WHILE");
+<<<<<<< HEAD
 		PercorreExp(&(*aux).decwhile.exp,tbl);
 		if ((*aux).decwhile.cmd!=NULL){
 			PercorreCmd((*aux).decwhile.cmd,tbl);
@@ -358,6 +389,27 @@ void PercorreCmd(mng_cmd* cmd,lista_simb* tbl){
 		//PercorreVar(cmd.atrib.var);
 		printf("ATRIB\n");
 		PercorreExp(&(*aux).atrib.exp,tbl);
+=======
+		//PercorreExp(&cmd.decwhile.exp);
+		//PercorreCmd(*cmd.decwhile.cmd);
+	}
+	if(cmd.tipocmd == MNG_ATRIB){
+		//PercorreVar(cmd.atrib.var);
+		printf("=");
+		//PercorreExp(&cmd.atrib.exp);
+	}
+	if(cmd.tipocmd == MNG_RETURN){
+		if (cmd.ret.tipret == RET_EXP){
+			printf("percorrendo exp");
+			//PercorreExp(&cmd.ret.exp);
+		}else{
+			printf("return ;");	
+		}
+	}
+	if(cmd.tipocmd == MNG_CHMET){
+		printf("\nchamada ao método id : ", cmd.chmet.id.name);
+		//PercorreListexp(cmd.chmet.listexp);
+>>>>>>> cb1685e880796a550313a01b95107a4fcad116ab
 	}
 	if((*aux).tipocmd == MNG_BLOCO){
 		printf("percorre bloco dentro do cmd\n");

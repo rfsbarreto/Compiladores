@@ -339,17 +339,17 @@ lista_simb* adicionaFunc(lista_simb* s,mng_decfunc decfunc,mng_pars* pars, lista
 }
 
 void imprimirlista(lista_simb* s){
-		printf("implista ");
+		//printf("implista ");
 		lista_simb* aux=s;
 		while ((*aux).prox!=NULL){
 			aux=(*aux).prox;
 			//variável
 			if ((*aux).tipono == 0){
-				printf("\nvar: %s  ",(*aux).simb.name);
-				printf("\ntipo: %d  ",(*aux).simb.tipo);			
+				//printf("\nvar: %s  ",(*aux).simb.name);
+				//printf("\ntipo: %d  ",(*aux).simb.tipo);			
 			}else{
-				printf("\nfunc: %s  ",(*aux).funcao.name);
-				printf("\ntipo: %d  ",(*aux).funcao.tipo);
+				//printf("\nfunc: %s  ",(*aux).funcao.name);
+//				printf("\ntipo: %d  ",(*aux).funcao.tipo);
 				if((*aux).funcao.lista != NULL){
 					imprimirlista((*aux).funcao.lista);
 				}

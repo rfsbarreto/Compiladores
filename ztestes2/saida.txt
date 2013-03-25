@@ -8,6 +8,7 @@ implista
 var: a  
 tipo: 0  
 tipo no dec : 6 
+<<<<<<< HEAD
 tipo decfunc 0
   id f  
 
@@ -24,6 +25,16 @@ nome id par: Xÿà
 adicionavar1 Xÿà	 
 percorre bloco
 
+=======
+tipo decfunc
+  id f
+tip par: 
+nome id par: 
+tip par: 
+nome id par: 
+tip par: 
+nome id par: 
+>>>>>>> cb1685e880796a550313a01b95107a4fcad116ab
 tipo decvar
   id c adicionavar1 c 
 implista 
@@ -36,6 +47,7 @@ tipo: 38
 var: Xÿà	  
 tipo: 38  
 tipo decvar
+<<<<<<< HEAD
   id d adicionavar1 d 
 implista 
 var: d  
@@ -94,6 +106,21 @@ nome id par: Xÿà
 adicionavar1 Xÿà	 
 percorre bloco
 
+=======
+  id d cmds=cmds=cmdspercorrendo exp
+tipo no dec : 6 
+tipo decfunc
+  id hcmdspercorrendo exp
+tipo no dec : 6 
+tipo decfunc
+  id gcmds
+chamada ao mÃ©todo id : 
+tipo no dec : 6 
+tipo decfunc
+  id f2
+tip par: 
+nome id par: 
+>>>>>>> cb1685e880796a550313a01b95107a4fcad116ab
 tipo decvar
   id a adicionavar1 a 
 implista 
@@ -102,6 +129,7 @@ tipo: 0
 var: Xÿà	  
 tipo: 38  
 tipo decvar
+<<<<<<< HEAD
   id i adicionavar1 i 
 implista 
 var: i  
@@ -162,3 +190,6 @@ expMNG_BLOCOcmds
 
  Comandos 165739976  
 acabou o/
+=======
+  id i cmds=cmds=cmdsMNG_WHILEcmdspercorrendo expacabou o/
+>>>>>>> cb1685e880796a550313a01b95107a4fcad116ab
