@@ -32,14 +32,14 @@ void yyerror(const char* errmsg);
 %union{
 	
 	mng_tipbase  tipbase;	
-	mng_id id;
+	mng_id* id;
 	mng_var* var;
 	DEC(bloco);
 	mng_pars * pars;
 	mng_par* par;
-	mng_decvar* decvar;
+	mng_decvar decvar;
 	mng_decfunc decfunc;
-	mng_tip tip;
+	mng_tip* tip;
 	mng_prg* prg;
 	mng_dec dec;
 	mng_listnom* listnom;
@@ -109,18 +109,18 @@ programa : { $$=NULL; } // $$.teste = test;
 ; 
 
 declaracao : decvariavel  { $$=inicializadec(); 
-			$$.decvar =(*$1); 
+			$$.decvar =$1; 
 			$$.tipodec=MNG_DECVAR;
-			//tbl=adicionaVar(tbl,$1.p_listnom,$1.tip); 
-		//	verificasimbolos(tbl,$1.p_listnom);
-		//	imprimirlista(tbl);
+			tbl=adicionaVar(tbl,$1.p_listnom,$1.tip); 
+			verificasimbolos(tbl,$1.p_listnom);
+			imprimirlista(tbl);
 			}
 	| decfuncao {  $$=inicializadec(); 
 			$$.decfunc =$1;  
 			$$.tipodec=MNG_DECFUNC;
 		//	tbl=adicionaFunc(tbl,$1); 
-		//	verificasimbolo(tbl,$1.id);
-		//	imprimirlista(tbl);
+			verificasimbolo(tbl,$1.id);
+			imprimirlista(tbl);
 }
 ;
 
@@ -134,11 +134,11 @@ listanomes : ID { $$=inicializalistnom($1,NULL);
 ;
 
 
-tipo : tipobase  { $$.tipbase = $1; $$.qtdACOL= 0;}
+tipo : tipobase  { (*$$).tipbase = $1; (*$$).qtdACOL= 0;}
 	| tipo ACOL FCOL { 
 			$$=inicializatipo();
-			$$.tipbase = $1.tipbase;			
-			$$.qtdACOL = $1.qtdACOL+1;
+			(*$$).tipbase = (*$1).tipbase;			
+			(*$$).qtdACOL = (*$1).qtdACOL+1;
 			}
 ;
 
@@ -148,7 +148,7 @@ tipobase : INT {  $$=TIPO_INT;}
 ; 
 
 decfuncao : VOID ID APAR parametros FPAR bloco {$$=inicializadecfunc($2, $4, $6); 
-						$$.tip.tipbase = TIPO_VAZIO;
+						(*$$.tip).tipbase = TIPO_VAZIO;
 						lista_simb* tblaux=adicionaVars(tblaux,$6);
 						verificasimbolosbloco(tblaux,$6);
 						tbl=adicionaFunc(tbl,$$,$4,tblaux);  
@@ -222,92 +222,92 @@ var : ID  { $$ = inicializavar(NULL); (*$$).id = $1; (*$$).qtdACOL=0; }
 ;
 
 exp : NUMINT { $$=inicializaexp(MNG_TIPBASE);    
-		(*$$).tipo.tipbase =TIPO_INT; 
+		(*(*$$).tipo).tipbase =TIPO_INT; 
 		(*$$).numint=$1;}
 	| NUMFLOAT {$$=inicializaexp(MNG_TIPBASE); 
-		(*$$).tipo.tipbase=TIPO_FLOAT;
+		(*(*$$).tipo).tipbase=TIPO_FLOAT;
 		(*$$).numfloat=$1;   }
 	| STRING {$$=inicializaexp(MNG_TIPBASE); 
-		(*$$).tipo.tipbase= $1.tipo; 
+		(*(*$$).tipo).tipbase= $1.tipo; 
 		(*$$).string=$1; }
 	| var {$$=inicializaexp(MNG_VAR); 
 		(*$$).var= $1; 
 		(*(*$$).var).qtdACOL= (*$1).qtdACOL; 
 		}                 
-	| APAR exp FPAR{$$=inicializaexp(MNG_EXP); (*$$).exp= $2; (*$$).tipo.tipbase = (*(*$$).exp).tipo.tipbase;
+	| APAR exp FPAR{$$=inicializaexp(MNG_EXP); (*$$).exp= $2; (*(*$$).tipo).tipbase = (*(*(*$$).exp).tipo).tipbase;
 			}
 	| chamadaMetodo {$$=inicializaexp(MNG_CHMET); (*$$).chmet= $1;}
     	| NEW tipo ACOL exp FCOL {$$=inicializaexp(MNG_TIPEXP); 
-			(*$$).tipexp.tip = &$2; 
+			(*$$).tipexp.tip = $2; 
 			(*$$).exp = $4;}
 	| SUB exp {
-			$$=inicializaexp(MNG_TIPBASE); (*$$).tipo.tipbase = (*$2).tipo.tipbase; 
-			((*$2).tipo.tipbase==TIPO_INT)?((*$$).numint.valor=(-1 * (*$2).numint.valor)):((*$$).numfloat.valor=(-1*(*$2).numfloat.valor)); 
+			$$=inicializaexp(MNG_TIPBASE); (*(*$$).tipo).tipbase = (*(*$2).tipo).tipbase; 
+			((*(*$2).tipo).tipbase==TIPO_INT)?((*$$).numint.valor=(-1 * (*$2).numint.valor)):((*$$).numfloat.valor=(-1*(*$2).numfloat.valor)); 
 		  }  
 	| exp SOMA exp {
 			$$=inicializaexp(MNG_OP);
 			(*$$).op=inicializaop($1,OP_SOMA,$3); 
 			(*(*$$).op).linha = lineno;
-			(*$$).tipo.tipbase=verificatipoexpOP((*$$).op);
+			(*(*$$).tipo).tipbase=verificatipoexpOP((*$$).op);
 			}
 
 	| exp SUB exp {$$=inicializaexp(MNG_OP); 
 			(*$$).op=inicializaop($1,OP_SUB,$3);  
 			(*(*$$).op).linha = lineno;
-			(*$$).tipo.tipbase=verificatipoexpOP((*$$).op);
+			(*(*$$).tipo).tipbase=verificatipoexpOP((*$$).op);
 			}
 	| exp MULT exp {$$=inicializaexp(MNG_OP); 
 			(*$$).op=inicializaop($1,OP_MULT,$3);  
 			(*(*$$).op).linha = lineno;
-			(*$$).tipo.tipbase=verificatipoexpOP((*$$).op);
+			(*(*$$).tipo).tipbase=verificatipoexpOP((*$$).op);
 			}
 	| exp DIV exp  {$$=inicializaexp(MNG_OP); 
 			(*$$).op=inicializaop($1,OP_DIV,$3);  
 			(*(*$$).op).linha = lineno;
-			(*$$).tipo.tipbase=verificatipoexpOP((*$$).op);
+			(*(*$$).tipo).tipbase=verificatipoexpOP((*$$).op);
 			}
 	| exp IGUAL exp {$$=inicializaexp(MNG_OP); 
 			(*$$).op=inicializaop($1,OP_IGUAL,$3);
 			(*(*$$).op).linha = lineno;
-			(*$$).tipo.tipbase=verificatipoexpOP((*$$).op);
+			(*(*$$).tipo).tipbase=verificatipoexpOP((*$$).op);
 			}
 	| exp MENORIG exp {$$=inicializaexp(MNG_OP); 
 			(*$$).op=inicializaop($1,OP_MENORIG,$3); 
 			(*(*$$).op).linha = lineno;
-			(*$$).tipo.tipbase=verificatipoexpOP((*$$).op);
+			(*(*$$).tipo).tipbase=verificatipoexpOP((*$$).op);
 			}
 	| exp MAIORIG exp  {$$=inicializaexp(MNG_OP); 
 			(*$$).op=inicializaop($1,OP_MAIORIG,$3);  
 			(*(*$$).op).linha = lineno;
-			(*$$).tipo.tipbase=verificatipoexpOP((*$$).op);
+			(*(*$$).tipo).tipbase=verificatipoexpOP((*$$).op);
 			}
 	| exp MENORQ exp {$$=inicializaexp(MNG_OP); 
 			(*$$).op=inicializaop($1,OP_MENORQ,$3);  
 			(*(*$$).op).linha = lineno;
-			(*$$).tipo.tipbase=verificatipoexpOP((*$$).op);
+			(*(*$$).tipo).tipbase=verificatipoexpOP((*$$).op);
 			}
 	| exp MAIORQ exp {$$=inicializaexp(MNG_OP); 
 			(*$$).op=inicializaop($1,OP_MAIORQ,$3); 
 			(*(*$$).op).linha = lineno; 
-			(*$$).tipo.tipbase=verificatipoexpOP((*$$).op);
+			(*(*$$).tipo).tipbase=verificatipoexpOP((*$$).op);
 			}//(*$$.op).exp1= $1; (*$$.op).op= OP_MAIORQ; (*$$.op).exp2 = $3;}
 	| NAO exp {	$$=inicializaexp(MNG_NAO); 
 			(*$$).nao.op = OP_NAO; 
 			(*$$).nao.exp = $2; 
-			(*$$).tipo.tipbase = (*$2).tipo.tipbase;}
+			(*(*$$).tipo).tipbase = (*(*$2).tipo).tipbase;}
 	| exp E exp {$$=inicializaexp(MNG_OP); 
 			(*(*$$).op).exp1= $1; 
 			(*(*$$).op).op= OP_E; 
 			(*(*$$).op).exp2 = $3;
 			(*(*$$).op).linha = lineno;
-			(*$$).tipo.tipbase=verificatipoexpOP((*$$).op);
+			(*(*$$).tipo).tipbase=verificatipoexpOP((*$$).op);
 			} //verificar o tipo
 	| exp OU exp {$$=inicializaexp(MNG_OP); 
 			(*(*$$).op).exp1= $1; 
 			(*(*$$).op).op= OP_OU; 
 			(*(*$$).op).exp2 = $3;
 			(*(*$$).op).linha = lineno;
-			(*$$).tipo.tipbase=verificatipoexpOP((*$$).op);}
+			(*(*$$).tipo).tipbase=verificatipoexpOP((*$$).op);}
 ;
 
 chamadaMetodo : ID APAR listaexp FPAR {$$ = inicializachmet($1,$3);}

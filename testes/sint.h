@@ -86,11 +86,11 @@ typedef union YYSTYPE
 	
 	mng_tipbase  tipbase;	
 	mng_id id;
-	mng_var var;
+	mng_var* var;
 	DEC(bloco);
 	mng_pars * pars;
-	mng_par par;
-	mng_decvar decvar;
+	mng_par* par;
+	mng_decvar* decvar;
 	mng_decfunc decfunc;
 	mng_tip tip;
 	mng_prg* prg;
@@ -98,21 +98,22 @@ typedef union YYSTYPE
 	mng_listnom* listnom;
 	mng_decvars* decvars;
 	mng_cmds* cmds;
-	mng_cmd cmd;
+	mng_cmd* cmd;
 	mng_ptelse* ptelse;
 	mng_chmet chmet;
 	mng_listexp* listexp;
-	mng_exp exp;
+	mng_exp* exp;
 	DEC(numint);
 	DEC(numfloat);
 	DEC(string);
+	DEC(chr);
 	//DEC(prg);
 	//int token;
 
 
 
 /* Line 2068 of yacc.c  */
-#line 116 "sint.h"
+#line 117 "sint.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

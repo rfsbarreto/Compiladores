@@ -1014,7 +1014,7 @@ YY_RULE_SETUP
 case 35:
 YY_RULE_SETUP
 #line 90 "teste_v6.lex"
-{ int tamanho = strlen(yytext)*sizeof(char);
+{ int tamanho = strlen(yytext)*sizeof(mng_id);
 	//mng_id* i=(mng_id*) malloc(tamanho);
 	//(*i).name="";
           // strcat((*i).name,yytext);
@@ -1031,6 +1031,7 @@ YY_RULE_SETUP
 	//	yylval= (YYSTYPE)  id1;    //yyget_text(); //strcat(yytext,"1");
 	yylval.id.name=(char *) malloc(tamanho);
 	strcat(yylval.id.name,yytext);
+	yylval.id.linha=lineno;
 	//printf("KK: %s \n" , yylval.id.name);
 		
 		//strcat(yylval->string,yytext);		
@@ -1039,7 +1040,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 113 "teste_v6.lex"
+#line 114 "teste_v6.lex"
 {   //yylval->inteiro = atoi(yytext); 	
 						mng_numint* aux= (mng_numint*) malloc(sizeof(mng_numint));
 						(*aux).valor=atoi(yytext);
@@ -1050,7 +1051,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 121 "teste_v6.lex"
+#line 122 "teste_v6.lex"
 { //yylval->real= atof(yytext);; yylval.
 						mng_numfloat* aux= (mng_numfloat*) malloc(sizeof(mng_numfloat));
 						(*aux).valor=atof(yytext);
@@ -1060,7 +1061,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 129 "teste_v6.lex"
+#line 130 "teste_v6.lex"
 {  int linha = lineno;
 						char c=input();
 						int fechou = 0;
@@ -1084,7 +1085,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 151 "teste_v6.lex"
+#line 152 "teste_v6.lex"
 { 	c=yytext;
 									i=0;
 									int j = 0;
@@ -1114,31 +1115,42 @@ YY_RULE_SETUP
 										}
 										i++;
 									}
-									int tamanho = strlen(yytext)*sizeof(char);
-					mng_string* aux= (mng_string*) malloc(sizeof(mng_string));
-						(*aux).valor=yytext;
-						yylval.string=*aux;	
-						
+								int tamanho = strlen(yytext) *sizeof(char);
+								mng_string* aux= (mng_string*) malloc(sizeof(tamanho));
+								(*aux).valor=yytext;
+//								(*aux).tam=strlen(yytext);
+//printf("tamnho: %d \n",tam);															
+								if ( tamanho==3 ){
+
+									(*aux).tipo=TIPO_CHAR;
+									(*aux).valor= yytext;
+									yylval.string=*aux;						} else {
+									
+								(*aux).tipo=TIPO_STRING;	
+									yylval.string=*aux;	
+			
+								}
+							
 //									yylval = (YYSTYPE) yytext;		
 									return STRING;
 									} 
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 188 "teste_v6.lex"
+#line 200 "teste_v6.lex"
 { fprintf(stderr,"ERRO: String não fechada na linha %d ", lineno); return;} 
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 191 "teste_v6.lex"
+#line 203 "teste_v6.lex"
 {fprintf(stderr,"ERRO: Caracter inválido %d ", lineno); return; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 194 "teste_v6.lex"
+#line 206 "teste_v6.lex"
 ECHO;
 	YY_BREAK
-#line 1142 "lex.c"
+#line 1154 "lex.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2136,7 +2148,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 194 "teste_v6.lex"
+#line 206 "teste_v6.lex"
 
 
 /*** C Code section ***/

@@ -37,7 +37,7 @@ void yyerror(const char* errmsg);
 	DEC(bloco);
 	mng_pars * pars;
 	mng_par* par;
-	mng_decvar* decvar;
+	mng_decvar decvar;
 	mng_decfunc decfunc;
 	mng_tip tip;
 	mng_prg* prg;
@@ -109,18 +109,18 @@ programa : { $$=NULL; } // $$.teste = test;
 ; 
 
 declaracao : decvariavel  { $$=inicializadec(); 
-			$$.decvar =(*$1); 
+			$$.decvar =$1; 
 			$$.tipodec=MNG_DECVAR;
-			//tbl=adicionaVar(tbl,$1.p_listnom,$1.tip); 
-		//	verificasimbolos(tbl,$1.p_listnom);
-		//	imprimirlista(tbl);
+			tbl=adicionaVar(tbl,$1.p_listnom,$1.tip); 
+			verificasimbolos(tbl,$1.p_listnom);
+			imprimirlista(tbl);
 			}
 	| decfuncao {  $$=inicializadec(); 
 			$$.decfunc =$1;  
 			$$.tipodec=MNG_DECFUNC;
 		//	tbl=adicionaFunc(tbl,$1); 
-		//	verificasimbolo(tbl,$1.id);
-		//	imprimirlista(tbl);
+			verificasimbolo(tbl,$1.id);
+			imprimirlista(tbl);
 }
 ;
 

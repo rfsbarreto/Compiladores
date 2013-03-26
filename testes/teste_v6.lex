@@ -87,7 +87,7 @@ while	{ return WHILE ; }
 \t      {}
 \r      {}
 \n      {lineno++; }
-{id} { int tamanho = strlen(yytext)*sizeof(char);
+{id} { int tamanho = strlen(yytext)*sizeof(mng_id);
 	//mng_id* i=(mng_id*) malloc(tamanho);
 	//(*i).name="";
           // strcat((*i).name,yytext);
@@ -104,6 +104,7 @@ while	{ return WHILE ; }
 	//	yylval= (YYSTYPE)  id1;    //yyget_text(); //strcat(yytext,"1");
 	yylval.id.name=(char *) malloc(tamanho);
 	strcat(yylval.id.name,yytext);
+	yylval.id.linha=lineno;
 	//printf("KK: %s \n" , yylval.id.name);
 		
 		//strcat(yylval->string,yytext);		
@@ -181,14 +182,16 @@ while	{ return WHILE ; }
 								mng_string* aux= (mng_string*) malloc(sizeof(tamanho));
 								(*aux).valor=yytext;
 //								(*aux).tam=strlen(yytext);
-																		
-								if ( strlen(yytext)>1 ){
-									(*aux).tipo=TIPO_STRING;	
-									yylval.string=*aux;	
-								} else {
+//printf("tamnho: %d \n",tam);															
+								if ( tamanho==3 ){
+
 									(*aux).tipo=TIPO_CHAR;
 									(*aux).valor= yytext;
+									yylval.string=*aux;						} else {
+									
+								(*aux).tipo=TIPO_STRING;	
 									yylval.string=*aux;	
+			
 								}
 							
 //									yylval = (YYSTYPE) yytext;		

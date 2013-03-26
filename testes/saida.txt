@@ -1,2 +1,0 @@
-Tipo da func= 0
-14 Tipo vazioErro de retorno na la: 3 

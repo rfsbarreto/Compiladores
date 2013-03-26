@@ -4,8 +4,11 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-typedef enum {MNG_PROG,MNG_DEC,MNG_DECVAR,MNG_LISTNOM,MNG_TIPO,MNG_TIPBASE,MNG_DECFUNC,MNG_PARS, MNG_IF, MNG_WHILE,MNG_ATRIB, MNG_OP, MNG_NAO, MNG_TIPEXP, MNG_RETURN, MNG_OPNEG,
-MNG_PAR,MNG_BLOCO,MNG_DECVARS,MNG_CMD,MNG_CMDS,MNG_PTELSE,MNG_VAR,MNG_EXP,MNG_CHMET,MNG_LSTEXP} tipo_no;
+typedef enum {MNG_PROG,MNG_DEC,MNG_DECVAR,MNG_LISTNOM,MNG_TIPO,
+MNG_TIPBASE,MNG_DECFUNC,MNG_PARS, MNG_IF, MNG_WHILE,
+MNG_ATRIB, MNG_OP, MNG_NAO, MNG_TIPEXP, MNG_RETURN, 
+MNG_OPNEG,MNG_PAR,MNG_BLOCO,MNG_DECVARS,MNG_CMD,
+MNG_CMDS,MNG_PTELSE,MNG_VAR,MNG_EXP,MNG_CHMET,MNG_LSTEXP} tipo_no;
 
 typedef enum mng_tipbase { 
 	TIPO_INT,TIPO_CHAR,TIPO_STRING,TIPO_FLOAT,TIPO_VAZIO
@@ -37,6 +40,7 @@ typedef struct mng_buckets_rec{
 
 typedef struct mng_id{
     char* name;
+	int linha;
 } mng_id;
 
 
@@ -94,7 +98,7 @@ typedef struct mng_exp{
 	mng_tip tipo;
 	union{
 		struct mng_tip *tip;
-		mng_var var;//DEC(var);
+		mng_var *var;//DEC(var);
 		struct mng_exp* exp;//DEC(exp);
 		DEC(chmet);
 		DEC(nao);
@@ -107,16 +111,17 @@ typedef struct mng_exp{
 }mng_exp;
 
 typedef struct mng_listexp{
-	DEC(exp);
+	mng_exp *exp;
+	//DEC(exp);
 	struct mng_listexp* listexp;
 }mng_listexp;
 
 
 typedef struct mng_op{
 	int linha;
-	mng_exp exp1;
+	mng_exp* exp1;
 	mng_operadores op;
-	mng_exp exp2; 
+	mng_exp* exp2; 
 }mng_op;
 
 
@@ -139,15 +144,16 @@ typedef struct mng_decvar{
 
 
 typedef struct mng_decvars{
-	mng_decvar decvar;
+	mng_decvar* decvar;
 	struct mng_decvars* decvars;
 
 } mng_decvars;
 
 
 typedef struct mng_atrib{
-	DEC(var);
-	DEC(exp);
+	mng_var *var;
+//	DEC(var);
+	mng_exp *exp;
 } mng_atrib;
 
 
@@ -158,14 +164,16 @@ typedef struct mng_ptelse{
 
 typedef struct mng_decif { 
 //    char* name;
-	DEC(exp);
+	mng_exp *exp;
+	//DEC(exp);
 	struct mng_cmd* cmd;
 	mng_ptelse* ptelse;
 	
 } mng_decif;
 
 typedef struct mng_decwhile { 
-	DEC(exp);
+	mng_exp * exp;	
+
 	struct mng_cmd* cmd;
 	
 } mng_decwhile;
@@ -174,7 +182,7 @@ typedef struct mng_decwhile {
 typedef struct mng_ret{
 	mng_tipret tipret;
 	union{
-		mng_exp exp;	
+		mng_exp *exp;	
 	};
 }mng_ret;
 
@@ -195,7 +203,7 @@ typedef struct mng_cmd{
 
 
 typedef struct mng_cmds{
-	mng_cmd cmd;
+	mng_cmd* cmd;
 	struct mng_cmds* cmds;
 } mng_cmds;
 
@@ -231,7 +239,8 @@ typedef struct  mng_decfunc{
 typedef struct mng_dec{
 	tipo_no tipodec;
     union{
-        DEC(decvar);
+	mng_decvar* decvar;
+        //DEC(decvar);
         DEC(decfunc);
     };
 } mng_dec; //declaracao
@@ -247,6 +256,7 @@ typedef struct mng_prg {
 typedef struct simbolo{
         mng_tipbase tipo;
         char* name;
+		int linha;
 
 } simbolo;
 
@@ -254,6 +264,7 @@ typedef struct simbolo{
 typedef struct funcao{
         mng_tipbase tipo;
         char* name;
+		int linha;
 		struct lista_simb* lista;
 } funcao;
 
@@ -266,34 +277,30 @@ typedef struct lista_simb{
         struct lista_simb* prox;
 } lista_simb;
 
-lista_simb* adicionaVar(lista_simb* s,mng_decvar decvar){
-			printf("adicionavar %s \n",(*decvar.p_listnom).id.name);
-        	mng_listnom var = (*decvar.p_listnom);
+lista_simb* adicionaVar(lista_simb* s,mng_listnom* listnom, mng_tip tip){
+			printf("adicionavar %s \n",(*listnom).id.name);
+        	mng_listnom var = (*listnom);
 			lista_simb* sim = (lista_simb*) malloc(sizeof(lista_simb));
         	(*sim).simb.name=var.id.name;
-        	(*sim).simb.tipo=decvar.tip.tipbase;
+        	(*sim).simb.linha=var.id.linha;
+        	(*sim).simb.tipo=tip.tipbase;
         	(*sim).tipono=0;
-			printf("simbolo %s %d \n",(*sim).simb.name,(*sim).simb.tipo);
+			//printf("simbolo %s %d \n",(*sim).simb.name,(*sim).simb.tipo);
 			if (s!=NULL){
-				printf("s not null \n");
+				//printf("s not null \n");
 				(*sim).prox=(*s).prox;
 				(*s).prox=sim;			// cabeça apontará para o nó atual
-//				(*sim).prox=(*s).prox;
-				//return s;
     		}else{
-				printf("s null \n");
+				//printf("s null \n");
 				s= (lista_simb*) malloc(sizeof(lista_simb));            
 				(*s).prox=sim;
-				if (s==NULL){
-					printf("comoooo vá");}						
-				//(*s).prox=sim;
-				//return s;
-			}
+	}
 		while (var.list!=NULL){
 			var=(*var.list);			
 			sim = (lista_simb*) malloc(sizeof(lista_simb));
         	(*sim).simb.name=var.id.name;
-        	(*sim).simb.tipo=decvar.tip.tipbase;
+        	(*sim).simb.linha=var.id.linha;
+        	(*sim).simb.tipo=tip.tipbase;
         	(*sim).tipono=0;
         	(*sim).prox=(*s).prox;   //novo no aponta pra quem a cabeça está apontando
 			(*s).prox=sim;			// cabeça apontará para o nó atual
@@ -303,42 +310,191 @@ lista_simb* adicionaVar(lista_simb* s,mng_decvar decvar){
 
 }
 
-lista_simb* adicionaFunc(lista_simb* s,mng_decfunc decfunc){
-			printf("adicionavar %s \n",decfunc.id.name);
-        	//mng_listnom var = (*decvar.p_listnom);
-			lista_simb* sim = (lista_simb*) malloc(sizeof(lista_simb));
+lista_simb* adicionaVars(lista_simb* s,mng_bloco bloco){
+			//printf("adicionavars  \n");//,(*listnom).id.name);
+    		mng_decvars* var = bloco.decvars;
+		lista_simb* aux=(lista_simb*) malloc(sizeof(lista_simb));//=adicionaVar(s,var.p_listnom,var.tip);
+		while(var!=NULL){
+			adicionaVar(aux,(*(*var).decvar).p_listnom,(*(*var).decvar).tip);
+			var=(*var).decvars;
+		}
+		return aux;
+}
+
+lista_simb* adicionaFunc(lista_simb* s,mng_decfunc decfunc,mng_pars* pars, lista_simb* saux){
+		//printf("adicionafunc %s \n",decfunc.id.name);
+        	lista_simb* sim = (lista_simb*) malloc(sizeof(lista_simb));
         	(*sim).funcao.name=decfunc.id.name;
-        	(*sim).simb.tipo=decfunc.tip.tipbase;
+        	(*sim).funcao.linha=decfunc.id.linha;
+        	(*sim).funcao.tipo=decfunc.tip.tipbase;
         	(*sim).tipono=1;
-			printf("simbolo %s %d \n",(*sim).simb.name,(*sim).simb.tipo);
-			if (s!=NULL){
-				printf("s not null \n");
+		(*sim).funcao.lista = saux;
+		if (s!=NULL){
+	
 				(*sim).prox=(*s).prox;
 				(*s).prox=sim;			// cabeça apontará para o nó atual
-//				(*sim).prox=(*s).prox;
-				//return s;
     		}else{
-				printf("s null \n");
+
 				s= (lista_simb*) malloc(sizeof(lista_simb));            
 				(*s).prox=sim;
 				if (s==NULL){
-					printf("comoooo vá");}						
-				//(*s).prox=sim;
-				//return s;
-			}
-			return s;
+
+				}						
+
+		}
+		return s;
 
 }
 
 void imprimirlista(lista_simb* s){
-		printf("implista ");
+		//printf("implista ");
 		lista_simb* aux=s;
 		while ((*aux).prox!=NULL){
-			aux=(*aux).prox;				
-			printf("var: %s  ",(*aux).simb.name);
+			aux=(*aux).prox;
+			//variável
+			if ((*aux).tipono == 0){
+				//printf("\nvar: %s  ",(*aux).simb.name);
+				//printf("\ntipo: %d  ",(*aux).simb.tipo);			
+			}else{
+				//printf("\nfunc: %s  ",(*aux).funcao.name);
+//				printf("\ntipo: %d  ",(*aux).funcao.tipo);
+				if((*aux).funcao.lista != NULL){
+					imprimirlista((*aux).funcao.lista);
+				}
+			}
 			
-        }
+ 	       }
 }
 
 
+void procuraNome(lista_simb* s, char*nome){
+		printf("implista ");
+		lista_simb* aux=s;
+		while ((*aux).prox!=NULL){
+			aux=(*aux).prox;
+			//variável
+			if ((*aux).tipono == 0){
+				printf("\nvar: %s  ",(*aux).simb.name);
+				printf("\ntipo: %d  ",(*aux).simb.tipo);			
+			}else{
+				printf("\nfunc: %s  ",(*aux).funcao.name);
+				printf("\ntipo: %d  ",(*aux).funcao.tipo);
+				if((*aux).funcao.lista != NULL){
+					imprimirlista((*aux).funcao.lista);
+				}
+			}
+			
+ 	       }
+}
+
+
+
+
+
+
+int isequal(char* s1,char* s2){
+		int i=0; int igual=1; 
+		char* y=s1; 		char* z=s2;	
+		int max=( strlen(s1) <= strlen(s2))?strlen(s2):strlen(s1);	
+		for (i=0;i<max;i++ ){
+				if (y[i]!=z[i])
+					igual=0;
+//					printf("essa porra é diferente:   ");
+//				printf("erro variável duplicada: %s  ",(*aux).simb.name);
+				// exit(0);				
+			}
+				return igual;
+				//if (igual)
+				//	exit(0);
+}
+
+
+void verificaIDDuplicado(lista_simb* s, mng_id id){
+	
+	if(s!=NULL){
+//		printf("\nverificando\n");
+//		imprimirlista(s);
+//		printf("\nverificando\n");
+		lista_simb* aux=s;
+		while ((*aux).prox!=NULL){
+			aux=(*aux).prox;				
+				//printf("id: %s  ",(*aux).simb.name);
+//				printf("var: %s  \n",id.name);
+			//if(strncmp(id.name,(*aux).simb.name),100){
+//				if (id.name==(*aux).simb.name)
+			//int i=0; int igual=1; char* y=id.name;char* z=(*aux).simb.name;
+			//int max=(strlen(id.name) <= strlen((*aux).simb.name)) ?strlen((*aux).simb.name):strlen(id.name);	
+			if (isequal(id.name,(*aux).simb.name)){
+				printf("Erro na linha: %d",id.linha);
+				//yyerror();
+				exit(0);					
+			}
+/*			for (i=0;i<max;i++ ){
+				if (y[i]!=z[i])
+				igual=0;
+//					printf("essa porra é diferente:   ");
+//				printf("erro variável duplicada: %s  ",(*aux).simb.name);
+				// exit(0);				
+			}
+				if (igual)
+					exit(0);*/
+		}
+	}
+}
+
+
+
+void verificasimbolo(lista_simb* s,mng_id id){
+
+	if(s!=NULL){
+		int	cont=0;
+		int linha=id.linha;
+			lista_simb* aux=s;
+			while ((*aux).prox!=NULL){
+				aux=(*aux).prox;				
+				if (isequal(id.name,(*aux).simb.name)){
+					//printf("linha : %d linha : %d \n",linha,(*aux).simb.linha);			
+					if((*aux).simb.linha>=linha)
+						linha=(*aux).simb.linha;
+//					else
+//						linha=(*aux).simb.linha;
+					cont++;				
+				}			
+			}
+			if (cont>1){
+					printf("Erro na linha : %d \n",linha);
+					exit(0);					
+			}	
+			if (cont==0){
+					printf("Vriável não declarada na linha : %d \n",linha);
+					exit(0);					
+			}
+	}
+	
+}
+
+void verificasimbolos(lista_simb* s,mng_listnom* listnom){
+
+	if(s!=NULL){
+		//int	cont=0;
+		mng_listnom* l=listnom;
+		while (l!=NULL){
+			lista_simb* aux=s;
+			verificasimbolo(s,(*l).id);
+			l=(*l).list;
+		}
+	}
+}
+
+void verificasimbolosbloco(lista_simb* s,mng_bloco bloco){
+
+	if(s!=NULL){
+		//int	cont=0;
+		mng_decvars* var=bloco.decvars;
+		while(var!=NULL){
+			verificasimbolos(s,(*(*var).decvar).p_listnom);
+			var=(*var).decvars;
+		}
+	}
+}
 
