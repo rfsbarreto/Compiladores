@@ -1,60 +1,36 @@
-<<<<<<< HEAD
 
 lista final: 
 
-tipo no dec : 2 
-tipo decvar
-  id a 
-
-	contador: 0 
-
-tamanho S : 0 
-adicionavar1 a 
-implista 
-var: a  
-tipo2:   TIPO_INT
 tipo no dec : 6 
+tipo decfunc
+  id fabre bloco
 
-	contador: 0 
-
-tamanho S : 0 
-
-tipo decfunc 0
-  id f  
-abre bloco
-
-tipo decvar
-  id a 
-
-	contador: 0 
-
-tamanho S : 0 
-adicionavar1 a 
-implista 
-var: a  
-tipo2:   TIPO_INTcmdsATRIB
-expEncerra bloco 
+cmds
+return com exp
+ tipo da exp 5
+tipobase: 0  valor1: 3 Encerra bloco 
 Imprimindo lista da funcao: implista 
-var: a  
-tipo2:   TIPO_INT
+verificando chamada
+tenho coisas
 tipo no dec : 6 
 
-	contador: 1 
+	contador: 0 
 
 tamanho S : 0 
 
-tipo decfunc 0
-  id a  
-abre bloco
-cmdsEncerra bloco 
-Imprimindo lista da funcao: implista Imprimindo lista FINAL: implista 
-func: a  
-tipo2:   TIPO_VAZIOimplista 
+tipo decfunc
+  id gabre bloco
+
+cmds
+return com exp
+ tipo da exp 24
+nome do metodo: f
+ tipo da exp 5
+tipobase: 0  valor1: 4 Encerra bloco 
+Imprimindo lista da funcao: implista 
+verificando chamada
+tenho coisasImprimindo lista FINAL: implista 
+func: g  
+tipo2:   TIPO_INTimplista 
 func: f  
-tipo2:   TIPO_VAZIOimplista 
-var: a  
-tipo2:   TIPO_INT
-var: a  
-tipo2:   TIPO_INTacabou o/
-=======
->>>>>>> d62241ab7d645bf42c6822837112564b7effa506
+tipo2:   TIPO_INTimplista acabou o/

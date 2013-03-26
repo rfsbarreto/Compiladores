@@ -156,10 +156,14 @@ decfuncao : VOID ID APAR parametros FPAR bloco {$$=inicializadecfunc($2, $4, $6)
 						//tbl=adicionaFunc(tbl,$$,$4,tblaux);  
 					//	imprimirlista(tblaux);
 						//verificaIDDuplicado(tbl, $2);
+						if ($4 != NULL){
+						(*$$).qtdPars = (*$4).qtdPars;}else (*$$).qtdPars =0;
 						verificaReturn($6, (*$$).tip, $2);
 						}	
 	| tipo ID  APAR parametros FPAR bloco {$$=inicializadecfunc($2, $4, $6); 
-						(*$$).tip = $1; 
+						(*$$).tip = $1;
+						if ($4 != NULL) {
+						(*$$).qtdPars = (*$4).qtdPars;} else (*$$).qtdPars =0;
 						//lista_simb* tblaux1=adicionaVars(tblaux1,$6);
 						//tbl=adicionaFunc(tbl,$$,$4,tblaux1);  
 						//imprimirlista(tblaux1);
@@ -171,9 +175,12 @@ decfuncao : VOID ID APAR parametros FPAR bloco {$$=inicializadecfunc($2, $4, $6)
 //tiporetorno : tipo | VOID;
 
 
-parametros : {$$ = NULL;}
-	| parametro {$$ = inicializapars($1, NULL);}
-	| parametro VIRG parametros {$$ = inicializapars($1, $3);}
+parametros : {$$ = NULL; //(*$$).qtdPars = 0;
+}
+	| parametro {$$ = inicializapars($1, NULL); (*$$).qtdPars =1;
+}
+	| parametro VIRG parametros {$$ = inicializapars($1, $3); if ($3 != NULL){(*$$).qtdPars = (*$3).qtdPars +1;} else (*$$).qtdPars= 1;
+}
 ; 
 
 parametro : tipo ID  { $$ = inicializapar($1, $2);};
@@ -315,9 +322,12 @@ exp : NUMINT { $$=inicializaexp(MNG_TIPBASE);
 chamadaMetodo : ID APAR listaexp FPAR {$$ = inicializachmet($1,$3);}
 ;
 
-listaexp :  {$$ = NULL;}
-			| exp {$$ = inicializalistexp($1, NULL);}
-			| exp VIRG listaexp {$$ = inicializalistexp($1, $3);}
+listaexp :  {$$ = NULL; (*$$).qtdPars = 0;
+}
+			| exp {$$ = inicializalistexp($1, NULL); (*$$).qtdPars = 1;
+}
+			| exp VIRG listaexp {$$ = inicializalistexp($1, $3); (*$$).qtdPars = (*$3).qtdPars +1;
+}
 ;
 
 %%

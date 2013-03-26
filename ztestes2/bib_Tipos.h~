@@ -77,7 +77,7 @@ default:break;
 typedef enum mng_tipbase { 
 	TIPO_INT,TIPO_CHAR,TIPO_STRING,TIPO_FLOAT,TIPO_VAZIO
 } mng_tipbase ; //tipobase
-void imprimetipbase(mng_tipbase t){
+/*void imprimetipbase(mng_tipbase t){
 switch(t){
 T(TIPO_INT)
 T(TIPO_CHAR)
@@ -86,7 +86,7 @@ T(TIPO_FLOAT)
 T(TIPO_VAZIO)
 default:break;
 }
-}
+} */
 
 void imprimetipbase(mng_tipbase t){
 switch(t){
@@ -197,6 +197,7 @@ typedef struct mng_exp{
 }mng_exp;
 
 typedef struct mng_listexp{
+	int qtdPars;
 	mng_exp *exp;
 	//DEC(exp);
 	struct mng_listexp* listexp;
@@ -309,17 +310,19 @@ typedef struct mng_par{
 
 
 typedef struct mng_pars{
+	int qtdPars;
 	struct mng_par* par;
 	struct mng_pars* pars;
-
 } mng_pars; //parametros
 
 
 typedef struct  mng_decfunc{
+	int qtdPars;	
 	DEC(tip);
 	DEC(id);
 	mng_pars* pars;
 	mng_bloco*bloco;
+	
 //	DEC(bloco);
 } mng_decfunc ; //decfunção
 
@@ -621,6 +624,58 @@ void verificasimbolo(lista_simb* s,mng_id id){
 	}
 	
 }
+
+void verificaChamada(lista_simb* global,lista_simb* local){
+	printf ("\nverificando chamada");
+	if((*local).prox!=NULL && (*global).prox!=NULL){
+		printf ("\ntenho coisas");
+		//int	cont=0;
+		//int linha=id.linha;
+			lista_simb* aux= (*local).prox;
+			lista_simb* auxg = (*global).prox;
+			while (aux!=NULL ){
+				printf ("\ntenho coisas na lista local");
+					
+//				printf("\nprocurando por %s", (*aux).simb.name);		
+			//	if(){		
+				while(auxg!=NULL){	
+						
+						printf("\ntipo global %d",(*auxg).tipono);
+						printf("\ntipo local %d",(*aux).tipono);
+							if ((*auxg).tipono ==0){
+								printf("\nNome da variavel global %s",(*auxg).simb.name);
+							}else 
+								printf("\nNome da funcao global %s",(*auxg).funcao.name);
+							if ((*auxg).tipono ==0){
+								printf("\ncomparando com variavel local %s",(*aux).simb.name);
+							}else 
+								printf("\ncomparando com funcao local %s",(*aux).funcao.name);
+						//if (isequal(id.name,(*aux).simb.name)){
+						//	printf("Chamada ?? linha : %d linha : %d \n",linha,(*aux).simb.linha);			
+
+						//if((*aux).simb.linha>=linha)
+						//	linha=(*aux).simb.linha;
+//					else
+//						linha=(*aux).simb.linha;
+						//cont++;
+						if((*auxg).prox != NULL){	
+							auxg = (*auxg).prox;}else break;
+						
+					
+				}
+				if((*aux).prox != NULL){
+					aux=(*aux).prox;}else break;
+				//}else break;
+				
+				
+			}
+	}
+	
+}
+
+
+
+
 
 void verificasimbolos(lista_simb* s,mng_listnom* listnom){
 

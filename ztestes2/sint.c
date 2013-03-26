@@ -523,12 +523,12 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint16 yyrline[] =
 {
        0,   104,   104,   109,   110,   113,   120,   129,   132,   135,
-     139,   140,   147,   148,   149,   152,   161,   174,   175,   176,
-     179,   181,   184,   185,   188,   190,   193,   197,   201,   205,
-     209,   210,   211,   216,   217,   220,   221,   226,   229,   232,
-     235,   239,   241,   242,   245,   249,   256,   261,   266,   271,
-     276,   281,   286,   291,   296,   300,   307,   315,   318,   319,
-     320
+     139,   140,   147,   148,   149,   152,   163,   178,   180,   182,
+     186,   188,   191,   192,   195,   197,   200,   204,   208,   212,
+     216,   217,   218,   223,   224,   227,   228,   233,   236,   239,
+     242,   246,   248,   249,   252,   256,   263,   268,   273,   278,
+     283,   288,   293,   298,   303,   307,   314,   322,   325,   327,
+     329
 };
 #endif
 
@@ -1681,6 +1681,8 @@ yyreduce:
 						//tbl=adicionaFunc(tbl,$$,$4,tblaux);  
 					//	imprimirlista(tblaux);
 						//verificaIDDuplicado(tbl, $2);
+						if ((yyvsp[(4) - (6)].pars) != NULL){
+						(*(yyval.decfunc)).qtdPars = (*(yyvsp[(4) - (6)].pars)).qtdPars;}else (*(yyval.decfunc)).qtdPars =0;
 						verificaReturn((yyvsp[(6) - (6)].bloco), (*(yyval.decfunc)).tip, (yyvsp[(2) - (6)].id));
 						}
     break;
@@ -1688,9 +1690,11 @@ yyreduce:
   case 16:
 
 /* Line 1806 of yacc.c  */
-#line 161 "bison.y"
+#line 163 "bison.y"
     {(yyval.decfunc)=inicializadecfunc((yyvsp[(2) - (6)].id), (yyvsp[(4) - (6)].pars), (yyvsp[(6) - (6)].bloco)); 
-						(*(yyval.decfunc)).tip = (yyvsp[(1) - (6)].tip); 
+						(*(yyval.decfunc)).tip = (yyvsp[(1) - (6)].tip);
+						if ((yyvsp[(4) - (6)].pars) != NULL) {
+						(*(yyval.decfunc)).qtdPars = (*(yyvsp[(4) - (6)].pars)).qtdPars;} else (*(yyval.decfunc)).qtdPars =0;
 						//lista_simb* tblaux1=adicionaVars(tblaux1,$6);
 						//tbl=adicionaFunc(tbl,$$,$4,tblaux1);  
 						//imprimirlista(tblaux1);
@@ -1702,56 +1706,59 @@ yyreduce:
   case 17:
 
 /* Line 1806 of yacc.c  */
-#line 174 "bison.y"
-    {(yyval.pars) = NULL;}
+#line 178 "bison.y"
+    {(yyval.pars) = NULL; //(*$$).qtdPars = 0;
+}
     break;
 
   case 18:
 
 /* Line 1806 of yacc.c  */
-#line 175 "bison.y"
-    {(yyval.pars) = inicializapars((yyvsp[(1) - (1)].par), NULL);}
+#line 180 "bison.y"
+    {(yyval.pars) = inicializapars((yyvsp[(1) - (1)].par), NULL); (*(yyval.pars)).qtdPars =1;
+}
     break;
 
   case 19:
 
 /* Line 1806 of yacc.c  */
-#line 176 "bison.y"
-    {(yyval.pars) = inicializapars((yyvsp[(1) - (3)].par), (yyvsp[(3) - (3)].pars));}
+#line 182 "bison.y"
+    {(yyval.pars) = inicializapars((yyvsp[(1) - (3)].par), (yyvsp[(3) - (3)].pars)); if ((yyvsp[(3) - (3)].pars) != NULL){(*(yyval.pars)).qtdPars = (*(yyvsp[(3) - (3)].pars)).qtdPars +1;} else (*(yyval.pars)).qtdPars= 1;
+}
     break;
 
   case 20:
 
 /* Line 1806 of yacc.c  */
-#line 179 "bison.y"
+#line 186 "bison.y"
     { (yyval.par) = inicializapar((yyvsp[(1) - (2)].tip), (yyvsp[(2) - (2)].id));}
     break;
 
   case 21:
 
 /* Line 1806 of yacc.c  */
-#line 181 "bison.y"
+#line 188 "bison.y"
     {(yyval.bloco) = inicializabloco((yyvsp[(2) - (4)].decvars), (yyvsp[(3) - (4)].cmds));}
     break;
 
   case 22:
 
 /* Line 1806 of yacc.c  */
-#line 184 "bison.y"
+#line 191 "bison.y"
     { (yyval.decvars) = inicializadecvars((yyvsp[(1) - (2)].decvar),(yyvsp[(2) - (2)].decvars)); }
     break;
 
   case 23:
 
 /* Line 1806 of yacc.c  */
-#line 185 "bison.y"
+#line 192 "bison.y"
     {(yyval.decvars) = NULL;}
     break;
 
   case 24:
 
 /* Line 1806 of yacc.c  */
-#line 188 "bison.y"
+#line 195 "bison.y"
     {(yyval.cmds) = inicializacmds((yyvsp[(1) - (2)].cmd),(yyvsp[(2) - (2)].cmds)); (*(yyval.cmds)).cmd = (yyvsp[(1) - (2)].cmd);  (*(yyval.cmds)).cmds = (yyvsp[(2) - (2)].cmds);
 			}
     break;
@@ -1759,14 +1766,14 @@ yyreduce:
   case 25:
 
 /* Line 1806 of yacc.c  */
-#line 190 "bison.y"
+#line 197 "bison.y"
     {(yyval.cmds) = NULL;}
     break;
 
   case 26:
 
 /* Line 1806 of yacc.c  */
-#line 193 "bison.y"
+#line 200 "bison.y"
     {(yyval.cmd)= inicializacmd(MNG_IF); 
 					(*(yyval.cmd)).decif.exp = (yyvsp[(3) - (6)].exp); 
 					(*(yyval.cmd)).decif.cmd = (yyvsp[(5) - (6)].cmd); 
@@ -1776,7 +1783,7 @@ yyreduce:
   case 27:
 
 /* Line 1806 of yacc.c  */
-#line 197 "bison.y"
+#line 204 "bison.y"
     {(yyval.cmd)= inicializacmd(MNG_WHILE); 
 					(*(yyval.cmd)).decwhile.exp=(yyvsp[(3) - (5)].exp); 
 					(*(yyval.cmd)).decwhile.cmd = (yyvsp[(5) - (5)].cmd);
@@ -1786,7 +1793,7 @@ yyreduce:
   case 28:
 
 /* Line 1806 of yacc.c  */
-#line 201 "bison.y"
+#line 208 "bison.y"
     {(yyval.cmd)= inicializacmd(MNG_ATRIB); 
 				(*(yyval.cmd)).atrib.var = (yyvsp[(1) - (4)].var); 
 				(*(yyval.cmd)).atrib.exp = (yyvsp[(3) - (4)].exp); 
@@ -1796,7 +1803,7 @@ yyreduce:
   case 29:
 
 /* Line 1806 of yacc.c  */
-#line 205 "bison.y"
+#line 212 "bison.y"
     {(yyval.cmd)= inicializacmd(MNG_RETURN); 
 				(*(yyval.cmd)).ret.exp = (yyvsp[(2) - (3)].exp); 
 				(*(yyval.cmd)).ret.tipret=RET_EXP; 
@@ -1806,21 +1813,21 @@ yyreduce:
   case 30:
 
 /* Line 1806 of yacc.c  */
-#line 209 "bison.y"
+#line 216 "bison.y"
     {(yyval.cmd)= inicializacmd(MNG_RETURN); (*(yyval.cmd)).ret.tipret=RET_VAZIO; (*(yyval.cmd)).linha=lineno;  }
     break;
 
   case 31:
 
 /* Line 1806 of yacc.c  */
-#line 210 "bison.y"
+#line 217 "bison.y"
     {(yyval.cmd)= inicializacmd(MNG_CHMET); (*(yyval.cmd)).chmet= (yyvsp[(1) - (2)].chmet);(*(yyval.cmd)).linha=lineno;}
     break;
 
   case 32:
 
 /* Line 1806 of yacc.c  */
-#line 211 "bison.y"
+#line 218 "bison.y"
     {(yyval.cmd)=inicializacmd(MNG_BLOCO); (*(yyval.cmd)).bloco = ((yyvsp[(1) - (1)].bloco));(*(yyval.cmd)).linha=lineno;
 			}
     break;
@@ -1828,28 +1835,28 @@ yyreduce:
   case 33:
 
 /* Line 1806 of yacc.c  */
-#line 216 "bison.y"
+#line 223 "bison.y"
     {(yyval.ptelse) = NULL;}
     break;
 
   case 34:
 
 /* Line 1806 of yacc.c  */
-#line 217 "bison.y"
+#line 224 "bison.y"
     {(yyval.ptelse) = inicializaptelse((yyvsp[(2) - (2)].cmd));}
     break;
 
   case 35:
 
 /* Line 1806 of yacc.c  */
-#line 220 "bison.y"
+#line 227 "bison.y"
     { (yyval.var) = inicializavar(NULL); (*(yyval.var)).id = (yyvsp[(1) - (1)].id); (*(yyval.var)).qtdACOL=0; }
     break;
 
   case 36:
 
 /* Line 1806 of yacc.c  */
-#line 221 "bison.y"
+#line 228 "bison.y"
     {(yyval.var)=inicializavar((yyvsp[(3) - (4)].exp)); 
 				(*(yyval.var)).qtdACOL=
 				(*(yyvsp[(1) - (4)].var)).qtdACOL+1;}
@@ -1858,7 +1865,7 @@ yyreduce:
   case 37:
 
 /* Line 1806 of yacc.c  */
-#line 226 "bison.y"
+#line 233 "bison.y"
     { (yyval.exp)=inicializaexp(MNG_TIPBASE);    
 		(*(yyval.exp)).tipo.tipbase =TIPO_INT; 
 		(*(yyval.exp)).numint=(yyvsp[(1) - (1)].numint);}
@@ -1867,7 +1874,7 @@ yyreduce:
   case 38:
 
 /* Line 1806 of yacc.c  */
-#line 229 "bison.y"
+#line 236 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_TIPBASE); 
 		(*(yyval.exp)).tipo.tipbase=TIPO_FLOAT;
 		(*(yyval.exp)).numfloat=(yyvsp[(1) - (1)].numfloat);   }
@@ -1876,7 +1883,7 @@ yyreduce:
   case 39:
 
 /* Line 1806 of yacc.c  */
-#line 232 "bison.y"
+#line 239 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_TIPBASE); 
 		(*(yyval.exp)).tipo.tipbase= (yyvsp[(1) - (1)].string).tipo; 
 		(*(yyval.exp)).string=(yyvsp[(1) - (1)].string); }
@@ -1885,7 +1892,7 @@ yyreduce:
   case 40:
 
 /* Line 1806 of yacc.c  */
-#line 235 "bison.y"
+#line 242 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_VAR); 
 		(*(yyval.exp)).var= (yyvsp[(1) - (1)].var); 
 		(*(*(yyval.exp)).var).qtdACOL= (*(yyvsp[(1) - (1)].var)).qtdACOL; 
@@ -1895,7 +1902,7 @@ yyreduce:
   case 41:
 
 /* Line 1806 of yacc.c  */
-#line 239 "bison.y"
+#line 246 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_EXP); (*(yyval.exp)).exp= (yyvsp[(2) - (3)].exp); (*(yyval.exp)).tipo.tipbase = (*(*(yyval.exp)).exp).tipo.tipbase;
 			}
     break;
@@ -1903,14 +1910,14 @@ yyreduce:
   case 42:
 
 /* Line 1806 of yacc.c  */
-#line 241 "bison.y"
+#line 248 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_CHMET); (*(yyval.exp)).chmet= (yyvsp[(1) - (1)].chmet);}
     break;
 
   case 43:
 
 /* Line 1806 of yacc.c  */
-#line 242 "bison.y"
+#line 249 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_TIPEXP); 
 			(*(yyval.exp)).tipexp.tip = &(yyvsp[(2) - (5)].tip); 
 			(*(yyval.exp)).exp = (yyvsp[(4) - (5)].exp);}
@@ -1919,7 +1926,7 @@ yyreduce:
   case 44:
 
 /* Line 1806 of yacc.c  */
-#line 245 "bison.y"
+#line 252 "bison.y"
     {
 			(yyval.exp)=inicializaexp(MNG_TIPBASE); (*(yyval.exp)).tipo.tipbase = (*(yyvsp[(2) - (2)].exp)).tipo.tipbase; 
 			((*(yyvsp[(2) - (2)].exp)).tipo.tipbase==TIPO_INT)?((*(yyval.exp)).numint.valor=(-1 * (*(yyvsp[(2) - (2)].exp)).numint.valor)):((*(yyval.exp)).numfloat.valor=(-1*(*(yyvsp[(2) - (2)].exp)).numfloat.valor)); 
@@ -1929,7 +1936,7 @@ yyreduce:
   case 45:
 
 /* Line 1806 of yacc.c  */
-#line 249 "bison.y"
+#line 256 "bison.y"
     {
 			(yyval.exp)=inicializaexp(MNG_OP);
 			(*(yyval.exp)).op=inicializaop((yyvsp[(1) - (3)].exp),OP_SOMA,(yyvsp[(3) - (3)].exp)); 
@@ -1941,7 +1948,7 @@ yyreduce:
   case 46:
 
 /* Line 1806 of yacc.c  */
-#line 256 "bison.y"
+#line 263 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_OP); 
 			(*(yyval.exp)).op=inicializaop((yyvsp[(1) - (3)].exp),OP_SUB,(yyvsp[(3) - (3)].exp));  
 			(*(*(yyval.exp)).op).linha = lineno;
@@ -1952,7 +1959,7 @@ yyreduce:
   case 47:
 
 /* Line 1806 of yacc.c  */
-#line 261 "bison.y"
+#line 268 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_OP); 
 			(*(yyval.exp)).op=inicializaop((yyvsp[(1) - (3)].exp),OP_MULT,(yyvsp[(3) - (3)].exp));  
 			(*(*(yyval.exp)).op).linha = lineno;
@@ -1963,7 +1970,7 @@ yyreduce:
   case 48:
 
 /* Line 1806 of yacc.c  */
-#line 266 "bison.y"
+#line 273 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_OP); 
 			(*(yyval.exp)).op=inicializaop((yyvsp[(1) - (3)].exp),OP_DIV,(yyvsp[(3) - (3)].exp));  
 			(*(*(yyval.exp)).op).linha = lineno;
@@ -1974,7 +1981,7 @@ yyreduce:
   case 49:
 
 /* Line 1806 of yacc.c  */
-#line 271 "bison.y"
+#line 278 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_OP); 
 			(*(yyval.exp)).op=inicializaop((yyvsp[(1) - (3)].exp),OP_IGUAL,(yyvsp[(3) - (3)].exp));
 			(*(*(yyval.exp)).op).linha = lineno;
@@ -1985,7 +1992,7 @@ yyreduce:
   case 50:
 
 /* Line 1806 of yacc.c  */
-#line 276 "bison.y"
+#line 283 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_OP); 
 			(*(yyval.exp)).op=inicializaop((yyvsp[(1) - (3)].exp),OP_MENORIG,(yyvsp[(3) - (3)].exp)); 
 			(*(*(yyval.exp)).op).linha = lineno;
@@ -1996,7 +2003,7 @@ yyreduce:
   case 51:
 
 /* Line 1806 of yacc.c  */
-#line 281 "bison.y"
+#line 288 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_OP); 
 			(*(yyval.exp)).op=inicializaop((yyvsp[(1) - (3)].exp),OP_MAIORIG,(yyvsp[(3) - (3)].exp));  
 			(*(*(yyval.exp)).op).linha = lineno;
@@ -2007,7 +2014,7 @@ yyreduce:
   case 52:
 
 /* Line 1806 of yacc.c  */
-#line 286 "bison.y"
+#line 293 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_OP); 
 			(*(yyval.exp)).op=inicializaop((yyvsp[(1) - (3)].exp),OP_MENORQ,(yyvsp[(3) - (3)].exp));  
 			(*(*(yyval.exp)).op).linha = lineno;
@@ -2018,7 +2025,7 @@ yyreduce:
   case 53:
 
 /* Line 1806 of yacc.c  */
-#line 291 "bison.y"
+#line 298 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_OP); 
 			(*(yyval.exp)).op=inicializaop((yyvsp[(1) - (3)].exp),OP_MAIORQ,(yyvsp[(3) - (3)].exp)); 
 			(*(*(yyval.exp)).op).linha = lineno; 
@@ -2029,7 +2036,7 @@ yyreduce:
   case 54:
 
 /* Line 1806 of yacc.c  */
-#line 296 "bison.y"
+#line 303 "bison.y"
     {	(yyval.exp)=inicializaexp(MNG_NAO); 
 			(*(yyval.exp)).nao.op = OP_NAO; 
 			(*(yyval.exp)).nao.exp = (yyvsp[(2) - (2)].exp); 
@@ -2039,7 +2046,7 @@ yyreduce:
   case 55:
 
 /* Line 1806 of yacc.c  */
-#line 300 "bison.y"
+#line 307 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_OP); 
 			(*(*(yyval.exp)).op).exp1= (yyvsp[(1) - (3)].exp); 
 			(*(*(yyval.exp)).op).op= OP_E; 
@@ -2052,7 +2059,7 @@ yyreduce:
   case 56:
 
 /* Line 1806 of yacc.c  */
-#line 307 "bison.y"
+#line 314 "bison.y"
     {(yyval.exp)=inicializaexp(MNG_OP); 
 			(*(*(yyval.exp)).op).exp1= (yyvsp[(1) - (3)].exp); 
 			(*(*(yyval.exp)).op).op= OP_OU; 
@@ -2064,35 +2071,38 @@ yyreduce:
   case 57:
 
 /* Line 1806 of yacc.c  */
-#line 315 "bison.y"
+#line 322 "bison.y"
     {(yyval.chmet) = inicializachmet((yyvsp[(1) - (4)].id),(yyvsp[(3) - (4)].listexp));}
     break;
 
   case 58:
 
 /* Line 1806 of yacc.c  */
-#line 318 "bison.y"
-    {(yyval.listexp) = NULL;}
+#line 325 "bison.y"
+    {(yyval.listexp) = NULL; (*(yyval.listexp)).qtdPars = 0;
+}
     break;
 
   case 59:
 
 /* Line 1806 of yacc.c  */
-#line 319 "bison.y"
-    {(yyval.listexp) = inicializalistexp((yyvsp[(1) - (1)].exp), NULL);}
+#line 327 "bison.y"
+    {(yyval.listexp) = inicializalistexp((yyvsp[(1) - (1)].exp), NULL); (*(yyval.listexp)).qtdPars = 1;
+}
     break;
 
   case 60:
 
 /* Line 1806 of yacc.c  */
-#line 320 "bison.y"
-    {(yyval.listexp) = inicializalistexp((yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].listexp));}
+#line 329 "bison.y"
+    {(yyval.listexp) = inicializalistexp((yyvsp[(1) - (3)].exp), (yyvsp[(3) - (3)].listexp)); (*(yyval.listexp)).qtdPars = (*(yyvsp[(3) - (3)].listexp)).qtdPars +1;
+}
     break;
 
 
 
 /* Line 1806 of yacc.c  */
-#line 2096 "sint.c"
+#line 2106 "sint.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2323,7 +2333,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 323 "bison.y"
+#line 333 "bison.y"
 
 
 void yyerror(const char* errmsg)
