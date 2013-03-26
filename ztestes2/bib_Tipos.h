@@ -1,15 +1,84 @@
 #define DEC(dec) mng_##dec dec
 #define DECP(dec) mng_##dec* p_##dec
+#define T(a) case a: printf(#a);break;
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 
-typedef enum {MNG_PROG,MNG_DEC,MNG_DECVAR,MNG_LISTNOM,MNG_TIPO,MNG_TIPBASE,MNG_DECFUNC,MNG_PARS, MNG_IF, MNG_WHILE,MNG_ATRIB, MNG_OP, MNG_NAO, MNG_TIPEXP, MNG_RETURN, MNG_OPNEG,
-MNG_PAR,MNG_BLOCO,MNG_DECVARS,MNG_CMD,MNG_CMDS,MNG_PTELSE,MNG_VAR,MNG_EXP,MNG_CHMET,MNG_LSTEXP} tipo_no;
+typedef enum {
+MNG_PROG,
+MNG_DEC,
+MNG_DECVAR,
+MNG_LISTNOM,
+MNG_TIPO,
+MNG_TIPBASE,
+MNG_DECFUNC,
+MNG_PARS,
+ MNG_IF,
+ MNG_WHILE,
+MNG_ATRIB,
+ MNG_OP,
+ MNG_NAO, 
+MNG_TIPEXP,
+ MNG_RETURN,
+ MNG_OPNEG,
+MNG_PAR,
+MNG_BLOCO,
+MNG_DECVARS,
+MNG_CMD,
+MNG_CMDS,
+MNG_PTELSE,
+MNG_VAR,
+MNG_EXP,
+MNG_CHMET,
+MNG_LSTEXP
+} tipo_no;
+
+void imprimetipono(tipo_no t){
+switch(t){
+T(MNG_PROG)
+T(MNG_DEC)
+T(MNG_DECVAR)
+T(MNG_LISTNOM)
+T(MNG_TIPO)
+T(MNG_TIPBASE)
+T(MNG_DECFUNC)
+T(MNG_PARS)
+T( MNG_IF)
+ T(MNG_WHILE)
+T(MNG_ATRIB)
+T( MNG_OP)
+ T(MNG_NAO)
+T(MNG_TIPEXP)
+ T(MNG_RETURN)
+ T(MNG_OPNEG)
+T(MNG_PAR)
+T(MNG_BLOCO)
+T(MNG_DECVARS)
+T(MNG_CMD)
+T(MNG_CMDS)
+T(MNG_PTELSE)
+T(MNG_VAR)
+T(MNG_EXP)
+T(MNG_CHMET)
+T(MNG_LSTEXP)
+default:break;
+}
+}
 
 typedef enum mng_tipbase { 
 	TIPO_INT,TIPO_CHAR,TIPO_STRING,TIPO_FLOAT,TIPO_VAZIO
 } mng_tipbase ; //tipobase
+void imprimetipbase(mng_tipbase t){
+switch(t){
+T(TIPO_INT)
+T(TIPO_CHAR)
+T(TIPO_STRING)
+T(TIPO_FLOAT)
+T(TIPO_VAZIO)
+default:break;
+}
+}
 
 typedef enum mng_tipret { 
 	RET_VAZIO, RET_EXP
@@ -334,7 +403,7 @@ lista_simb* adicionaVars(lista_simb* s,mng_bloco bloco){
 		return aux;
 }
 
-lista_simb* adicionaFunc(lista_simb* s,mng_decfunc decfunc,mng_pars* pars, lista_simb* saux){
+lista_simb* adicionaFunc(lista_simb* s,mng_decfunc decfunc,/*mng_pars* pars,*/ lista_simb* saux){
 		//printf("adicionafunc %s \n",decfunc.id.name);
         	lista_simb* sim = (lista_simb*) malloc(sizeof(lista_simb));
         	(*sim).funcao.name=decfunc.id.name;
@@ -367,10 +436,10 @@ void imprimirlista(lista_simb* s){
 			//variável
 			if ((*aux).tipono == 0){
 				printf("\nvar: %s  ",(*aux).simb.name);
-				printf("\ntipo: %d  ",(*aux).simb.tipo);			
+				printf("\ntipo2:   ");imprimetipbase((*aux).simb.tipo);			
 			}else{
 				printf("\nfunc: %s  ",(*aux).funcao.name);
-				printf("\ntipo: %d  ",(*aux).funcao.tipo);
+				printf("\ntipo2:   ");imprimetipbase((*aux).funcao.tipo);
 				if((*aux).funcao.lista != NULL){
 					imprimirlista((*aux).funcao.lista);
 				}
@@ -378,6 +447,27 @@ void imprimirlista(lista_simb* s){
 			
  	       }
 }
+int tamanho(lista_simb* s){
+		//printf("implista ");
+		lista_simb* aux=s;
+		int cont=-1;
+		while ((*aux).prox!=NULL){
+			aux=(*aux).prox;
+	/*
+			if ((*aux).tipono == 0){
+				printf("\nvar: %s  ",(*aux).simb.name);
+				printf("\ntipo2:   ");imprimetipbase((*aux).simb.tipo);			
+			}else{
+				printf("\nfunc: %s  ",(*aux).funcao.name);
+				printf("\ntipo2:   ");imprimetipbase((*aux).funcao.tipo);
+				if((*aux).funcao.lista != NULL){
+					imprimirlista((*aux).funcao.lista);
+				}
+			}
+	*/  cont++;		
+ 	       }
+}
+
 
 
 void procuraNome(lista_simb* s, char*nome){
@@ -388,10 +478,10 @@ void procuraNome(lista_simb* s, char*nome){
 			//variável
 			if ((*aux).tipono == 0){
 				printf("\nvar: %s  ",(*aux).simb.name);
-				printf("\ntipo: %d  ",(*aux).simb.tipo);			
+				printf("\ntipo: ");imprimetipono((*aux).simb.tipo);			
 			}else{
 				printf("\nfunc: %s  ",(*aux).funcao.name);
-				printf("\ntipo: %d  ",(*aux).funcao.tipo);
+				printf("\ntipo: ");imprimetipono((*aux).funcao.tipo);
 				if((*aux).funcao.lista != NULL){
 					imprimirlista((*aux).funcao.lista);
 				}
@@ -474,11 +564,13 @@ void verificasimbolo(lista_simb* s,mng_id id){
 					cont++;				
 				}			
 			}
-			if (cont>1){
+			printf("\n\n\tcontador: %d \n\n",cont);
+			if (cont>0){
 					printf("Erro na linha : %d \n",linha);
 					exit(0);					
 			}	
-			if (cont==0){
+			printf("tamanho S : %d \n",tamanho(s));
+			if (cont==0 && tamanho(s)>0){
 					printf("Vriável não declarada na linha : %d \n",linha);
 					exit(0);					
 			}

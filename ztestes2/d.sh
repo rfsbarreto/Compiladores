@@ -1,2 +1,2 @@
  #!/bin/bash          
-clear && make && ./sintatico.out <b.txt >saida.txt 
+clear && make && ./sintatico.out <yes/semyes.monga >saida.txt 

@@ -102,14 +102,14 @@ void yyerror(const char* errmsg);
 
 principal: programa { arvore= $1; 
 			printf("\nlista final: \n");
-			PercorreArvore($1);	}// imprimirlista(tbl);  };
+			PercorreArvore($1);	};// imprimirlista(tbl);  };
 
 programa : { $$=NULL; } // $$.teste = test;
            | declaracao programa {   $$=inicializaprog($1,$2); }
 ; 
 
 declaracao : decvariavel  { $$=inicializadec(); 
-			$$.decvar =(*$1); 
+			$$.decvar =$1; 
 			$$.tipodec=MNG_DECVAR;
 			//tbl=adicionaVar(tbl,$1.p_listnom,$1.tip); 
 		//	verificasimbolos(tbl,$1.p_listnom);

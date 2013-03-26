@@ -89,7 +89,7 @@ typedef union YYSTYPE
 	mng_var var;
 	DEC(bloco);
 	mng_pars * pars;
-	mng_par par;
+	mng_par* par;
 	mng_decvar decvar;
 	mng_decfunc decfunc;
 	mng_tip tip;

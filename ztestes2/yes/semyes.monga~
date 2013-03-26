@@ -33,6 +33,6 @@ int [] f2(int b) {
 		i = i + 1;
 	}
 
-	return a[2];
+	return a;
 }
 

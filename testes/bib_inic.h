@@ -76,7 +76,7 @@ mng_decvar* inicializadecvar(DEC(tip),DECP(listnom)){
 	int tamanho= sizeof(mng_decvar);
 	DECP(decvar) = (mng_decvar*) malloc(tamanho);
 	(*p_decvar).tip = tip;
-	(*p_decvar).p_listnom= p_listnom;
+	(*p_decvar).p_listnom=p_listnom;
 	return p_decvar;
 }
 
@@ -284,14 +284,14 @@ void PercorrePars(mng_pars* pars){
 	}
 }
 
-void Percorredecvar(mng_decvar *decvar){
+void Percorredecvar(mng_decvar * decvar){
 	printf("\ntipo decvar %d", (*decvar).tip);
 	mng_listnom *declistnom = (*decvar).p_listnom;
-	while(declistnom != NULL){
+/*	while(declistnom != NULL){
 		printf("\n  id %s ", (*declistnom).id.name);
 		declistnom = (*declistnom).list;			
 	}
-
+*/
 }
 
 void Percorrebl(mng_bloco* bl){
@@ -307,10 +307,17 @@ void Percorrebl(mng_bloco* bl){
 }
 
 void PercorreDecvars(mng_decvars * dec){
+	printf("percorre vars ");
 	mng_decvars * decvars = dec;
 	while(decvars !=NULL){
-		Percorredecvar((*decvars).decvar);
-		decvars = (*decvars).decvars;	
+		if 	(	(*decvars).decvar ==NULL)
+			printf("1\n");
+		else
+			printf("2\n");
+		//Percorredecvar((*decvars).decvar);
+		
+		if 	(	(*decvars).decvars !=NULL)
+			decvars = (*decvars).decvars;	
 	}
 }
 
@@ -445,7 +452,7 @@ void PercorreArvore(mng_prg* arvore){
 		printf("\ntipo no dec : %d ", (*arvore).dec.tipodec);
 		if ((*arvore).dec.tipodec == MNG_DECVAR){
 			//decvar
-			Percorredecvar(&(*arvore).dec.decvar);
+			Percorredecvar((*arvore).dec.decvar);
 		}else{
 			printf("\ntipo decfunc", (*arvore).dec.decfunc.tip);			
 			printf("\n  id %s", (*arvore).dec.decfunc.id.name);	

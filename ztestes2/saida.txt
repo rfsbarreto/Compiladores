@@ -3,193 +3,55 @@ lista final:
 
 tipo no dec : 2 
 tipo decvar
-  id a adicionavar1 a 
+  id a 
+
+	contador: 0 
+
+tamanho S : 0 
+adicionavar1 a 
 implista 
 var: a  
-tipo: 0  
+tipo2:   TIPO_INT
 tipo no dec : 6 
-<<<<<<< HEAD
+
+	contador: 0 
+
+tamanho S : 0 
+
 tipo decfunc 0
   id f  
+abre bloco
 
-tip par: 38
-nome id par: Xÿà	 
-adicionavar1 Xÿà	 
-
-tip par: 38
-nome id par: Xÿà	 
-adicionavar1 Xÿà	 
-
-tip par: 38
-nome id par: Xÿà	 
-adicionavar1 Xÿà	 
-percorre bloco
-
-=======
-tipo decfunc
-  id f
-tip par: 
-nome id par: 
-tip par: 
-nome id par: 
-tip par: 
-nome id par: 
->>>>>>> cb1685e880796a550313a01b95107a4fcad116ab
 tipo decvar
-  id c adicionavar1 c 
+  id a 
+
+	contador: 0 
+
+tamanho S : 0 
+adicionavar1 a 
 implista 
-var: c  
-tipo: 0  
-var: Xÿà	  
-tipo: 38  
-var: Xÿà	  
-tipo: 38  
-var: Xÿà	  
-tipo: 38  
-tipo decvar
-<<<<<<< HEAD
-  id d adicionavar1 d 
-implista 
-var: d  
-tipo: 0  
-var: c  
-tipo: 0  
-var: Xÿà	  
-tipo: 38  
-var: Xÿà	  
-tipo: 38  
-var: Xÿà	  
-tipo: 38  cmds
-
-
-
- Comandos 165737056  
-ATRIB
-expcmds
-
-
-
- Comandos 165737200  
-ATRIB
-expcmds
-
-
-
- Comandos 165737504  
-
+var: a  
+tipo2:   TIPO_INTcmdsATRIB
+expEncerra bloco 
+Imprimindo lista da funcao: implista 
+var: a  
+tipo2:   TIPO_INT
 tipo no dec : 6 
+
+	contador: 1 
+
+tamanho S : 0 
+
 tipo decfunc 0
-  id h  
-percorre bloco
-cmds
-
-
-
- Comandos 165737760  
-
-tipo no dec : 6 
-tipo decfunc 0
-  id g  
-percorre bloco
-cmds
-
-
-
- Comandos 165738160  
-
-tipo no dec : 6 
-tipo decfunc 1
-  id f2  
-
-tip par: 38
-nome id par: Xÿà	 
-adicionavar1 Xÿà	 
-percorre bloco
-
-=======
-  id d cmds=cmds=cmdspercorrendo exp
-tipo no dec : 6 
-tipo decfunc
-  id hcmdspercorrendo exp
-tipo no dec : 6 
-tipo decfunc
-  id gcmds
-chamada ao mÃ©todo id : 
-tipo no dec : 6 
-tipo decfunc
-  id f2
-tip par: 
-nome id par: 
->>>>>>> cb1685e880796a550313a01b95107a4fcad116ab
-tipo decvar
-  id a adicionavar1 a 
-implista 
+  id a  
+abre bloco
+cmdsEncerra bloco 
+Imprimindo lista da funcao: implista Imprimindo lista FINAL: implista 
+func: a  
+tipo2:   TIPO_VAZIOimplista 
+func: f  
+tipo2:   TIPO_VAZIOimplista 
 var: a  
-tipo: 0  
-var: Xÿà	  
-tipo: 38  
-tipo decvar
-<<<<<<< HEAD
-  id i adicionavar1 i 
-implista 
-var: i  
-tipo: 0  
+tipo2:   TIPO_INT
 var: a  
-tipo: 0  
-var: Xÿà	  
-tipo: 38  cmds
-
-
-
- Comandos 165738728  
-ATRIB
-expcmds
-
-
-
- Comandos 165738872  
-ATRIB
-expcmds
-
-
-
- Comandos 165739848  
-MNG_WHILEexp
-
-
-
- Comandos 165739792  
-percorre bloco dentro do cmd
-percorre bloco
-
-tipo decvar
-  id  adicionavar1  
-implista 
-var:   
-tipo: 34  
-var: i  
-tipo: 0  
-var: a  
-tipo: 0  
-var: Xÿà	  
-tipo: 38  cmds
-
-
-
- Comandos 165739368  
-ATRIB
-expcmds
-
-
-
- Comandos 165739688  
-ATRIB
-expMNG_BLOCOcmds
-
-
-
- Comandos 165739976  
-acabou o/
-=======
-  id i cmds=cmds=cmdsMNG_WHILEcmdspercorrendo expacabou o/
->>>>>>> cb1685e880796a550313a01b95107a4fcad116ab
+tipo2:   TIPO_INTacabou o/

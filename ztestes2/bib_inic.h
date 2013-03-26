@@ -2,7 +2,7 @@
 #define DECP(dec) mng_##dec* p_##dec
 #include "bib_Tipos.h"
 #include "pilha.h"
-<<<<<<< HEAD
+
 void Percorredecvar(mng_decvar decvar,lista_simb* tbl);
 void PercorreCmds(mng_cmds*cmds,lista_simb* tbl);
 void PercorreCmd(mng_cmd* cmd,lista_simb* tbl);
@@ -14,18 +14,6 @@ void PercorreListexp(mng_listexp *listexp,lista_simb* tbl);
 void PercorreExp(mng_exp *exp,lista_simb* tbl);
 void PercorreVar(mng_var var,lista_simb* tbl);
 pilha* p1;
-=======
-void Percorredecvar(mng_decvar decvar);
-void PercorreCmds(mng_cmds*cmds);
-void PercorreCmd(mng_cmd cmd);
-void PercorreDecvars(mng_decvars * dec);
-void Percorrebl(mng_bloco bl);
-void PercorrePar(mng_par *par);
-void PercorrePars(mng_pars *pars);
-void PercorreListexp(mng_listexp *listexp);
-void PercorreExp(mng_exp *exp);
-void PercorreVar(mng_var var);
->>>>>>> cb1685e880796a550313a01b95107a4fcad116ab
 
 mng_prg* inicializaprog(mng_dec dec,mng_prg* prg){
 	int tamanho= sizeof(mng_prg);
@@ -61,20 +49,21 @@ mng_listnom* inicializalistnom(DEC(id),mng_listnom* listnom){
 	return p_listnom;
 }
 
-mng_pars* inicializapars(DEC(par),mng_pars* pars){
+mng_pars* inicializapars(mng_par* par,mng_pars* pars){
 	int tamanho= sizeof(mng_pars);
 	DECP(pars) = (mng_pars*) malloc(tamanho);
-	(*p_pars).par = &par;
+	(*p_pars).par = par;
+if 	(pars==NULL) printf ("AKI");
 	(*p_pars).pars= pars;
 	return p_pars;
 }
 
-mng_par inicializapar(DEC(tip),mng_id id){
+mng_par* inicializapar(DEC(tip),mng_id id){
 	int tamanho= sizeof(mng_par);
 	DECP(par) = (mng_par*) malloc(tamanho);
 	(*p_par).tip = tip;
 	(*p_par).id = id;
-	return (*p_par);
+	return p_par;
 }
 
 
@@ -290,9 +279,14 @@ void PercorrePar(mng_par *par,lista_simb* tbl){
 void PercorrePars(mng_pars* pars,lista_simb* tbl){
 	mng_pars * p = pars;
 	while(p != NULL){
+printf("percorre pars\n");		
+		printf("\ntip par: %d", (*(*p).par).tip.tipbase );
+		printf("\nnome id par: %s \n", (*(*p).par).id.name) ;
 		PercorrePar((*p).par,tbl);
 		PercorrePars((*p).pars,tbl);
+	if 	((*p).pars!=NULL)	
 		p = (*p).pars;
+		else break;
 	}
 }
 
@@ -301,6 +295,7 @@ void  Percorredecvar(mng_decvar decvar,lista_simb* tbl){
 	mng_listnom *declistnom = decvar.p_listnom;
 	while(declistnom != NULL){
 		printf("\n  id %s ", (*declistnom).id.name);
+		verificasimbolo(tbl,(*declistnom).id);
 		adicionaVar1( tbl ,(*declistnom).id,decvar.tip  );
 		declistnom = (*declistnom).list;			
 	}
@@ -309,7 +304,7 @@ void  Percorredecvar(mng_decvar decvar,lista_simb* tbl){
 }
 
 void Percorrebl(mng_bloco* bl,lista_simb* tbl){
-	printf("percorre bloco\n");
+	printf("abre bloco\n");
 	mng_bloco * aux= bl;
 	if (aux!=NULL){
 		if ((*aux).decvars!=NULL)
@@ -317,7 +312,8 @@ void Percorrebl(mng_bloco* bl,lista_simb* tbl){
 
 		if ((*aux).cmds!=NULL)
 			PercorreCmds((*aux).cmds,tbl);
-	}else{printf("assadasd");}
+	}else{printf("Enasdasdasdad \n");}
+	printf("Encerra bloco \n");
 }
 
 void PercorreDecvars(mng_decvars * dec,lista_simb* tbl){
@@ -340,7 +336,7 @@ void PercorreCmds(mng_cmds*cmds,lista_simb* tbl){
 
 }
 
-<<<<<<< HEAD
+
 void PercorreListexp(mng_listexp *listexp,lista_simb* tbl){
 	if(listexp != NULL){
 		PercorreExp(&(*listexp).exp,tbl);
@@ -354,30 +350,15 @@ void PercorreVar(mng_var var,lista_simb* tbl){
 	
 }
 void PercorreCmd(mng_cmd* cmd,lista_simb* tbl){
-	printf("\n\n\n\n Comandos %u  \n",cmd);
+//	printf("\n\n\n\n Comandos %u  \n",cmd);
 	mng_cmd* aux = cmd;
 	if((*aux).tipocmd == MNG_IF){
-=======
-void PercorreListexp(mng_listexp *listexp){
-	if(listexp != NULL){
-		PercorreExp(&(*listexp).exp);
-		PercorreListexp((*listexp).listexp);
-	}
-}
-void PercorreExp(mng_exp *exp){
-	printf("exp");
-}
-void PercorreVar(mng_var var){
 
-}
-void PercorreCmd(mng_cmd cmd){
-	if(cmd.tipocmd == MNG_IF){
->>>>>>> cb1685e880796a550313a01b95107a4fcad116ab
 		printf("if");
 	}
 	if((*aux).tipocmd == MNG_WHILE){
 		printf("MNG_WHILE");
-<<<<<<< HEAD
+
 		PercorreExp(&(*aux).decwhile.exp,tbl);
 		if ((*aux).decwhile.cmd!=NULL){
 			PercorreCmd((*aux).decwhile.cmd,tbl);
@@ -389,30 +370,10 @@ void PercorreCmd(mng_cmd cmd){
 		//PercorreVar(cmd.atrib.var);
 		printf("ATRIB\n");
 		PercorreExp(&(*aux).atrib.exp,tbl);
-=======
-		//PercorreExp(&cmd.decwhile.exp);
-		//PercorreCmd(*cmd.decwhile.cmd);
-	}
-	if(cmd.tipocmd == MNG_ATRIB){
-		//PercorreVar(cmd.atrib.var);
-		printf("=");
-		//PercorreExp(&cmd.atrib.exp);
-	}
-	if(cmd.tipocmd == MNG_RETURN){
-		if (cmd.ret.tipret == RET_EXP){
-			printf("percorrendo exp");
-			//PercorreExp(&cmd.ret.exp);
-		}else{
-			printf("return ;");	
-		}
-	}
-	if(cmd.tipocmd == MNG_CHMET){
-		printf("\nchamada ao método id : ", cmd.chmet.id.name);
-		//PercorreListexp(cmd.chmet.listexp);
->>>>>>> cb1685e880796a550313a01b95107a4fcad116ab
+
 	}
 	if((*aux).tipocmd == MNG_BLOCO){
-		printf("percorre bloco dentro do cmd\n");
+//		printf("percorre bloco dentro do cmd\n");
 				Percorrebl((*aux).bloco,tbl);
 		printf("MNG_BLOCO");
 	}
@@ -432,22 +393,24 @@ void PercorreArvore(mng_prg* arvore,lista_simb* tbl){
 			//decvar
 			Percorredecvar((*arvore).dec.decvar,tabela);
 		}else{
+			verificasimbolo(tbl,(*arvore).dec.decfunc.id);
 			lista_simb* tblfunc= (lista_simb*) malloc(sizeof(lista_simb));
 			printf("\ntipo decfunc %d", (*arvore).dec.decfunc.tip);			
 			printf("\n  id %s  \n", (*arvore).dec.decfunc.id.name);	
 			PercorrePars((*arvore).dec.decfunc.pars,tblfunc);
 			//imprimirlista(tblfunc);							
-			Percorrebl(&((*arvore).dec.decfunc.bloco),tblfunc);		
+			Percorrebl(&((*arvore).dec.decfunc.bloco),tblfunc);	
+			printf("Imprimindo lista da funcao: ");imprimirlista(tblfunc);								
+			adicionaFunc(tabela, (*arvore).dec.decfunc,tblfunc);
 			
 		}
 
 		if((*arvore).prog != NULL){
 			PercorreArvore((*arvore).prog,tabela);
-		}//else
-//			imprimirlista(tabela);				
-		
+		}
+		else{					printf("Imprimindo lista FINAL: ");imprimirlista(tabela);				}
 	}
-	//imprimirlista(tabela);	
+//	imprimirlista(tabela);	
 }
 
 

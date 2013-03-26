@@ -1585,7 +1585,7 @@ yyreduce:
 /* Line 1806 of yacc.c  */
 #line 111 "bison.y"
     { (yyval.dec)=inicializadec(); 
-			(yyval.dec).decvar =(*(yyvsp[(1) - (1)].decvar)); 
+			(yyval.dec).decvar =(yyvsp[(1) - (1)].decvar); 
 			(yyval.dec).tipodec=MNG_DECVAR;
 			//tbl=adicionaVar(tbl,$1.p_listnom,$1.tip); 
 		//	verificasimbolos(tbl,$1.p_listnom);
