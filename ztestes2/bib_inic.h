@@ -574,8 +574,9 @@ void PercorreArvore(mng_prg* arvore,lista_simb* tbl){
 				printf("\n  id %s", (*(*(*arvore).dec).decfunc).id.name);	
 				PercorrePars((*(*(*arvore).dec).decfunc).pars, tblfunc);
 				Percorrebl((*(*(*arvore).dec).decfunc).bloco,tblfunc);		
-				printf("Imprimindo lista da funcao: ");imprimirlista(tblfunc);								
+				printf("Imprimindo lista da funcao: ");imprimirlista(tblfunc);			
 				adicionaFunc(tabela, (*(*arvore).dec).decfunc,tblfunc);
+				verificaChamada(tabela,tblfunc);
 			}
 //>>>>>>> d62241ab7d645bf42c6822837112564b7effa506
 			
