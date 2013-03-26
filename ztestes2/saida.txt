@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 lista final: 
 
@@ -55,3 +56,5 @@ var: a
 tipo2:   TIPO_INT
 var: a  
 tipo2:   TIPO_INTacabou o/
+=======
+>>>>>>> d62241ab7d645bf42c6822837112564b7effa506

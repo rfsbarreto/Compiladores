@@ -32,7 +32,6 @@ int [] f2(int b) {
 		a[i] = new int[10];
 		i = i + 1;
 	}
-
 	return a;
 }
 
