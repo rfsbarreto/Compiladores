@@ -12,7 +12,7 @@
 //No_ast* arvore;
 lista_simb* tbl;
 mng_prg* arvore;
-pilha* p;
+
 
 
 void yyerror(const char* errmsg);
@@ -34,21 +34,20 @@ void yyerror(const char* errmsg);
 	mng_tipbase  tipbase;	
 	mng_id id;
 	mng_var* var;
-	mng_bloco * bloco;
-//	DEC(bloco);
+	DEC(bloco);
 	mng_pars * pars;
 	mng_par* par;
-	mng_decvar* decvar;
-	mng_decfunc* decfunc;
+	mng_decvar decvar;
+	mng_decfunc decfunc;
 	mng_tip tip;
 	mng_prg* prg;
-	mng_dec* dec;
+	mng_dec dec;
 	mng_listnom* listnom;
 	mng_decvars* decvars;
 	mng_cmds* cmds;
 	mng_cmd* cmd;
 	mng_ptelse* ptelse;
-	mng_chmet* chmet;
+	mng_chmet chmet;
 	mng_listexp* listexp;
 	mng_exp* exp;
 	DEC(numint);
@@ -101,28 +100,27 @@ void yyerror(const char* errmsg);
 
 %%
 
-principal: programa {   arvore= $1; 
+principal: programa { arvore= $1; 
 			printf("\nlista final: \n");
-//			PercorreArvore($1);	
-}// imprimirlista(tbl);  };
+			PercorreArvore($1);	}// imprimirlista(tbl);  };
 
 programa : { $$=NULL; } // $$.teste = test;
            | declaracao programa {   $$=inicializaprog($1,$2); }
 ; 
 
 declaracao : decvariavel  { $$=inicializadec(); 
-			(*$$).decvar =$1; 
-			(*$$).tipodec=MNG_DECVAR;
-			//tbl=adicionaVar(tbl,$1.p_listnom,$1.tip); 
-		//	verificasimbolos(tbl,$1.p_listnom);
-		//	imprimirlista(tbl);
+			$$.decvar =$1; 
+			$$.tipodec=MNG_DECVAR;
+			tbl=adicionaVar(tbl,$1.p_listnom,$1.tip); 
+			verificasimbolos(tbl,$1.p_listnom);
+			imprimirlista(tbl);
 			}
 	| decfuncao {  $$=inicializadec(); 
-			(*$$).decfunc =$1;  
-			(*$$).tipodec=MNG_DECFUNC;
+			$$.decfunc =$1;  
+			$$.tipodec=MNG_DECFUNC;
 		//	tbl=adicionaFunc(tbl,$1); 
-		//	verificasimbolo(tbl,$1.id);
-		//	imprimirlista(tbl);
+			verificasimbolo(tbl,$1.id);
+			imprimirlista(tbl);
 }
 ;
 
@@ -150,22 +148,22 @@ tipobase : INT {  $$=TIPO_INT;}
 ; 
 
 decfuncao : VOID ID APAR parametros FPAR bloco {$$=inicializadecfunc($2, $4, $6); 
-						(*$$).tip.tipbase = TIPO_VAZIO;
-						//lista_simb* tblaux=adicionaVars(tblaux,$6);
-						//verificasimbolosbloco(tblaux,$6);
-						//tbl=adicionaFunc(tbl,$$,$4,tblaux);  
+						$$.tip.tipbase = TIPO_VAZIO;
+						lista_simb* tblaux=adicionaVars(tblaux,$6);
+						verificasimbolosbloco(tblaux,$6);
+						tbl=adicionaFunc(tbl,$$,$4,tblaux);  
 					//	imprimirlista(tblaux);
 						//verificaIDDuplicado(tbl, $2);
-						verificaReturn($6, (*$$).tip, $2);
+						verificaReturn($6, $$.tip, $2);
 						}	
 	| tipo ID  APAR parametros FPAR bloco {$$=inicializadecfunc($2, $4, $6); 
-						(*$$).tip = $1; 
-						//lista_simb* tblaux1=adicionaVars(tblaux1,$6);
-						//tbl=adicionaFunc(tbl,$$,$4,tblaux1);  
-						//imprimirlista(tblaux1);
-						//verificasimbolosbloco(tblaux1,$6);
+						$$.tip = $1; 
+						lista_simb* tblaux1=adicionaVars(tblaux1,$6);
+						tbl=adicionaFunc(tbl,$$,$4,tblaux1);  
+						imprimirlista(tblaux1);
+						verificasimbolosbloco(tblaux1,$6);
 			//			verificaIDDuplicado(tbl, $2);
-						verificaReturn($6, (*$$).tip, $2);       }	
+						verificaReturn($6, $$.tip, $2);       }	
 ;
 
 //tiporetorno : tipo | VOID;
@@ -208,7 +206,7 @@ comando : IF APAR exp FPAR comando parteelse {$$= inicializacmd(MNG_IF);
 				(*$$).linha=lineno; }
 	| RETURN PTVIRG {$$= inicializacmd(MNG_RETURN); (*$$).ret.tipret=RET_VAZIO; (*$$).linha=lineno;  }
 	| chamadaMetodo PTVIRG {$$= inicializacmd(MNG_CHMET); (*$$).chmet= $1;(*$$).linha=lineno;}
-	| bloco {$$=inicializacmd(MNG_BLOCO); (*$$).bloco = ($1);(*$$).linha=lineno;
+	| bloco {$$=inicializacmd(MNG_BLOCO); (*$$).bloco = &($1);(*$$).linha=lineno;
 			}
 ;
 
@@ -336,7 +334,6 @@ int main(int argc, char** argv){
 	extern yydebug;
 	yydebug=1;
         yyparse();
-	PercorreArvore(arvore,NULL);
 	printf("acabou o/");
 //	printf("arvore: %d \n",(*arvore).teste);
 //	mng_prg p = 	(*arvore).prog;

@@ -1,15 +1,62 @@
 #define DEC(dec) mng_##dec dec
 #define DECP(dec) mng_##dec* p_##dec
+#define T(a) case a: printf(#a);break;
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 
-typedef enum {MNG_PROG,MNG_DEC,MNG_DECVAR,MNG_LISTNOM,MNG_TIPO,MNG_TIPBASE,MNG_DECFUNC,MNG_PARS, MNG_IF, MNG_WHILE,MNG_ATRIB, MNG_OP, MNG_NAO, MNG_TIPEXP, MNG_RETURN, MNG_OPNEG,
-MNG_PAR,MNG_BLOCO,MNG_DECVARS,MNG_CMD,MNG_CMDS,MNG_PTELSE,MNG_VAR,MNG_EXP,MNG_CHMET,MNG_LSTEXP} tipo_no;
+typedef enum {MNG_PROG,MNG_DEC,MNG_DECVAR,MNG_LISTNOM,MNG_TIPO,
+MNG_TIPBASE,MNG_DECFUNC,MNG_PARS, MNG_IF, MNG_WHILE,
+MNG_ATRIB, MNG_OP, MNG_NAO, MNG_TIPEXP, MNG_RETURN, 
+MNG_OPNEG,MNG_PAR,MNG_BLOCO,MNG_DECVARS,MNG_CMD,
+MNG_CMDS,MNG_PTELSE,MNG_VAR,MNG_EXP,MNG_CHMET,MNG_LSTEXP} tipo_no;
+
+void imprimetipono(tipo_no t){
+switch(t){
+T(MNG_PROG)
+T(MNG_DEC)
+T(MNG_DECVAR)
+T(MNG_LISTNOM)
+T(MNG_TIPO)
+T(MNG_TIPBASE)
+T(MNG_DECFUNC)
+T(MNG_PARS)
+T( MNG_IF)
+ T(MNG_WHILE)
+T(MNG_ATRIB)
+T( MNG_OP)
+ T(MNG_NAO)
+T(MNG_TIPEXP)
+ T(MNG_RETURN)
+ T(MNG_OPNEG)
+T(MNG_PAR)
+T(MNG_BLOCO)
+T(MNG_DECVARS)
+T(MNG_CMD)
+T(MNG_CMDS)
+T(MNG_PTELSE)
+T(MNG_VAR)
+T(MNG_EXP)
+T(MNG_CHMET)
+T(MNG_LSTEXP)
+default:break;
+}
+}
 
 typedef enum mng_tipbase { 
 	TIPO_INT,TIPO_CHAR,TIPO_STRING,TIPO_FLOAT,TIPO_VAZIO
 } mng_tipbase ; //tipobase
+
+void imprimetipbase(mng_tipbase t){
+switch(t){
+T(TIPO_INT)
+T(TIPO_CHAR)
+T(TIPO_STRING)
+T(TIPO_FLOAT)
+T(TIPO_VAZIO)
+default:break;
+}
+}
 
 typedef enum mng_tipret { 
 	RET_VAZIO, RET_EXP
@@ -95,9 +142,10 @@ typedef struct mng_exp{
 	mng_tip tipo;
 	union{
 		struct mng_tip *tip;
-		mng_var var;//DEC(var);
+		mng_var *var;//DEC(var);
 		struct mng_exp* exp;//DEC(exp);
-		DEC(chmet);
+		mng_chmet * chmet;		
+//		DEC(chmet);
 		DEC(nao);
 		struct mng_op* op;//DEC(op);
 		DEC(tipexp);
@@ -108,16 +156,17 @@ typedef struct mng_exp{
 }mng_exp;
 
 typedef struct mng_listexp{
-	DEC(exp);
+	mng_exp *exp;
+	//DEC(exp);
 	struct mng_listexp* listexp;
 }mng_listexp;
 
 
 typedef struct mng_op{
 	int linha;
-	mng_exp exp1;
+	mng_exp* exp1;
 	mng_operadores op;
-	mng_exp exp2; 
+	mng_exp* exp2; 
 }mng_op;
 
 
@@ -140,15 +189,16 @@ typedef struct mng_decvar{
 
 
 typedef struct mng_decvars{
-	mng_decvar decvar;
+	mng_decvar* decvar;
 	struct mng_decvars* decvars;
 
 } mng_decvars;
 
 
 typedef struct mng_atrib{
-	DEC(var);
-	DEC(exp);
+	mng_var *var;
+//	DEC(var);
+	mng_exp *exp;
 } mng_atrib;
 
 
@@ -159,14 +209,16 @@ typedef struct mng_ptelse{
 
 typedef struct mng_decif { 
 //    char* name;
-	DEC(exp);
+	mng_exp *exp;
+	//DEC(exp);
 	struct mng_cmd* cmd;
 	mng_ptelse* ptelse;
 	
 } mng_decif;
 
 typedef struct mng_decwhile { 
-	DEC(exp);
+	mng_exp * exp;	
+
 	struct mng_cmd* cmd;
 	
 } mng_decwhile;
@@ -175,7 +227,7 @@ typedef struct mng_decwhile {
 typedef struct mng_ret{
 	mng_tipret tipret;
 	union{
-		mng_exp exp;	
+		mng_exp *exp;	
 	};
 }mng_ret;
 
@@ -188,7 +240,8 @@ typedef struct mng_cmd{
 		DEC(atrib);
 		struct mng_bloco* bloco;
 		mng_ret ret;
-		DEC(chmet);
+		mng_chmet* chmet;
+//		DEC(chmet);
 	};
 } mng_cmd;
 
@@ -225,21 +278,25 @@ typedef struct  mng_decfunc{
 	DEC(tip);
 	DEC(id);
 	mng_pars* pars;
-	DEC(bloco);
+	mng_bloco*bloco;
+//	DEC(bloco);
 } mng_decfunc ; //decfunção
 
 
 typedef struct mng_dec{
 	tipo_no tipodec;
     union{
-        DEC(decvar);
-        DEC(decfunc);
+	mng_decvar* decvar;
+        //DEC(decvar);
+	mng_decfunc * decfunc;
+        //DEC(decfunc);
     };
 } mng_dec; //declaracao
 
 
 typedef struct mng_prg {
-	DEC(dec);
+	mng_dec *dec;
+//	DEC(dec);
 	struct mng_prg* prog; //= NULL;
 	int teste;
 } mng_prg; //programa
@@ -268,6 +325,8 @@ typedef struct lista_simb{
         };
         struct lista_simb* prox;
 } lista_simb;
+
+
 
 lista_simb* adicionaVar(lista_simb* s,mng_listnom* listnom, mng_tip tip){
 			printf("adicionavar %s \n",(*listnom).id.name);
@@ -323,23 +382,23 @@ lista_simb* adicionaVar1(lista_simb* s,mng_id id, mng_tip tip){
 	return s;
 }
 
-lista_simb* adicionaVars(lista_simb* s,mng_bloco bloco){
+lista_simb* adicionaVars(lista_simb* s,mng_bloco* bloco){
 			//printf("adicionavars  \n");//,(*listnom).id.name);
-    		mng_decvars* var = bloco.decvars;
+    		mng_decvars* var = (*bloco).decvars;
 		lista_simb* aux=(lista_simb*) malloc(sizeof(lista_simb));//=adicionaVar(s,var.p_listnom,var.tip);
 		while(var!=NULL){
-			adicionaVar(aux,(*var).decvar.p_listnom,(*var).decvar.tip);
+			adicionaVar(aux,(*(*var).decvar).p_listnom,(*(*var).decvar).tip);
 			var=(*var).decvars;
 		}
 		return aux;
 }
 
-lista_simb* adicionaFunc(lista_simb* s,mng_decfunc decfunc,mng_pars* pars, lista_simb* saux){
+lista_simb* adicionaFunc(lista_simb* s,mng_decfunc* decfunc, lista_simb* saux){
 		//printf("adicionafunc %s \n",decfunc.id.name);
         	lista_simb* sim = (lista_simb*) malloc(sizeof(lista_simb));
-        	(*sim).funcao.name=decfunc.id.name;
-        	(*sim).funcao.linha=decfunc.id.linha;
-        	(*sim).funcao.tipo=decfunc.tip.tipbase;
+        	(*sim).funcao.name=(*decfunc).id.name;
+        	(*sim).funcao.linha=(*decfunc).id.linha;
+        	(*sim).funcao.tipo=(*decfunc).tip.tipbase;
         	(*sim).tipono=1;
 		(*sim).funcao.lista = saux;
 		if (s!=NULL){
@@ -367,10 +426,11 @@ void imprimirlista(lista_simb* s){
 			//variável
 			if ((*aux).tipono == 0){
 				printf("\nvar: %s  ",(*aux).simb.name);
-				printf("\ntipo: %d  ",(*aux).simb.tipo);			
+				printf("\ntipo2:   ");
+				imprimetipbase((*aux).simb.tipo);
 			}else{
 				printf("\nfunc: %s  ",(*aux).funcao.name);
-				printf("\ntipo: %d  ",(*aux).funcao.tipo);
+				printf("\ntipo2:   ");imprimetipbase((*aux).funcao.tipo);
 				if((*aux).funcao.lista != NULL){
 					imprimirlista((*aux).funcao.lista);
 				}
@@ -388,10 +448,10 @@ void procuraNome(lista_simb* s, char*nome){
 			//variável
 			if ((*aux).tipono == 0){
 				printf("\nvar: %s  ",(*aux).simb.name);
-				printf("\ntipo: %d  ",(*aux).simb.tipo);			
+				printf("\ntipo: ");imprimetipono((*aux).simb.tipo);
 			}else{
 				printf("\nfunc: %s  ",(*aux).funcao.name);
-				printf("\ntipo: %d  ",(*aux).funcao.tipo);
+				printf("\ntipo: ");imprimetipono((*aux).funcao.tipo);
 				if((*aux).funcao.lista != NULL){
 					imprimirlista((*aux).funcao.lista);
 				}
@@ -499,13 +559,13 @@ void verificasimbolos(lista_simb* s,mng_listnom* listnom){
 	}
 }
 
-void verificasimbolosbloco(lista_simb* s,mng_bloco bloco){
+void verificasimbolosbloco(lista_simb* s,mng_bloco* bloco){
 
 	if(s!=NULL){
 		//int	cont=0;
-		mng_decvars* var=bloco.decvars;
+		mng_decvars* var=(*bloco).decvars;
 		while(var!=NULL){
-			verificasimbolos(s,(*var).decvar.p_listnom);
+			verificasimbolos(s,(*(*var).decvar).p_listnom);
 			var=(*var).decvars;
 		}
 	}
