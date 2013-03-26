@@ -198,9 +198,10 @@ comando : IF APAR exp FPAR comando parteelse {$$= inicializacmd(MNG_IF);
 					(*$$).decwhile.exp=$3; 
 					(*$$).decwhile.cmd = $5;
 					(*$$).linha=lineno;}
-        | var ATRIB exp PTVIRG {$$= inicializacmd(MNG_ATRIB); 
-				(*$$).atrib.var = $1; 
-				(*$$).atrib.exp = $3; 
+        | var ATRIB exp PTVIRG {$$= inicializacmd(MNG_ATRIB);
+				(*$$).atrib= inicializaatrib($1,$3);				 
+//				(*$$).atrib.var = $1; 
+//				(*$$).atrib.exp = $3; 
 				(*$$).linha=lineno;}
         | RETURN exp PTVIRG {$$= inicializacmd(MNG_RETURN); 
 				(*$$).ret.exp = $2; 
@@ -218,9 +219,7 @@ parteelse :           {$$ = NULL;}
 ;
 
 var : ID  { $$ = inicializavar(NULL); (*$$).id = $1; (*$$).qtdACOL=0; }
-	| var ACOL exp FCOL {$$=inicializavar($3); 
-				(*$$).qtdACOL=
-				(*$1).qtdACOL+1;}
+	| var ACOL exp FCOL {$$=inicializavar($3); (*$$).id=(*$1).id;  (*$$).qtdACOL=(*$1).qtdACOL+1;}
 ;
 
 exp : NUMINT { $$=inicializaexp(MNG_TIPBASE);    

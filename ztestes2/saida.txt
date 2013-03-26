@@ -1,10 +1,9 @@
-<<<<<<< HEAD
 
 lista final: 
 
 tipo no dec : 2 
-tipo decvar
-  id a 
+tipo decvar 0
+  id a  VERIFICANDO simbolo a 
 
 	contador: 0 
 
@@ -13,18 +12,17 @@ adicionavar1 a
 implista 
 var: a  
 tipo2:   TIPO_INT
-tipo no dec : 6 
+tipo no dec : 6  VERIFICANDO simbolo f 
 
 	contador: 0 
 
 tamanho S : 0 
 
-tipo decfunc 0
-  id f  
-abre bloco
+tipo decfunc
+  id fabre bloco
 
-tipo decvar
-  id a 
+tipo decvar 0
+  id a  VERIFICANDO simbolo a 
 
 	contador: 0 
 
@@ -32,29 +30,30 @@ tamanho S : 0
 adicionavar1 a 
 implista 
 var: a  
-tipo2:   TIPO_INTcmdsATRIB
-expEncerra bloco 
-Imprimindo lista da funcao: implista 
-var: a  
 tipo2:   TIPO_INT
-tipo no dec : 6 
+cmds
+ATRIB
+id: a VERIFICANDO simbolo a linha : 7 linha : 4 
+
 
 	contador: 1 
 
 tamanho S : 0 
 
-tipo decfunc 0
-  id a  
-abre bloco
-cmdsEncerra bloco 
-Imprimindo lista da funcao: implista Imprimindo lista FINAL: implista 
-func: a  
-tipo2:   TIPO_VAZIOimplista 
-func: f  
-tipo2:   TIPO_VAZIOimplista 
-var: a  
-tipo2:   TIPO_INT
-var: a  
-tipo2:   TIPO_INTacabou o/
-=======
->>>>>>> d62241ab7d645bf42c6822837112564b7effa506
+ tipo da exp 11
+Operação na linha 7
+ tipo da exp 22 VERIFICANDO simbolo a linha : 7 linha : 4 
+
+
+	contador: 1 
+
+tamanho S : 0 
+
+nome da var:a 
+qtd de ACOL:0  Tipo da operação: 1
+ tipo da exp 22 VERIFICANDO simbolo b 
+
+	contador: 0 
+
+tamanho S : 0 
+Vriável não declarada na linha : 7 

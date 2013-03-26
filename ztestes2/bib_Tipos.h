@@ -278,7 +278,7 @@ typedef struct mng_cmd{
 	union{
 		DEC(decif);
 		DEC(decwhile);
-		DEC(atrib);
+		mng_atrib* atrib;
 		struct mng_bloco* bloco;
 		mng_ret ret;
 		mng_chmet* chmet;
@@ -591,16 +591,18 @@ void verificaIDDuplicado(lista_simb* s, mng_id id){
 
 
 
-void verificasimbolo(lista_simb* s,mng_id id){
+//void verificasimbolo(lista_simb* s,mng_id id){
+void verificasimbolo(lista_simb* s,mng_id id,tipo_no t){
 
 	if(s!=NULL){
 		int	cont=0;
 		int linha=id.linha;
 			lista_simb* aux=s;
+			printf(" VERIFICANDO simbolo %s ",id.name);
 			while ((*aux).prox!=NULL){
 				aux=(*aux).prox;				
 				if (isequal(id.name,(*aux).simb.name)){
-					//printf("linha : %d linha : %d \n",linha,(*aux).simb.linha);			
+					printf("linha : %d linha : %d \n",linha,(*aux).simb.linha);			
 					if((*aux).simb.linha>=linha)
 						linha=(*aux).simb.linha;
 //					else
@@ -609,12 +611,16 @@ void verificasimbolo(lista_simb* s,mng_id id){
 				}			
 			}
 			printf("\n\n\tcontador: %d \n\n",cont);
-			if (cont>0){
+			if ( (cont>0) && (t== MNG_DECVAR || t==MNG_DECFUNC)){
 					printf("Erro na linha : %d \n",linha);
 					exit(0);					
 			}	
+//			if (cont>0 && t== MNG_ID){
+//					printf("Erro na linha : %d \n",linha);
+//					exit(0);					
+//			}	
 			printf("tamanho S : %d \n",tamanho(s));
-			if (cont==0 && tamanho(s)>0){
+			if (cont==0 && (tamanho(s)>0 || t==MNG_VAR)){
 					printf("Vriável não declarada na linha : %d \n",linha);
 					exit(0);					
 			}
@@ -626,10 +632,13 @@ void verificasimbolos(lista_simb* s,mng_listnom* listnom){
 
 	if(s!=NULL){
 		//int	cont=0;
+		tipo_no t=MNG_DECVAR;
 		mng_listnom* l=listnom;
 		while (l!=NULL){
 			lista_simb* aux=s;
-			verificasimbolo(s,(*l).id);
+			
+			verificasimbolo(s,(*l).id,t);
+//			verificasimbolo(s,(*l).id);
 			l=(*l).list;
 		}
 	}

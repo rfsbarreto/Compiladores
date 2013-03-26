@@ -1,7 +1,7 @@
 
 int a;
 
-int f(int a) {
+int f(int a,int b) {
 	int[] c;
 	int d;
 	c = new int[a];
@@ -20,7 +20,7 @@ float h() {
 
 
 void g() {
-	f(3 );
+	f(3,4);
 }
 
 int [] f2(int b) {
