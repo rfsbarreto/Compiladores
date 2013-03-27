@@ -81,7 +81,7 @@ typedef union YYSTYPE
 {
 
 /* Line 2068 of yacc.c  */
-#line 33 "bison.y"
+#line 32 "bison.y"
 
 	
 	mng_tipbase  tipbase;	

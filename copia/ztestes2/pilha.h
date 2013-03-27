@@ -20,7 +20,7 @@ void insert(lista_simb* lista,pilha* p1){
 	(*d1).ant=(*p1).topo;		//Atribuindo ao novo nó o apontador para o atual topo da pilha
 	(*p1).topo=d1;					//Apontando a pilha pro novo nó
 	//(*p1).topo = d1;	
-	//return;
+	return;
 }
 
 void imprime(pilha* p1){

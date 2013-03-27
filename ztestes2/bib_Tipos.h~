@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "enum.h"
-//#include "verificacao.h"
+#include "verificacao.h"
 
 
 

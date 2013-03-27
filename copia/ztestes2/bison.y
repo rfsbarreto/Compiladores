@@ -2,11 +2,10 @@
 //#include <stdio.h>
 //#include "bib1.c"
 #include "bib_inic.h"
-//#include "leitura.h"
 
 //#include "teste.h"
 #include "lex.c"
-#define YYDEBUG 1
+//#define YYDEBUG 1
 //#define DEC(dec) mng_##dec dec
 //extern mng_tipbase ;
 
@@ -103,9 +102,9 @@ void yyerror(const char* errmsg);
 %%
 
 principal: programa {   arvore= $1; 
-			//printf("\nlista final: \n");
+
 //			PercorreArvore($1);	
-};// imprimirlista(tbl);  };
+}// imprimirlista(tbl);  };
 
 programa : { $$=NULL; } // $$.teste = test;
            | declaracao programa {   $$=inicializaprog($1,$2); }
@@ -380,11 +379,11 @@ void yyerror(const char* errmsg)
 
  
 int main(int argc, char** argv){
-	extern yydebug;
-	yydebug=1;
+	//extern yydebug;
+//	yydebug=1;
     yyparse();
 	PercorreArvore(arvore,NULL);
-//	printf("acabou o/");
+
 //	printf("arvore: %d \n",(*arvore).teste);
 //	mng_prg p = 	(*arvore).prog;
 //	printf("arvore2: %d \n",(*arvore).prog.teste);
