@@ -1,6 +1,6 @@
 #define DEC(dec) mng_##dec dec
 #define DECP(dec) mng_##dec* p_##dec
-#define T(a) case a: printf(#a);break;
+#define T(a) case a: return #a;break;
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -9,7 +9,7 @@
 
 
 
-void imprimetipono(tipo_no t){
+char* imprimetipono(tipo_no t){
 	switch(t){
 			T(MNG_PROG) T(MNG_DEC)  T(MNG_DECVAR)  T(MNG_LISTNOM)  T(MNG_TIPO) T(MNG_TIPBASE) T(MNG_DECFUNC) T(MNG_PARS) 
 			T( MNG_IF)  T(MNG_WHILE)  T(MNG_ATRIB) T( MNG_OP)  T(MNG_NAO)  T(MNG_TIPEXP)  T(MNG_RETURN)	T(MNG_OPNEG) 
@@ -19,7 +19,7 @@ void imprimetipono(tipo_no t){
 
 
 
-void imprimetipbase(mng_tipbase t){
+char* imprimetipbase(mng_tipbase t){
 	switch(t){ T(TIPO_INT) T(TIPO_CHAR) T(TIPO_STRING) T(TIPO_FLOAT) T(TIPO_VAZIO)  default:break;}
 }
 

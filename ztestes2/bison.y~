@@ -103,6 +103,8 @@ void yyerror(const char* errmsg);
 %%
 
 principal: programa {   arvore= $1; 
+			printf("Impressão teste ");imprimirlistaprog(arvore);
+			printf("\n\n ");
 			//printf("\nlista final: \n");
 //			PercorreArvore($1);	
 };// imprimirlista(tbl);  };
@@ -383,8 +385,9 @@ int main(int argc, char** argv){
 	extern yydebug;
 	yydebug=1;
     yyparse();
+	
 	PercorreArvore(arvore,NULL);
-//	printf("acabou o/");
+	printf("acabou o/");
 //	printf("arvore: %d \n",(*arvore).teste);
 //	mng_prg p = 	(*arvore).prog;
 //	printf("arvore2: %d \n",(*arvore).prog.teste);

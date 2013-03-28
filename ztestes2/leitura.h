@@ -35,6 +35,7 @@ printf("percorre pars\n");
 	//	printf("percorre pars\n");		
 	//	printf("\ntip par: %d", (*(*(*p).par).tip).tipbase );
 	///	printf("\nnome id par: %s \n", (*(*p).par).id.name) ;
+		printf("Percorrendo Parametros"); //nome id par: %s \n", (*(*p).par).id.name) ;
 		PercorrePar((*p).par, tbl);
 		PercorrePars((*p).pars,tbl);
 		if ((*p).pars != NULL){
@@ -45,7 +46,7 @@ printf("percorre pars\n");
 }
 
 void Percorredecvar(mng_decvar* decvar,lista_simb* tbl){
-//	printf("\ntipo decvar %d", (*decvar).tip);
+	printf("Percorrendo var\n");//"\ntipo decvar %d", (*decvar).tip);
 	mng_listnom *declistnom = (*decvar).p_listnom;
 	while(declistnom != NULL){
 	//	printf("\n  id %s ", (*declistnom).id.name);
@@ -57,7 +58,7 @@ void Percorredecvar(mng_decvar* decvar,lista_simb* tbl){
 		declistnom = (*declistnom).list;			
 
 	}
-	imprimirlista(tbl);
+	//imprimirlista(tbl);
 	//return tbl;
 }
 
@@ -65,6 +66,7 @@ void Percorrebl(mng_bloco* bl,lista_simb* tbl){
 	//printf("abre bloco\n");
 	mng_bloco * aux= bl;
 	if (aux!=NULL){
+				printf("Percorrendo bloco\n"); //nome id par: %s \n", (*(*p).par).id.name) ;
 		if ((*aux).decvars!=NULL)
 			PercorreDecvars((*aux).decvars,tbl);
 
@@ -81,6 +83,7 @@ void Percorrebl(mng_bloco* bl,lista_simb* tbl){
 void PercorreDecvars(mng_decvars * dec,lista_simb* tbl){
 	mng_decvars * decvars = dec;
 	while(decvars !=NULL){
+		printf("Percorrendo Decvars\n");
 		Percorredecvar((*decvars).decvar, tbl);
 		if((*decvars).decvars != NULL){
 			decvars = (*decvars).decvars;
@@ -228,7 +231,9 @@ void PercorreCmd(mng_cmd* cmd,lista_simb* tbl){
 }
 
 void PercorreArvore(mng_prg* arvore,lista_simb* tbl){
+//	printf("Percorrendo árvore: \n");	
 	if(arvore != NULL){
+
 		lista_simb* tabela;		
 		if (tbl==NULL){
 			tabela=	(lista_simb*) malloc(sizeof(lista_simb));
@@ -238,11 +243,13 @@ void PercorreArvore(mng_prg* arvore,lista_simb* tbl){
 		//printf("\ntipo no dec : %d ", (*(*arvore).dec).tipodec);
 		if ((*(*arvore).dec).tipodec == MNG_DECVAR){
 			//decvar
+		printf("Percorrendo árvore( decvar): \n");	
 			if((*(*arvore).dec).decvar){
 				Percorredecvar((*(*arvore).dec).decvar, tabela);
 			}
 		}else{
 			if((*(*arvore).dec).decfunc != NULL){
+				printf("Percorrendo árvore( decfunc): \n");	
 				tipo_no t=MNG_DECFUNC;
 				verificasimbolo(tbl,(*(*(*arvore).dec).decfunc).id,t);
 //				verificasimbolo(tbl,(*(*(*arvore).dec).decfunc).id);//,t);
@@ -252,7 +259,7 @@ void PercorreArvore(mng_prg* arvore,lista_simb* tbl){
 				PercorrePars((*(*(*arvore).dec).decfunc).pars, tblfunc);
 				Percorrebl((*(*(*arvore).dec).decfunc).bloco,tblfunc);		
 			//	printf("Imprimindo lista da funcao: ");imprimirlista(tblfunc);			
-			
+				//printf("decfunc analisada: \n");	
 				adicionaFunc(tabela, (*(*arvore).dec).decfunc,tblfunc);
 			
 
@@ -262,11 +269,11 @@ void PercorreArvore(mng_prg* arvore,lista_simb* tbl){
 		}
 
 		if((*arvore).prog != NULL){
+			imprimirlista(tabela);
 			PercorreArvore((*arvore).prog,tabela);
-
 		}
-		else{				//	printf("Imprimindo lista FINAL: ");imprimirlista(tabela);				}
+		else{					printf("Imprimindo lista FINAL: ");imprimirlista(tabela);				}
 	}
-//	imprimirlista(tabela);	
+	printf("arvore vazia");//imprimirlista(tabela);	
 }
-}
+

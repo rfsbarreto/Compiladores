@@ -1,26 +1,60 @@
+#include "bib_Tipos.h"
+
 void imprimirlista(lista_simb* s){
 	//	printf("implista ");
 		lista_simb* aux=s;
+		//printf("\n")
 		while ((*aux).prox!=NULL){
 			aux=(*aux).prox;
 			//variável
 			if ((*aux).tipono == 0){
-			//	printf("\nvar: %s  ",(*aux).simb.id.name);
+				printf("var: %s ",(*aux).simb.id.name);
 //				printf("\ndimensoes: %s  ",(*aux).simb.tipo.qtdACOL);
-				//printf("\ntipo2:   ");
-//				imprimetipbase((*(*aux).simb.tipo).tipbase);
+				printf("ntipo2:  ->  ");
+				imprimetipbase((*(*aux).simb.tipo).tipbase);
 
 			}else{
-				//printf("\nfunc: %s  ",(*aux).funcao.id.name);
+				printf("func: %s  ",(*aux).funcao.id.name);
 //				printf("\ndimensoes: %s  ",(*aux).funcao.tipo.qtdACOL);
-				//printf("\ntipo2:   ");imprimetipbase((*(*aux).funcao.tipo).tipbase);
+				printf("tipo2: %s -> ",imprimetipbase((*(*aux).funcao.tipo).tipbase) );
 				if((*aux).funcao.lista != NULL){
 					imprimirlista((*aux).funcao.lista);
 				}
 			}
+				
+ 	       }
+		printf("%s \n",(*aux).prox);
+}
+
+void imprimirlistaprog(mng_prg* s){
+	//	printf("implista ");
+		mng_prg* aux=s;
+		while (aux!=NULL){
+//			aux=(*aux).prox;
+			//variável
+		//	if ((*aux).tipono == 0){
+				printf(" dec.tipo: %u -> ",(*(*aux).dec).tipodec);
+				aux=(*aux).prog;
+//				printf("\ndimensoes: %s  ",(*aux).simb.tipo.qtdACOL);
+//				printf("\ntipo2:   ");
+			//	imprimetipbase((*(*aux).dec.tipo).tipbase);
+
+		//	}else{
+		//		printf("\nfunc: %s  ",(*aux).funcao.id.name);
+//				printf("\ndimensoes: %s  ",(*aux).funcao.tipo.qtdACOL);
+		//		printf("\ntipo2:   ");imprimetipbase((*(*aux).funcao.tipo).tipbase);
+		//		if((*aux).funcao.lista != NULL){
+		//			imprimirlista((*aux).funcao.lista);
+		//		}
+		//	}
 			
  	       }
+		printf("%s",aux);
 }
+
+
+
+
 int tamanho(lista_simb* s){
 		//printf("implista ");
 		lista_simb* aux=s;
