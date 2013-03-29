@@ -110,7 +110,7 @@ principal: programa {   arvore= $1;
 };// imprimirlista(tbl);  };
 
 programa : { $$=NULL; } // $$.teste = test;
-           | declaracao programa {   $$=inicializaprog($1,$2); }
+           | declaracao programa {   $$=inicializaprog($1,$2);  imprimirlistadec($1); printf("\n"); }
 ; 
 
 declaracao : decvariavel  { $$=inicializadec(); 
@@ -126,6 +126,7 @@ declaracao : decvariavel  { $$=inicializadec();
 		//	tbl=adicionaFunc(tbl,$1); 
 		//	verificasimbolo(tbl,$1.id);
 		//	imprimirlista(tbl);
+		//imprimirlistaprog(arvore)
 }
 ;
 
@@ -169,6 +170,7 @@ decfuncao : VOID ID APAR parametros FPAR bloco {$$=inicializadecfunc($2, $4, $6)
 						(*$$).tip = $1;
 						if ($4 != NULL) {
 						(*$$).qtdPars = (*$4).qtdPars;} else (*$$).qtdPars =0;
+
 						//lista_simb* tblaux1=adicionaVars(tblaux1,$6);
 						//tbl=adicionaFunc(tbl,$$,$4,tblaux1);  
 						//imprimirlista(tblaux1);
@@ -385,7 +387,7 @@ int main(int argc, char** argv){
 	extern yydebug;
 	yydebug=1;
     yyparse();
-	
+	printf("\n==========================================================================================================================\n");
 	PercorreArvore(arvore,NULL);
 	printf("acabou o/");
 //	printf("arvore: %d \n",(*arvore).teste);

@@ -282,6 +282,7 @@ typedef struct funcao{
 //        char* name;
 //		int linha;
 		mng_id id;
+		int qtdPas;
 		struct lista_simb* lista;
 } funcao;
 
@@ -373,6 +374,7 @@ lista_simb* adicionaFunc(lista_simb* s,mng_decfunc* decfunc, lista_simb* saux){
 //        	(*sim).funcao.linha=(*decfunc).id.linha;
 		//(*sim).funcao.tipo = (mng_tip*) malloc(sizeof(mng_tip));
         	(*sim).funcao.tipo=(*decfunc).tip;
+		(*sim).funcao.qtdPars=(*decfunc).qtdPars;		
         	(*sim).tipono=1;
 		(*sim).funcao.lista = saux;
 		if (s!=NULL){

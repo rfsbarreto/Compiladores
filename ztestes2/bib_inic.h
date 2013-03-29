@@ -2,7 +2,7 @@
 #define DECP(dec) mng_##dec* p_##dec
 //#include "bib_Tipos.h"
 #include "verificacao.h"
-#include "pilha.h"
+//#include "pilha.h"
 #include "leitura.h"
 
 

@@ -32,6 +32,18 @@ void imprime(pilha* p1){
 	printf("\n");
 }
 
+int tamanhopilha(pilha* p1){
+	dado* aux=(*p1).topo;
+	int cont=0;
+	while (aux!=NULL){
+//		imprimirlista((*aux).tbl);//{printf("%d ",(*aux).a);
+		cont++;
+		aux=(*aux).ant;
+	};
+	return cont;
+	//printf("\n");
+}
+
 //Função para desempilhar
 void pop(pilha* p1){
 	if (!vazia(p1)){	
