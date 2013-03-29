@@ -235,12 +235,16 @@ void PercorreCmd(mng_cmd* cmd,lista_simb* tbl){
 		printf("\nchamada ao método id : %s", (*(*aux).chmet).id.name);
 		tipo_no t=MNG_CHMET;
 		verificasimbolo(tbl,(*(*aux).chmet).id,t);
+		
 		pilha * p=p1;
-		while (tamanhopilha(p)>0){
+	///	printf(" tamanho pilha pro while: %d  ",tamanhopilha(p));
+		while ((*p).topo!=NULL){
 //			verificasimbolo(tbl,(*(*aux).chmet).id,(*(*p).topo).tbl,t);
-			printf("Verificando!");
-			verificasimbolo((*(*p).topo).tbl,(*(*aux).chmet).id,t);
-		}
+		//	printf("Verificando!");
+			verificachmet((*(*p).topo).tbl,(*aux).chmet,t);
+			(*p).topo=(*(*p).topo).ant;
+
+		} 
 		PercorreListexp((*(*aux).chmet).listexp,tbl);
 		
 	}

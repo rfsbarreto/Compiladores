@@ -60,7 +60,7 @@ void imprimirlistadec(mng_dec* s){
 //			aux=(*aux).prox;
 			//variável
 			if ((*aux).tipodec == MNG_DECVAR){
-				printf(" dec.var.tpbase: %s -> ",(*(*(*aux).decvar).tip).tipbase);
+				printf(" dec.var.tpbase: %s -> ",imprimetipbase((*(*(*aux).decvar).tip).tipbase));
 //				printf(" dec.qtdPAR: %u -> ",(*(*(*aux).dec).qtdPars);
 			}else{
 				printf(" dec.func: %s -> ",(*(*aux).decfunc).id.name);
@@ -254,8 +254,9 @@ void verificasimbolo(lista_simb* s,mng_id id,tipo_no t){
 		//	printf("tamanho S : %d \n",tamanholista(s));
 			if ( (cont>0) && (t== MNG_CHMET)){
 					printf("QTDPAR: %d  ",(*aux).funcao.qtdPars);
-					printf("Erro na linha : %d \n",linha);
-					exit(0);					
+				//	printf("Erro na linha : %d \n",linha);
+					
+					//exit(0);					
 			}	
 			printf("tamanho S : %d \n",tamanholista(s));
 			if (cont==0 && ( /*tamanholista(s)>0 ||*/ t==MNG_VAR)){
@@ -301,13 +302,16 @@ void verificachmet(lista_simb* s,mng_chmet* met,tipo_no t){//,pilha * p1){
 
 			if ( (cont>0) && (t== MNG_CHMET)){
 					printf("qtdpars: %d %d \n",qtdpars,(*aux).funcao.qtdPars);
-					if (qtdpars>(*aux).funcao.qtdPars)
-						printf("Erro na linha %d. Função chamada possui menos parâmetros  \n",linha);
-					else	
-						if (qtdpars<(*aux).funcao.qtdPars)
-						printf("Erro na linha %d. Função chamada possui mais parâmetros  \n",linha);
-				
-					exit(0);					
+					if (qtdpars==(*aux).funcao.qtdPars)	{
+					
+					} else	{			
+						if (qtdpars>(*aux).funcao.qtdPars)
+							printf("Erro na linha %d. Função chamada possui menos parâmetros  \n",linha);
+						else	
+						//if (qtdpars<(*aux).funcao.qtdPars)
+							printf("Erro na linha %d. Função chamada possui mais parâmetros  \n",linha);
+						exit(0);					
+						}
 			}	
 /*			if (cont==0 && (tamanholista(s)>0 || t==MNG_VAR)){
 					printf("Variável não declarada na linha : %d \n",linha);
