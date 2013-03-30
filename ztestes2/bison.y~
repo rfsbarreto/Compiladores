@@ -111,14 +111,14 @@ principal: programa {   arvore= $1;
 
 programa : { $$=NULL; } // $$.teste = test;
            | declaracao programa {   $$=inicializaprog($1,$2);  imprimirlistadec($1); printf("\n"); }
-; 
+; 	
 
 declaracao : decvariavel  { $$=inicializadec(); 
 			(*$$).decvar =$1; 
 			(*$$).tipodec=MNG_DECVAR;
 			//tbl=adicionaVar(tbl,$1.p_listnom,$1.tip); 
 		//	verificasimbolos(tbl,$1.p_listnom);
-		//	imprimirlista(tbl);
+		//	imprimirlista(tbl);	
 			}
 	| decfuncao {  $$=inicializadec(); 
 			(*$$).decfunc =$1;  

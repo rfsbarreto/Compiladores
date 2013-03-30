@@ -273,6 +273,7 @@ typedef struct simbolo{
         mng_tip* tipo;
 //       char* name;
 //		int linha;
+		tipo_no tiposimbolo;
 		mng_id id;
 } simbolo;
 
@@ -306,6 +307,7 @@ lista_simb* adicionaVar(lista_simb* s,mng_listnom* listnom, mng_tip* tip){
 
 	//	(*sim).simb.tipo = (mng_tip*) malloc(sizeof(mng_tip));
         	(*sim).simb.tipo=tip;
+		(*sim).simb.tiposimbolo=MNG_VAR;
         	(*sim).tipono=0;
 			//printf("simbolo %s %d \n",(*sim).simb.name,(*sim).simb.tipo);
 			if (s!=NULL){
@@ -332,7 +334,7 @@ lista_simb* adicionaVar(lista_simb* s,mng_listnom* listnom, mng_tip* tip){
 
 }
 
-lista_simb* adicionaVar1(lista_simb* s,mng_id id, mng_tip* tip){
+lista_simb* adicionaVar1(lista_simb* s,mng_id id, mng_tip* tip,tipo_no t){
 			//printf("adicionavar1 %s %d %d \n",id.name,(*tip).tipbase,(*tip).qtdACOL);
         	//mng_listnom var = (*listnom);
 			lista_simb* sim = (lista_simb*) malloc(sizeof(lista_simb));
@@ -340,6 +342,7 @@ lista_simb* adicionaVar1(lista_simb* s,mng_id id, mng_tip* tip){
 //        	(*sim).simb.linha=id.linha;
 		//(*sim).simb.tipo = (mng_tip*) malloc(sizeof(mng_tip));
         	(*sim).simb.tipo=tip;
+		(*sim).simb.tiposimbolo=t;
         	(*sim).tipono=0;
 			//printf("simbolo %s %d \n",(*sim).simb.name,(*sim).simb.tipo);
 			if (s!=NULL){
@@ -348,6 +351,7 @@ lista_simb* adicionaVar1(lista_simb* s,mng_id id, mng_tip* tip){
 				(*s).prox=sim;			// cabeça apontará para o nó atual
     		}else{
 				//printf("s null \n");
+				(*sim).prox=NULL;
 				s= (lista_simb*) malloc(sizeof(lista_simb));            
 				(*s).prox=sim;
 	}
@@ -375,6 +379,7 @@ lista_simb* adicionaFunc(lista_simb* s,mng_decfunc* decfunc, lista_simb* saux){
 		//(*sim).funcao.tipo = (mng_tip*) malloc(sizeof(mng_tip));
         	(*sim).funcao.tipo=(*decfunc).tip;
 		(*sim).funcao.qtdPars=(*decfunc).qtdPars;		
+//		(*sim).funcao.tiposimbolo=MNG_VAR;
         	(*sim).tipono=1;
 		(*sim).funcao.lista = saux;
 		if (s!=NULL){
@@ -382,7 +387,7 @@ lista_simb* adicionaFunc(lista_simb* s,mng_decfunc* decfunc, lista_simb* saux){
 				(*sim).prox=(*s).prox;
 				(*s).prox=sim;			// cabeça apontará para o nó atual
     		}else{
-
+				(*sim).prox=NULL;
 				s= (lista_simb*) malloc(sizeof(lista_simb));            
 				(*s).prox=sim;
 				if (s==NULL){

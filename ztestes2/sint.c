@@ -1594,7 +1594,7 @@ yyreduce:
 			(*(yyval.dec)).tipodec=MNG_DECVAR;
 			//tbl=adicionaVar(tbl,$1.p_listnom,$1.tip); 
 		//	verificasimbolos(tbl,$1.p_listnom);
-		//	imprimirlista(tbl);
+		//	imprimirlista(tbl);	
 			}
     break;
 

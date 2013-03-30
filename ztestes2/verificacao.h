@@ -7,6 +7,7 @@ void imprimirlista(lista_simb* s){
 		//printf("\n")
 		while ((*aux).prox!=NULL){
 			aux=(*aux).prox;
+			printf("end: %u ",aux);
 			//variável
 			if ((*aux).tipono == 0){
 				printf("var: %s ",(*aux).simb.id.name);
@@ -25,6 +26,7 @@ void imprimirlista(lista_simb* s){
  	       }
 		printf("%s \n",(*aux).prox);
 }
+
 
 void imprimirlistaprog(mng_prg* s){
 	//	printf("implista ");
@@ -60,11 +62,13 @@ void imprimirlistadec(mng_dec* s){
 //			aux=(*aux).prox;
 			//variável
 			if ((*aux).tipodec == MNG_DECVAR){
+				printf(" dec.vars: %s -> ",imprimirlistanome((*(*aux).decvar).p_listnom));	
 				printf(" dec.var.tpbase: %s -> ",imprimetipbase((*(*(*aux).decvar).tip).tipbase));
 //				printf(" dec.qtdPAR: %u -> ",(*(*(*aux).dec).qtdPars);
 			}else{
 				printf(" dec.func: %s -> ",(*(*aux).decfunc).id.name);
 				printf(" decfunc.qtdPAR: %d -> ",(*(*aux).decfunc).qtdPars);
+				printf(" decfunc.tipo: %s -> ",imprimetipbase((*(*(*aux).decfunc).tip).tipbase));			
 			}
 	
 //			aux=(*aux).prog;
@@ -72,6 +76,15 @@ void imprimirlistadec(mng_dec* s){
 			
  	    
 		//printf("%s",aux);
+}
+
+void imprimirlistanome(mng_listnom* s){
+		mng_listnom* a=s;
+		while (a!=NULL){
+			printf(" %s ",(*a).id);
+			a=(*a).list;
+		}
+
 }
 
 
@@ -142,7 +155,8 @@ int isequal(char* s1,char* s2){
 			}
 				return igual;
 				//if (igual)
-				//	exit(0);
+				//	exit(0); 
+
 }
 
 
@@ -220,16 +234,24 @@ mng_tip* verificavar(lista_simb* s,mng_id id,tipo_no t){
 }
 
 //void verificasimbolo(lista_simb* s,mng_id id){
-void verificasimbolo(lista_simb* s,mng_id id,tipo_no t){
+mng_tip* verificasimbolo(lista_simb* s,mng_id id,tipo_no t){
 
+	imprimirlista(s);
 	if(s!=NULL){
 		int	cont=0;
 		int linha=id.linha;
 			lista_simb* aux=s;
-			printf("\n VERIFICANDO simbolo %s ",id.name);
+			printf("\n VERIFICANDO simbolo %s %u %u",id.name,(*aux).prox,aux) ;
 			while ((*aux).prox!=NULL){
-				aux=(*aux).prox;				
-				if (isequal(id.name,(*aux).simb.id.name)){
+			//	printf("\n VERIFICANDO simbolo %s na tabela %u ",id.name,aux);
+				aux=(*aux).prox;			
+				printf("\n VERIFICANDO simbolo %s na tabela %u ",id.name,aux);	
+				//printf("\nimprimindo lista: ");imprimirlista(aux);
+				//printf("\nteste %s",(*aux).funcao.id.name);
+				//printf("\nteste %s",(*aux).simb.id.name);
+			//if 
+				
+			if (isequal(id.name,((*aux).tipono==0)?((*aux).simb.id.name):((*aux).funcao.id.name ) ) ) {
 					//printf("linha : %d linha : %d \n",linha,(*aux).simb.id.linha);
 							
 					if((*aux).simb.id.linha>=linha)
@@ -240,7 +262,7 @@ void verificasimbolo(lista_simb* s,mng_id id,tipo_no t){
 					cont++;				
 										break;
 				}			
-			}
+		 }  	
 			printf("\tcontador: %d \n",cont);
 		//	imprimirlista(s);
 			if ( (cont>0) && (t== MNG_DECVAR || t==MNG_DECFUNC)){
@@ -258,19 +280,82 @@ void verificasimbolo(lista_simb* s,mng_id id,tipo_no t){
 					
 					//exit(0);					
 			}	
-			printf("tamanho S : %d \n",tamanholista(s));
+			printf("tamanho t  S : %s %d \n",imprimetipono(t),tamanholista(s));
+			printf("aaaaa\n");
 			if (cont==0 && ( /*tamanholista(s)>0 ||*/ t==MNG_VAR)){
 					printf("Vriável não declarada na linha : %d \n",linha);
 					exit(0);					
 			}
-	//printf("tamanho S : %d \n",tamanholista(s));
+		return ( ( (*aux).tipono==0)?((*aux).simb.tipo):((*aux).funcao.tipo ) );
 	printf("\n TERMINOU VERIFICAçao simbolo  ");
 	//printf("tamaassadnho S : %d \n",tamanholista(s));
 	}
 	
 }
 
-void verificachmet(lista_simb* s,mng_chmet* met,tipo_no t){//,pilha * p1){
+
+void Verificatipo(mng_exp * exp,lista_simb* s,mng_id id,tipo_no t){
+
+	imprimirlista(s);
+	if(s!=NULL){
+		int	cont=0;
+		int linha=id.linha;
+			lista_simb* aux=s;
+			printf("\n VERIFICANDO simbolo %s %u %u",id.name,(*aux).prox,aux) ;
+			while ((*aux).prox!=NULL){
+			//	printf("\n VERIFICANDO simbolo %s na tabela %u ",id.name,aux);
+				aux=(*aux).prox;			
+				printf("\n VERIFICANDO simbolo %s na tabela %u ",id.name,aux);	
+				//printf("\nimprimindo lista: ");imprimirlista(aux);
+				//printf("\nteste %s",(*aux).funcao.id.name);
+				//printf("\nteste %s",(*aux).simb.id.name);
+			//if 
+				
+			if (isequal(id.name,((*aux).tipono==0)?((*aux).simb.id.name):((*aux).funcao.id.name ) ) ) {
+					//printf("linha : %d linha : %d \n",linha,(*aux).simb.id.linha);
+							
+					if((*aux).simb.id.linha>=linha)
+						linha=(*aux).simb.id.linha;
+
+//					else
+//						linha=(*aux).simb.linha;
+					cont++;				
+										break;
+				}			
+		 }  	
+			printf("\tcontador: %d \n",cont);
+		//	imprimirlista(s);
+			if ( (cont>0) && (t== MNG_DECVAR || t==MNG_DECFUNC)){
+					printf("Erro na linha : %d \n",linha);
+					exit(0);					
+			}	
+//			if (cont>0 && t== MNG_ID){
+//					printf("Erro na linha : %d \n",linha);
+//					exit(0);					
+//			}	
+		//	printf("tamanho S : %d \n",tamanholista(s));
+			if ( (cont>0) && (t== MNG_CHMET)){
+					printf("QTDPAR: %d  ",(*aux).funcao.qtdPars);
+				//	printf("Erro na linha : %d \n",linha);
+					
+					//exit(0);					
+			}	
+			printf("tamanho t  S : %s %d \n",imprimetipono(t),tamanholista(s));
+			printf("aaaaa\n");
+			if (cont==0 && ( /*tamanholista(s)>0 ||*/ t==MNG_VAR)){
+					printf("Vriável não declarada na linha : %d \n",linha);
+					exit(0);					
+			}
+	
+	printf("\n TERMINOU VERIFICAçao simbolo  ");
+	//printf("tamaassadnho S : %d \n",tamanholista(s));
+	}
+}
+
+
+
+
+lista_simb* verificachmet(lista_simb* s,mng_chmet* met,tipo_no t){//,pilha * p1){
 
 	int qtdpars=0;
 	mng_listexp* l = (*met).listexp;
@@ -282,14 +367,14 @@ void verificachmet(lista_simb* s,mng_chmet* met,tipo_no t){//,pilha * p1){
 		int	cont=0;
 		int linha=(*met).id.linha;
 			lista_simb* aux=s;
-		//	printf("\n VERIFICANDO simbolo %s ",id.name);
+		//	printf("\n VERIFICANDO %s ",(*met).id.name);
 			while ((*aux).prox!=NULL){
 				aux=(*aux).prox;				
-				if ( (*aux).tipono==1 && isequal((*met).id.name,(*aux).simb.id.name)){
+				if ( (*aux).tipono==1 && isequal( (*met).id.name, (*aux).funcao.id.name ) ) {
 					//printf("linha : %d linha : %d \n",linha,(*aux).simb.id.linha);
 							
-					if((*aux).simb.id.linha>=linha)
-						linha=(*aux).simb.id.linha;
+					if((*aux).funcao.id.linha>=linha)
+						linha=(*aux).funcao.id.linha;
 //					else
 //						linha=(*aux).simb.linha;
 					cont++;		
@@ -302,8 +387,24 @@ void verificachmet(lista_simb* s,mng_chmet* met,tipo_no t){//,pilha * p1){
 
 			if ( (cont>0) && (t== MNG_CHMET)){
 					printf("qtdpars: %d %d \n",qtdpars,(*aux).funcao.qtdPars);
+				//	imprimirlista((*aux).funcao.lista);
 					if (qtdpars==(*aux).funcao.qtdPars)	{
-					
+						int i;
+						lista_simb* b=(*(*aux).funcao.lista).prox;
+						mng_listexp* e= (*l).listexp	;	
+				//		printf("%s",imprimetipbase((*(*(*e).exp).tipo).tipbase));				
+						for (i=1;i<=qtdpars;i++){
+							//b=(*(*aux).funcao.lista);
+							//mng_listexp* e= (*(*l).listexp)	;
+						/*	if ( (*(*(*e).exp).tipo).tipbase != (*(*b).simb.tipo).tipbase 
+								|| (*(*(*e).exp).tipo).qtdACOL != (*(*b).simb.tipo).qtdACOL  )
+								printf("Erro na linha %d. Tipos dos parametroes são diferentes  \n",linha);
+							else{
+												
+							}														
+						*/
+						}							
+
 					} else	{			
 						if (qtdpars>(*aux).funcao.qtdPars)
 							printf("Erro na linha %d. Função chamada possui menos parâmetros  \n",linha);
@@ -319,7 +420,7 @@ void verificachmet(lista_simb* s,mng_chmet* met,tipo_no t){//,pilha * p1){
 			}*/ 
 	}
 	
-}
+
 
 //void verificasimbolo(lista_simb* s,mng_id id){
 void verificatipo(lista_simb* s,mng_tip * tip, mng_id id, tipo_no t){

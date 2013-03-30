@@ -5,7 +5,7 @@ void PercorreDecvars(mng_decvars * dec,lista_simb* tbl);
 void Percorrebl(mng_bloco* bl,lista_simb* tbl);
 void PercorrePar(mng_par *par,lista_simb* tbl);
 void PercorrePars(mng_pars *pars,lista_simb* tbl);
-void PercorreListexp(mng_listexp *listexp,lista_simb* tbl);
+void PercorreListexp(mng_listexp *listexp,lista_simb* tbl,mng_tip* tip);
 void PercorreExp(mng_exp *exp,lista_simb* tbl);
 void PercorreVar(mng_var *var,lista_simb* tbl);
 void PercorreOP(mng_op *op,lista_simb* tbl);
@@ -16,7 +16,7 @@ void PercorrePar(mng_par *par,lista_simb* tbl){
 	if(par!=NULL){
 		//printf("\ntip par: %d", (*par).tip);
 	///	printf("\nnome id par: %s", (*par).id.name);
-		tbl=adicionaVar1( tbl ,(*par).id,(*par).tip  );	
+		tbl=adicionaVar1( tbl ,(*par).id,(*par).tip ,MNG_PAR );	
 	}
 }
 	
@@ -55,7 +55,7 @@ void Percorredecvar(mng_decvar* decvar,lista_simb* tbl){
 				tipo_no t=MNG_DECVAR;
 //		verificasimbolo(tbl,(*declistnom).id);//,t);
 		verificasimbolo(tbl,(*declistnom).id,t);
-		adicionaVar1( tbl ,(*declistnom).id,(*decvar).tip  );
+		adicionaVar1( tbl ,(*declistnom).id,(*decvar).tip ,MNG_DECVAR );
 		declistnom = (*declistnom).list;			
 
 	}
@@ -105,10 +105,11 @@ void PercorreCmds(mng_cmds*cmds,lista_simb* tbl){
 
 }
 
-void PercorreListexp(mng_listexp *listexp,lista_simb* tbl){
+void PercorreListexp(mng_listexp *listexp,lista_simb* tbl,mng_tip* tip){
 	if(listexp != NULL){
 		PercorreExp((*listexp).exp,tbl);
-		PercorreListexp((*listexp).listexp,tbl);
+		
+		PercorreListexp((*listexp).listexp,tbl,tip);
 	}
 }
 void PercorreExp(mng_exp *exp,lista_simb* tbl){
@@ -122,8 +123,11 @@ void PercorreExp(mng_exp *exp,lista_simb* tbl){
 	if((*exp).tipoexp == MNG_VAR){
 		tipo_no t = MNG_VAR;
 		//(*exp).tip = verificavar(tbl,(*(*exp).var).id,t);		
-		printf("mng var : %d ",(*(*exp).var).id);
+		printf("mng var : %s ",(*(*exp).var).id.name);
 		verificasimbolo(tbl,(*(*exp).var).id,t);
+		
+		//verificatipo(exp,
+		//(*)
 		//printf("teste");
 	
 //		imprimetipbase((*(*exp).tip).tipbase);
@@ -140,15 +144,15 @@ void PercorreExp(mng_exp *exp,lista_simb* tbl){
 		verificasimbolo(tbl,(*(*exp).chmet).id,t);
 		
 		pilha * p=p1;
-	///	printf(" tamanho pilha pro while: %d  ",tamanhopilha(p));
+		printf(" tamanho pilha pro while: %d  ",tamanhopilha(p));
 		while ((*p).topo!=NULL){
 //			verificasimbolo(tbl,(*(*aux).chmet).id,(*(*p).topo).tbl,t);
-		//	printf("Verificando!");
+			printf("Verificando %u!\n",(*(*p).topo).tbl);
 			verificachmet((*(*p).topo).tbl,(*exp).chmet,t);
 			(*p).topo=(*(*p).topo).ant;
 
 		} 
-		PercorreListexp((*(*exp).chmet).listexp,tbl);
+		PercorreListexp((*(*exp).chmet).listexp,tbl,NULL);
 
 	}
 	if((*exp).tipoexp == MNG_TIPEXP){
@@ -232,20 +236,21 @@ void PercorreCmd(mng_cmd* cmd,lista_simb* tbl){
 		}
 	}
 	if((*aux).tipocmd == MNG_CHMET){
-		printf("\nchamada ao método id : %s", (*(*aux).chmet).id.name);
+		printf("\nchamada ao método id : %s \n", (*(*aux).chmet).id.name);
 		tipo_no t=MNG_CHMET;
-		verificasimbolo(tbl,(*(*aux).chmet).id,t);
-		
+		mng_tip* tip = verificasimbolo(tbl,(*(*aux).chmet).id,t);
+
 		pilha * p=p1;
+		printf("pilha %u",p);
 	///	printf(" tamanho pilha pro while: %d  ",tamanhopilha(p));
-		while ((*p).topo!=NULL){
+	/*	while ((*p).topo!=NULL){
 //			verificasimbolo(tbl,(*(*aux).chmet).id,(*(*p).topo).tbl,t);
 		//	printf("Verificando!");
 			verificachmet((*(*p).topo).tbl,(*aux).chmet,t);
 			(*p).topo=(*(*p).topo).ant;
 
-		} 
-		PercorreListexp((*(*aux).chmet).listexp,tbl);
+		} */ 
+		PercorreListexp((*(*aux).chmet).listexp,tbl,tip);
 		
 	}
 	if((*aux).tipocmd == MNG_BLOCO){
@@ -266,6 +271,7 @@ void PercorreArvore(mng_prg* arvore,lista_simb* tbl){
 		lista_simb* tabela;		
 		if (tbl==NULL){
 			tabela=	(lista_simb*) malloc(sizeof(lista_simb));
+			printf("Endereço tabela %u ",tabela);
 			p1=(pilha*) malloc(sizeof(pilha));
 			(*p1).topo=NULL;
 		}else
@@ -280,24 +286,29 @@ void PercorreArvore(mng_prg* arvore,lista_simb* tbl){
 			}
 		}else{
 			if((*(*arvore).dec).decfunc != NULL){
+	
+				while (tamanhopilha(p1)>1){
+					printf("POP!");pop(p1);
+				}				
+				insert(tabela,p1);
 				printf("Percorrendo árvore( decfunc): \n");	
+							printf("Endereço tabela %u %u ",tabela,(*tabela).prox);
 				printf("Endereço da PILHA e do topo dela: %u %u \n",p1,(*p1).topo);
 				tipo_no t=MNG_DECFUNC;
-				verificasimbolo(tbl,(*(*(*arvore).dec).decfunc).id,t);
+				verificasimbolo(tabela,(*(*(*arvore).dec).decfunc).id,t);
 //				verificasimbolo(tbl,(*(*(*arvore).dec).decfunc).id);//,t);
+				printf("vamo ver")				;
 				lista_simb* tblfunc= (lista_simb*) malloc(sizeof(lista_simb));
 			//	printf("\ntipo decfunc", (*(*(*arvore).dec).decfunc).tip);			
 				//printf("\n  id %s", (*(*(*arvore).dec).decfunc).id.name);	
 				PercorrePars((*(*(*arvore).dec).decfunc).pars, tblfunc);
 				Percorrebl((*(*(*arvore).dec).decfunc).bloco,tblfunc);		
-			//	printf("Imprimindo lista da funcao: ");imprimirlista(tblfunc);			
+				printf("Imprimindo lista da funcao: ");imprimirlista(tblfunc);			
 		//		printf("decfunc analisada: \n");	
 				adicionaFunc(tabela, (*(*arvore).dec).decfunc,tblfunc);
 
-				while (tamanhopilha(p1)>1){
-					printf("POP!");pop(p1);
-				}
-				insert(tabela,p1);
+				
+				
 			
 
 			}
