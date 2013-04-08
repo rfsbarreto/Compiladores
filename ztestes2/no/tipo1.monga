@@ -1,9 +1,0 @@
-int f(int n) {
-	return n * n;
-}
-
-int g() {
-	int[] a;
-	return f(a);
-}
-

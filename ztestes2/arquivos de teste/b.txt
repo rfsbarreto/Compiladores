@@ -1,7 +1,0 @@
-int b;
-int  a() {
-	char[] c;
-	int t;
-	return 3; 
-}
-

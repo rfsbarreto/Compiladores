@@ -1,8 +1,0 @@
-int main(){
-if (2)
-if (3+5)
-c=1;
-else
-d=2;
-
-}

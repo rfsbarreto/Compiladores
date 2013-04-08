@@ -1,5 +1,0 @@
-void g() {
-	int a;
-	a = new int[3];
-}
-

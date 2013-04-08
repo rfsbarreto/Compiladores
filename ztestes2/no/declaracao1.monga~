@@ -1,7 +1,0 @@
-int a;
-
-void f() {
-	int a;
-	a = a + b;
-}
- 
