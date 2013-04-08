@@ -2,24 +2,80 @@ void Percorredecvar(mng_decvar* decvar,lista_simb* tbl);
 void PercorreCmds(mng_decfunc* f, mng_cmds*cmds,lista_simb* tbl);
 void PercorreCmd(mng_decfunc* f, mng_cmd* cmd,lista_simb* tbl);
 void PercorreDecvars(mng_decfunc* f, mng_decvars * dec,lista_simb* tbl);
+void Percorrebl1(mng_decfunc* f, mng_bloco* bl,lista_simb* tbl);
 void Percorrebl(mng_decfunc* f, mng_bloco* bl,lista_simb* tbl);
 void PercorrePar(mng_par *par,lista_simb* tbl);
 void PercorrePars(mng_pars *pars,lista_simb* tbl);
-void PercorreListexp(mng_listexp *listexp,lista_simb* tbl,mng_tip* tip);
-void PercorreExp(mng_exp *exp,lista_simb* tbl);
-void PercorreVar(mng_var *var,lista_simb* tbl);
-void PercorreOP(mng_op *op,lista_simb* tbl);
-void imprimetipoPascal(mng_tipbase  tipo);
+void PercorreListexp(mng_decfunc * f,mng_listexp *listexp,lista_simb* tbl,mng_tip* tip);
+void PercorreExp(mng_decfunc * f,mng_exp *exp,lista_simb* tbl);
+void PercorreVar(mng_decfunc * f,mng_var *var,lista_simb* tbl);
+void PercorreOP(mng_decfunc * f,mng_op *op,lista_simb* tbl);
+void imprimetipoPascal(mng_tip*  tip);
 pilha* p1;
 
 
 
-void imprimetipoPascal(mng_tipbase  tipo){
-	if(imprimetipbase(tipo) == "TIPO_INT") printf(":integer ");
-	if(imprimetipbase(tipo) == "TIPO_VAZIO") printf(" ");
-	if(imprimetipbase(tipo) == "TIPO_FLOAT") printf(":real ");
-	if(imprimetipbase(tipo) == "TIPO_STRING") printf(":string ");
-	if(imprimetipbase(tipo) == "TIPO_CHAR") printf(":char ");
+void imprimetipoPascal(mng_tip*  tip){
+	if (tip != NULL)
+	if ((*tip).qtdACOL == 0){
+		if(imprimetipbase((*tip).tipbase) == "TIPO_INT") printf(":integer ");
+		if(imprimetipbase((*tip).tipbase) == "TIPO_VAZIO") printf(" ");
+		if(imprimetipbase((*tip).tipbase) == "TIPO_FLOAT") printf(":real ");
+		if(imprimetipbase((*tip).tipbase) == "TIPO_STRING") printf(":string ");
+		if(imprimetipbase((*tip).tipbase) == "TIPO_CHAR") printf(":char ");
+	}else{
+		int qtd = (*tip).qtdACOL;
+		if(imprimetipbase((*tip).tipbase) == "TIPO_INT"){ 
+			printf(":array [");
+			while(qtd > 0){
+				printf("1..100000000 "); qtd = qtd -1 ;
+				if (qtd > 0){
+					printf(",");
+				}
+			}
+			printf("] of integer ");
+		}
+		if(imprimetipbase((*tip).tipbase) == "TIPO_VAZIO")		
+			while(qtd > 0){ 
+				printf(" ");	 
+				qtd = qtd -1 ;
+			}
+		if(imprimetipbase((*tip).tipbase) == "TIPO_FLOAT"){
+			printf(":array ["); 		
+			while(qtd > 0){
+				printf("1..100000000 ");
+				qtd = qtd -1 ;
+				if (qtd > 0){
+					printf(",");
+				}
+				printf("] of real ");
+			} 
+			
+		}
+		if(imprimetipbase((*tip).tipbase) == "TIPO_STRING"){ 		
+			printf(":array ["); 		
+			while(qtd > 0){
+				printf("1..100000000 ");
+				qtd = qtd -1 ;
+				if (qtd > 0){
+					printf(",");
+				}
+				printf("] of string ");
+			} 		
+		}
+		if(imprimetipbase((*tip).tipbase) == "TIPO_CHAR"){ 		
+			printf(":array ["); 		
+			while(qtd > 0){
+				printf("1..100000000 ");
+				qtd = qtd -1 ;
+				if (qtd > 0){
+					printf(",");
+				}
+				printf("] of char ");
+			} 
+		}				
+		
+	}
 }
 
 void imprimeOPPascal(mng_operadores op){
@@ -66,7 +122,7 @@ void PercorrePar(mng_par *par,lista_simb* tbl){
 		//printf("var");
 		tbl=adicionaVar1( tbl ,(*par).id,(*par).tip ,MNG_PAR );	
 		printf("%s",(*par).id.name);
-		imprimetipoPascal((*(*par).tip).tipbase);
+		imprimetipoPascal((*par).tip);
 	}
 }
 	
@@ -117,10 +173,35 @@ void Percorredecvar(mng_decvar* decvar,lista_simb* tbl){
 		if(declistnom != NULL) printf(" , ");			
 
 	}
-	imprimetipoPascal((*(*decvar).tip).tipbase); printf("; ");
-
+	
+	imprimetipoPascal((*decvar).tip); printf("; ");
+			
+		
+	
 	//imprimirlista(tbl);
 	//return tbl;
+}
+
+void Percorrebl1(mng_decfunc* f, mng_bloco* bl,lista_simb* tbl){
+	//printf("abre bloco\n");
+	mng_bloco * aux= bl;
+	if (aux!=NULL){
+				//printf("Percorrendo bloco\n"); //nome id par: %s \n", (*(*p).par).id.name) ;
+		if ((*aux).decvars!=NULL){
+			printf(" var \n");
+			PercorreDecvars(f, (*aux).decvars,tbl);
+			printf("\n");
+		}
+		if ((*aux).cmds!=NULL)
+			printf(" begin\n");
+			PercorreCmds(f, (*aux).cmds,tbl);
+			printf(" end;{bloco}\n");
+/*<<<<<<< HEAD
+	}else{printf("Enasdasdasdad \n");}
+======= */
+	}//else{printf("\n");}
+//>>>>>>> d62241ab7d645bf42c6822837112564b7effa506
+	//printf("Encerra bloco \n");
 }
 
 void Percorrebl(mng_decfunc* f, mng_bloco* bl,lista_simb* tbl){
@@ -128,14 +209,15 @@ void Percorrebl(mng_decfunc* f, mng_bloco* bl,lista_simb* tbl){
 	mng_bloco * aux= bl;
 	if (aux!=NULL){
 				//printf("Percorrendo bloco\n"); //nome id par: %s \n", (*(*p).par).id.name) ;
-		if ((*aux).decvars!=NULL)
+		if ((*aux).decvars!=NULL){
 			printf(" var \n");
 			PercorreDecvars(f, (*aux).decvars,tbl);
-
+			printf("\n");
+		}
 		if ((*aux).cmds!=NULL)
-			printf(" begin\n");
+//			printf(" begin\n");
 			PercorreCmds(f, (*aux).cmds,tbl);
-			printf(" end;\n");
+//			printf(" end;{bloco}\n");
 /*<<<<<<< HEAD
 	}else{printf("Enasdasdasdad \n");}
 ======= */
@@ -168,14 +250,17 @@ void PercorreCmds(mng_decfunc* f, mng_cmds*cmds,lista_simb* tbl){
 
 }
 
-void PercorreListexp(mng_listexp *listexp,lista_simb* tbl,mng_tip* tip){
+void PercorreListexp(mng_decfunc * f,mng_listexp *listexp,lista_simb* tbl,mng_tip* tip){
 	if(listexp != NULL){
-		PercorreExp((*listexp).exp,tbl);
-		
-		PercorreListexp((*listexp).listexp,tbl,tip);
+		printf("lista exp");
+		PercorreExp(f, (*listexp).exp,tbl);
+		if ((*listexp).listexp != NULL){
+			printf(",");
+		}
+		PercorreListexp(f, (*listexp).listexp,tbl,tip);
 	}
 }
-void PercorreExp(mng_exp *exp,lista_simb* tbl){
+void PercorreExp(mng_decfunc * f,mng_exp *exp,lista_simb* tbl){
 	//printf("\n tipo da exp %d", (*exp).tipoexp);
 	//printf("Percorrendo EXP tipo %s ",imprimetipono((*exp).tipoexp));
 
@@ -196,11 +281,11 @@ void PercorreExp(mng_exp *exp,lista_simb* tbl){
 		verificasimbolo(tbl,(*(*exp).var).id,t);
 		VerificavarACOL(tbl,(*(*exp).var).id,t, (*(*exp).var).qtdACOL);
 		printf(" %s ",(*(*exp).var).id.name);
-		PercorreVar((*exp).var,tbl);	
+		PercorreVar(f,(*exp).var,tbl);	
 	}
 	if((*exp).tipoexp == MNG_EXP){
 	//	printf("\nqtd de ACOL:%d ",(*(*exp).tipexp.tip).qtdACOL);
-		PercorreExp((*exp).tipexp.exp,tbl);
+		PercorreExp(f,(*exp).tipexp.exp,tbl);
 		struct mng_exp* exp;//DEC(exp);
 		
 	}
@@ -218,20 +303,26 @@ void PercorreExp(mng_exp *exp,lista_simb* tbl){
 			(*p).topo=(*(*p).topo).ant;
 
 		} */
+		
 		verificachmet((*(*p).topo).tbl,(*exp).chmet,t);
-		PercorreListexp((*(*exp).chmet).listexp,tbl,NULL);
+		printf("{chamada na expressao} \n %s", (*(*exp).chmet).id.name);
+		printf("(");
+		PercorreListexp(f,(*(*exp).chmet).listexp,tbl,NULL);
+		printf(")");
 
 	}
 	if((*exp).tipoexp == MNG_TIPEXP){
-		PercorreExp((*exp).exp,tbl);
+		PercorreExp(f,(*exp).exp,tbl);
 	}
 	if((*exp).tipoexp == MNG_OP){
-		PercorreOP((*exp).op,tbl);
+			printf("OP\n");
+		PercorreOP(f,(*exp).op,tbl);
 	//	printf(" fechou OP");
 	}
 	if((*exp).tipoexp == MNG_NAO){
 		//printf("\nNAO");
-		PercorreExp((*exp).nao.exp,tbl);		
+		printf("not ");
+		PercorreExp(f,(*exp).nao.exp,tbl);		
 		if((*(*exp).tipo).tipbase == TIPO_FLOAT
 		|| (*(*exp).tipo).tipbase == TIPO_STRING
 		|| (*(*exp).tipo).tipbase == TIPO_VAZIO){
@@ -241,30 +332,40 @@ void PercorreExp(mng_exp *exp,lista_simb* tbl){
 	//	printf("FIM EXP \n");
 }
 
-void PercorreOP(mng_op *op,lista_simb* tbl){
-	
+void PercorreOP(mng_decfunc * f,mng_op *op,lista_simb* tbl){
+		printf("\nOperação na linha %d ", (*op).linha);
+	printf("OP1: tipo-> %s %s",imprimetipono((*(*op).exp1).tipoexp),imprimetipono((*(*(*(*op).exp1).op).exp1).tipoexp));
 	//printf("\nOperação na linha %d ", (*op).linha);
-	PercorreExp((*op).exp1,tbl);
+	PercorreExp(f,(*op).exp1,tbl);
 	imprimeOPPascal((*op).op);
+		printf(" Tipo da operação: %d \n");
 	//printf(" Tipo da operação: %d ",(*op).op);
-	PercorreExp((*op).exp2,tbl);
+	PercorreExp(f,(*op).exp2,tbl);
 	//printf(" Fechou OP: %d",(*op).op);
 }
 
 
 
-void PercorreVar(mng_var *var,lista_simb* tbl){
-	//printf(" Percorrendo Var: %d",var);
-	if(var != NULL){
+void PercorreVar(mng_decfunc * f,mng_var *var,lista_simb* tbl){
+//	printf("fora");
+	while(var != NULL){
+		//printf(" Percorrendo Var: %d",var);
+		//printf("acol %d", (*var).qtdACOL);
 		//printf("\nnome da var:%s ",(*var).id.name);
-		
-		if ((*var).exp != NULL){
+		if ((*var).qtdACOL != 0){
 			printf(" [");
-			PercorreExp((*var).exp,tbl);
-			printf(" {expressão} ");
+			if ((*var).exp != NULL){
+				
+				PercorreExp(f,(*var).exp,tbl);
+				printf(" {expressão} ");
+
+			}
 			printf(" ]\n");
 		}
-	
+		if((*var).var != NULL){
+			var = (*var).var;
+		}else{ break;}
+		
 		//printf("\nqtd de ACOL:%d ",(*var).qtdACOL);
 	}
 }
@@ -276,7 +377,7 @@ void PercorreCmd(mng_decfunc* f,mng_cmd* cmd,lista_simb* tbl){
 	mng_cmd* aux = cmd;
 	if((*aux).tipocmd == MNG_IF){
 		printf(" if");
-		PercorreExp((*aux).decif.exp,tbl);
+		PercorreExp(f,(*aux).decif.exp,tbl);
 		printf(" then begin\n");
 		PercorreCmd(f, (*aux).decif.cmd,tbl); 
 
@@ -292,7 +393,7 @@ void PercorreCmd(mng_decfunc* f,mng_cmd* cmd,lista_simb* tbl){
 	}
 	if((*aux).tipocmd == MNG_WHILE){
 		printf(" while ");
-		PercorreExp((*aux).decwhile.exp,tbl);
+		PercorreExp(f,(*aux).decwhile.exp,tbl);
 		printf(" do \n begin\n");
 
 		if ((*aux).decwhile.cmd!=NULL){
@@ -310,7 +411,7 @@ void PercorreCmd(mng_decfunc* f,mng_cmd* cmd,lista_simb* tbl){
 
 		verificasimbolo(tbl,(*(*(*aux).atrib).var).id,t);
 		printf("%s :=", (*(*(*aux).atrib).var).id.name);
-		PercorreExp((*(*aux).atrib).exp,tbl);
+		PercorreExp(f,(*(*aux).atrib).exp,tbl);
 		
 
 			if ((*(*(*aux).atrib).exp).tipoexp == MNG_TIPEXP){	
@@ -321,7 +422,7 @@ void PercorreCmd(mng_decfunc* f,mng_cmd* cmd,lista_simb* tbl){
 				}
 				
 				//Verificatipo(tbl,(*(*(*aux).atrib).var).id,t,(*(*(*aux).atrib).exp).tipexp.tip);
-				PercorreExp((*(*(*aux).atrib).exp).tipexp.exp, tbl);
+				PercorreExp(f,(*(*(*aux).atrib).exp).tipexp.exp, tbl);
 			}
 		printf(";\n");
 	}
@@ -335,8 +436,8 @@ void PercorreCmd(mng_decfunc* f,mng_cmd* cmd,lista_simb* tbl){
 
 			
 			printf("%s := ", (*f).id.name);			
-			PercorreExp((*aux).ret.exp,tbl);
-			printf(";\n {return com exp}");
+			PercorreExp(f,(*aux).ret.exp,tbl);
+			printf(";{return com exp} \n ");
 			
 		}else{
 		//	printf("\nreturn ;");	
@@ -362,7 +463,7 @@ void PercorreCmd(mng_decfunc* f,mng_cmd* cmd,lista_simb* tbl){
 
 		} */ 
 		//verificachmet(tbl,(*aux).chmet,t);
-		PercorreListexp((*(*aux).chmet).listexp,tbl,tip);
+		PercorreListexp(f,(*(*aux).chmet).listexp,tbl,tip);
 		printf(")");
 		
 	}
@@ -421,9 +522,9 @@ pop(p1);
 				printf("(");	
 				PercorrePars((*(*(*arvore).dec).decfunc).pars, tblfunc);
 				printf(")");
-				imprimetipoPascal((*(*(*(*arvore).dec).decfunc).tip).tipbase); printf(";\n");
+				imprimetipoPascal((*(*(*arvore).dec).decfunc).tip); printf(";\n");
 				
-				Percorrebl((*(*arvore).dec).decfunc, (*(*(*arvore).dec).decfunc).bloco,tblfunc);		
+				Percorrebl1((*(*arvore).dec).decfunc, (*(*(*arvore).dec).decfunc).bloco,tblfunc);		
 //				printf("Imprimindo lista da funcao: ");imprimirlista(tblfunc);			
 		//		printf("decfunc analisada: \n");	
 				adicionaFunc(tabela, (*(*arvore).dec).decfunc,tblfunc);

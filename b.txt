@@ -1,0 +1,21 @@
+int b;
+int r;
+
+int  a() {
+	int v;	
+	char[] c;
+	float b;
+
+return 3; 	
+
+
+}
+
+int t(){
+
+
+
+
+
+}
+

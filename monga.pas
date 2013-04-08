@@ -2,31 +2,31 @@ program monga;
 var
 a:integer ; function f(var a:integer ; var b:integer ):integer ;
  var 
-c:integer ; d:integer ;  begin
+c:array [1..100000000 ] of integer ; d:integer ; 
+ begin
 c := a ;
 c :=;
-f :=  a + b ;
- {return com exp} end;
+f :=  a + b ;{return com exp} 
+  end;{bloco}
 function h():real ;
  begin
-h := ;
- {return com exp} end;
+h := ;{return com exp} 
+  end;{bloco}
 function g() ;
  begin
-f() end;
-function f2(var b:integer ):integer ;
+f(lista exp,lista exp) end;{bloco}
+function f2(var b:integer ):array [1..100000000 ] of integer ;
  var 
-a:integer ; i:integer ;  begin
+a:array [1..100000000 ,1..100000000 ] of integer ; i:integer ; 
+ begin
 a :=;
 i :=;
  while  i == do 
  begin
- begin
 a :=;
 i := i +;
- end;
  end;{end do while}
-f2 :=  a ;
- {return com exp} end;
+f2 :=  a ;{return com exp} 
+  end;{bloco}
 begin
 end. {end do programa}

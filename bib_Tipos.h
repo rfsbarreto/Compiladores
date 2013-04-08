@@ -93,8 +93,10 @@ typedef struct mng_var{
 	mng_tip*tip;
 	DEC(id);
 	struct mng_exp * exp;
+	struct mng_var * var;
 	int qtdACOL;
 } mng_var;
+
 
 
 

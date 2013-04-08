@@ -241,13 +241,20 @@ parteelse :           {$$ = NULL;}
 	| ELSE comando {$$ = inicializaptelse($2);} //precisa verificar se está correto
 ;
 
-var : ID  { $$ = inicializavar(NULL); (*$$).tip = inicializatipo(); (*$$).id = $1; (*$$).qtdACOL=0; }
+var : ID  { $$ = inicializavar(NULL); (*$$).tip = inicializatipo(); (*$$).id = $1; (*$$).qtdACOL=0; (*$$).var = NULL;}
 	| var ACOL exp FCOL {
+		(*$$).var= $1;
 		$$=inicializavar($3); 
 		(*$$).id=(*$1).id; 
 		(*$$).tip = inicializatipo();  
-		(*$$).qtdACOL=(*$1).qtdACOL+1;}
+		(*$$).qtdACOL=(*$1).qtdACOL+1;
+		}
+
 ;
+
+
+
+
 
 exp : NUMINT { $$=inicializaexp(MNG_TIPBASE);  
 				(*$$).tipo = inicializatipo();		  
@@ -282,8 +289,8 @@ exp : NUMINT { $$=inicializaexp(MNG_TIPBASE);
 	| SUB exp {
 			$$=inicializaexp(MNG_TIPBASE); 
 			(*$$).tipo = inicializatipo();
-		//	(*(*$$).tipo).tipbase = (*(*$2).tipo).tipbase; 
-			//((*(*$2).tipo).tipbase==TIPO_INT)?((*$$).numint.valor=(-1 * (*$2).numint.valor)):((*$$).numfloat.valor=(-1*(*$2).numfloat.valor)); 
+//			(*(*$$).tipo).tipbase = (*(*$2).tipo).tipbase; 
+	//		((*(*$2).tipo).tipbase==TIPO_INT)?((*$$).numint.valor=(-1 * (*$2).numint.valor)):((*$$).numfloat.valor=(-1*(*$2).numfloat.valor)); 
 		  }  
 	| exp SOMA exp {
 			$$=inicializaexp(MNG_OP);
@@ -297,7 +304,7 @@ exp : NUMINT { $$=inicializaexp(MNG_TIPBASE);
 	| exp SUB exp {$$=inicializaexp(MNG_OP); 
 			(*$$).op=inicializaop($1,OP_SUB,$3);  
 			(*(*$$).op).linha = lineno;
-            (*$$).tipo = inicializatipo();
+(*$$).tipo = inicializatipo();
 	//		(*(*$$).tipo).tipbase=verificatipoexpOP((*$$).op);
 			}
 	| exp MULT exp {$$=inicializaexp(MNG_OP); 
@@ -351,8 +358,8 @@ exp : NUMINT { $$=inicializaexp(MNG_TIPBASE);
 			(*$$).nao.op = OP_NAO; 
 			(*$$).nao.exp = $2; 
 			(*$$).tipo= inicializatipo();
-			//(*(*$$).tipo).tipbase = (*(*$2).tipo).tipbase;
-			}
+		//	(*(*$$).tipo).tipbase = (*(*$2).tipo).tipbase;
+		}
 	| exp E exp {$$=inicializaexp(MNG_OP); 
 			(*$$).op=inicializaop($1,OP_E,$3); 
 //			(*(*$$).op).exp1= $1; 
