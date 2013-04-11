@@ -261,35 +261,37 @@ void PercorreListexp(mng_decfunc * f,mng_listexp *listexp,lista_simb* tbl,mng_ti
 	}
 }
 void PercorreExp(mng_decfunc * f,mng_exp *exp,lista_simb* tbl){
-	//printf("\n tipo da exp %d", (*exp).tipoexp);
+	printf("\n tipo da exp %d", (*exp).tipoexp);
 	//printf("Percorrendo EXP tipo %s ",imprimetipono((*exp).tipoexp));
 
 	if((*exp).tipoexp == MNG_TIPBASE){
-		if((*exp).tip != NULL){
-			if((*(*exp).tip).tipbase != NULL);
-			//printf("%s", imprimetipbase((*(*exp).tip).tipbase));
-			//if (imprimetipbase((*(*exp).tip).tipbase) != NULL){
-			//	if (imprimetipbase((*(*exp).tip).tipbase) == "TIPO_INT"){
-			//	printf("%d", (*exp).numint);
-			//	}
-			//}
+	    /*printf(" EXP TIPBASE %d \n",(*exp).tipo);
+		if((*exp).tipo != NULL){
+                printf("OIIIIIIIIIIIII \n");	
+			    	if (imprimetipbase((*(*exp).tipo).tipbase) == "TIPO_INT"){
+			    	    printf("%d", (*exp).numint);
+			    }
 		}
-	
+	*/
 	}
 	if((*exp).tipoexp == MNG_VAR){
+		    printf("EXP VAR\n");
 		tipo_no t = MNG_VAR;
-		verificasimbolo(tbl,(*(*exp).var).id,t);
+		(*exp).tipo=verificasimbolo(tbl,(*(*exp).var).id,t);
 		VerificavarACOL(tbl,(*(*exp).var).id,t, (*(*exp).var).qtdACOL);
 		printf(" %s ",(*(*exp).var).id.name);
 		PercorreVar(f,(*exp).var,tbl);	
+		printf("FechaVar");
 	}
 	if((*exp).tipoexp == MNG_EXP){
+		    printf("EXP EXP\n");
 	//	printf("\nqtd de ACOL:%d ",(*(*exp).tipexp.tip).qtdACOL);
 		PercorreExp(f,(*exp).tipexp.exp,tbl);
 		struct mng_exp* exp;//DEC(exp);
 		
 	}
 	if((*exp).tipoexp == MNG_CHMET){
+		    printf("EXP CHMET\n");
 		//printf("metodo: %s \n", (*(*exp).chmet).id.name);
 		tipo_no t=MNG_CHMET;
 		verificasimbolo(tbl,(*(*exp).chmet).id,t);
@@ -312,12 +314,20 @@ void PercorreExp(mng_decfunc * f,mng_exp *exp,lista_simb* tbl){
 
 	}
 	if((*exp).tipoexp == MNG_TIPEXP){
+		    printf("EXP TIPEXP\n");
 		PercorreExp(f,(*exp).exp,tbl);
 	}
 	if((*exp).tipoexp == MNG_OP){
-			printf("OP\n");
+			printf("\nOP: %s ",imprimetipono((*(*(*exp).op).exp1).tipoexp));
+        //	printf(" %s \n",imprimetipono((*(*(*exp).op).exp2).tipoexp));
+		//	printf("%u %u \n",tbl,f);
 		PercorreOP(f,(*exp).op,tbl);
-	//	printf(" fechou OP");
+		printf("\n%s \n",imprimetipbase((*(*(*(*exp).op).exp1).tipo).tipbase));
+		if ( (*(*(*(*exp).op).exp1).tipo).tipbase==TIPO_FLOAT || (*(*(*(*exp).op).exp2).tipo).tipbase==TIPO_FLOAT)
+		    (*(*exp).tipo).tipbase==TIPO_FLOAT;
+		else
+		    (*(*exp).tipo).tipbase==TIPO_INT;
+		printf(" fechou OP %s \n",imprimetipbase((*(*exp).tipo).tipbase));
 	}
 	if((*exp).tipoexp == MNG_NAO){
 		//printf("\nNAO");
@@ -334,11 +344,11 @@ void PercorreExp(mng_decfunc * f,mng_exp *exp,lista_simb* tbl){
 
 void PercorreOP(mng_decfunc * f,mng_op *op,lista_simb* tbl){
 		printf("\nOperação na linha %d ", (*op).linha);
-	printf("OP1: tipo-> %s %s",imprimetipono((*(*op).exp1).tipoexp),imprimetipono((*(*(*(*op).exp1).op).exp1).tipoexp));
+	//printf("OP1: tipo-> %s  %s  ",imprimetipono((*(*op).exp1).tipoexp),imprimetipono((*(*op).exp2).tipoexp));//,imprimetipono((*(*(*(*op).exp1).op).exp1).tipoexp));
 	//printf("\nOperação na linha %d ", (*op).linha);
 	PercorreExp(f,(*op).exp1,tbl);
-	imprimeOPPascal((*op).op);
-		printf(" Tipo da operação: %d \n");
+	//imprimeOPPascal((*op).op);
+		//printf(" Tipo da operação: %d \n");
 	//printf(" Tipo da operação: %d ",(*op).op);
 	PercorreExp(f,(*op).exp2,tbl);
 	//printf(" Fechou OP: %d",(*op).op);
@@ -347,9 +357,9 @@ void PercorreOP(mng_decfunc * f,mng_op *op,lista_simb* tbl){
 
 
 void PercorreVar(mng_decfunc * f,mng_var *var,lista_simb* tbl){
-//	printf("fora");
-	while(var != NULL){
-		//printf(" Percorrendo Var: %d",var);
+	printf("Perc Var");
+ 	while(var != NULL){
+		printf(" Percorrendo Var: %d",var);
 		//printf("acol %d", (*var).qtdACOL);
 		//printf("\nnome da var:%s ",(*var).id.name);
 		if ((*var).qtdACOL != 0){
@@ -368,6 +378,7 @@ void PercorreVar(mng_decfunc * f,mng_var *var,lista_simb* tbl){
 		
 		//printf("\nqtd de ACOL:%d ",(*var).qtdACOL);
 	}
+	printf("Perc Var1");
 }
 
 
@@ -433,10 +444,14 @@ void PercorreCmd(mng_decfunc* f,mng_cmd* cmd,lista_simb* tbl){
 	if((*aux).tipocmd == MNG_RETURN){
 		
 		if ((*aux).ret.tipret == RET_EXP){
-
+			
 			
 			printf("%s := ", (*f).id.name);			
 			PercorreExp(f,(*aux).ret.exp,tbl);
+			if ((*(*f).tip).tipbase!=(*(*(*aux).ret.exp).tipo).tipbase){
+			    printf("Erro na linha %d. Tipo de Retorno diferente", (*aux).linha);
+			    exit(0);
+			}
 			printf(";{return com exp} \n ");
 			
 		}else{

@@ -1,7 +1,7 @@
 char [] s;
 
 void f() {
-	s = new char[10];
+   	s = new char[10];
 	s = "global";
 }
 
