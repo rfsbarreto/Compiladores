@@ -1,5 +1,6 @@
 #include "bib_Tipos.h"
 #include "pilha.h"
+pilha* p1;
 
 void imprimirlista(lista_simb* s){
 	//	printf("implista ");
@@ -243,7 +244,7 @@ mng_tip* verificasimbolo(lista_simb* s,mng_id id,tipo_no t){
 			lista_simb* aux=s;
 			///printf("\n VERIFICANDO simbolo %s %u %u",id.name,(*aux).prox,aux) ;
 			while ((*aux).prox!=NULL){
-			//	printf("\n VERIFICANDO simbolo %s na tabela %u ",id.name,aux);
+				printf("\n VERIFICANDO simbolo %s na tabela %u ",id.name,aux);
 				aux=(*aux).prox;			
 				//printf("\n VERIFICANDO simbolo %s na tabela %u ",id.name,aux);	
 				//printf("\nimprimindo lista: ");imprimirlista(aux);
@@ -280,13 +281,38 @@ mng_tip* verificasimbolo(lista_simb* s,mng_id id,tipo_no t){
 					
 					//exit(0);					
 			}	
-			//printf("tamanho t  S : %s %d \n",imprimetipono(t),tamanholista(s));
+			printf("tamanho t  Pilhas: %s %d \n",imprimetipono(t),tamanhopilha(p1));
 			//printf("aaaaa\n");
 			
-			if (cont==0 && ( /*tamanholista(s)>0 ||*/ t==MNG_VAR)){
+			
+			
+			if (cont==0  && t==MNG_VAR){
+			  //      printf("oii");
+			        pilha* p2=p1;			        
+			    if ( tamanhopilha(p2)==0  ){
+					printf("Vriável não declarada na linha : %d \n",linha);
+					exit(0);					
+			    }else{
+			        
+			       // pilha* p2=p1;
+			        
+			        while (tamanhopilha(p2)>0){
+			        printf("Olhando pilha\n");
+    			        lista_simb* l=(*(*p2).topo).tbl;
+    			        printf("lista: %d ",tamanholista(l));
+//			            (*p2).topo=(*(*p2).topo).ant;
+			            p2=&(*(*p2).topo).ant;
+			            verificasimbolo(l,id,t);
+			        }
+					printf("PASSEI\n");
+				}	//exit(0);					
+			}
+			
+		/*	if ( tamanholista(s)==0  ){
 					printf("Vriável não declarada na linha : %d \n",linha);
 					exit(0);					
 			}
+			*/
 		return ( ( (*aux).tipono==0)?((*aux).simb.tipo):((*aux).funcao.tipo ) );
 	//printf("\n TERMINOU VERIFICAçao simbolo  ");
 	//printf("tamaassadnho S : %d \n",tamanholista(s));
@@ -335,11 +361,11 @@ void VerificavarACOL(lista_simb* s,mng_id id,tipo_no t, int qtdACOL){
 		int	cont=0;
 		int linha=id.linha;
 			lista_simb* aux=s;
-
+            printf("\n VERIFICANDO var %s na tabela %u ",id.name,aux);
 			while ((*aux).prox!=NULL){
 				aux=(*aux).prox;			
 		
-				
+				printf("\n VERIFICANDO var %s na tabela %u ",id.name,aux);
 			if (isequal(id.name,((*aux).tipono==0)?((*aux).simb.id.name):((*aux).funcao.id.name ) ) ) {
 		
 					if ((*(*aux).simb.tipo).qtdACOL < qtdACOL){
@@ -363,7 +389,7 @@ void VerificavarACOL(lista_simb* s,mng_id id,tipo_no t, int qtdACOL){
 //					printf("Erro na linha : %d \n",linha);
 //					exit(0);					
 //			}	
-		//	printf("tamanho S : %d \n",tamanholista(s));
+		//	printf("tamanho S : %d \n",tamanholi    sta(s));
 			if ( (cont>0) && (t== MNG_CHMET)){
 				//	printf("QTDPAR: %d  ",(*aux).funcao.qtdPars);
 				//	printf("Erro na linha : %d \n",linha);
@@ -371,11 +397,28 @@ void VerificavarACOL(lista_simb* s,mng_id id,tipo_no t, int qtdACOL){
 					//exit(0);					
 			}
 			
-			//printf("tamanho t  S : %s %d \n",imprimetipono(t),tamanholista(s));
+			printf("tamanho t  S : %s %d \n",imprimetipono(t),tamanhopilha(p1));
 			//printf("aaaaa\n");
-			if (cont==0 && ( /*tamanholista(s)>0 ||*/ t==MNG_VAR)){
-					printf("Vriável não declarada na linha : %d \n",linha);
+			if (cont==0  && t==MNG_VAR){
+			  //      printf("oii");
+			        pilha* p2=p1;			        
+			    if ( tamanhopilha(p2)==0  ){
+					printf("Variável não declarada na linha : %d \n",linha);
 					exit(0);					
+			    }else{
+			        
+			       // pilha* p2=p1;
+			        
+			        while (tamanhopilha(p2)>0){
+			        printf("Olhando pilha\n");
+    			        lista_simb* l=(*(*p2).topo).tbl;
+    			        printf("lista: %d ",tamanholista(l));
+			            //(*p2).topo=(*(*p2).topo).ant;
+			            p2=&(*(*p2).topo).ant;
+			            VerificavarACOL(l,id,t,qtdACOL);
+			        }
+					printf("PASSEI %d\n",tamanhopilha(p1));
+				}	//exit(0);					
 			}
 	
 	//printf("\n TERMINOU VERIFICAçao simbolo  ");
@@ -449,7 +492,7 @@ void Verificatipo(lista_simb* s,mng_id id,tipo_no t, mng_tip*tip){
 
 
 lista_simb* verificachmet(lista_simb* s,mng_chmet* met,tipo_no t){//,pilha * p1){
-
+ // if((*met).id.name!="print"){
 	int qtdpars=0;
 	mng_listexp* l = (*met).listexp;
 //	printf("qtdpars: %d \n",qtdpars);
@@ -532,6 +575,7 @@ lista_simb* verificachmet(lista_simb* s,mng_chmet* met,tipo_no t){//,pilha * p1)
 					printf("Variável não declarada na linha : %d \n",linha);
 					exit(0);					
 			}*/ 
+	//}
 	}
 	}
 

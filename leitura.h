@@ -11,7 +11,7 @@ void PercorreExp(mng_decfunc * f,mng_exp *exp,lista_simb* tbl);
 void PercorreVar(mng_decfunc * f,mng_var *var,lista_simb* tbl);
 void PercorreOP(mng_decfunc * f,mng_op *op,lista_simb* tbl);
 void imprimetipoPascal(mng_tip*  tip);
-pilha* p1;
+
 
 
 
@@ -254,10 +254,12 @@ void PercorreListexp(mng_decfunc * f,mng_listexp *listexp,lista_simb* tbl,mng_ti
 	if(listexp != NULL){
 		printf("lista exp");
 		PercorreExp(f, (*listexp).exp,tbl);
+		
 		if ((*listexp).listexp != NULL){
 			printf(",");
 		}
 		PercorreListexp(f, (*listexp).listexp,tbl,tip);
+//		printf("cabei\n");
 	}
 }
 void PercorreExp(mng_decfunc * f,mng_exp *exp,lista_simb* tbl){
@@ -265,7 +267,11 @@ void PercorreExp(mng_decfunc * f,mng_exp *exp,lista_simb* tbl){
 	//printf("Percorrendo EXP tipo %s ",imprimetipono((*exp).tipoexp));
 
 	if((*exp).tipoexp == MNG_TIPBASE){
-	    /*printf(" EXP TIPBASE %d \n",(*exp).tipo);
+		printf("TESTE %d ",(*exp).numint.valor);
+	    	if ((*exp).tipo ==TIPO_INT){
+			printf("TESTE %d ",(*exp).numint.valor);
+		}
+		/*printf(" EXP TIPBASE %d \n",(*exp).tipo);
 		if((*exp).tipo != NULL){
                 printf("OIIIIIIIIIIIII \n");	
 			    	if (imprimetipbase((*(*exp).tipo).tipbase) == "TIPO_INT"){
@@ -294,7 +300,7 @@ void PercorreExp(mng_decfunc * f,mng_exp *exp,lista_simb* tbl){
 		    printf("EXP CHMET\n");
 		//printf("metodo: %s \n", (*(*exp).chmet).id.name);
 		tipo_no t=MNG_CHMET;
-		verificasimbolo(tbl,(*(*exp).chmet).id,t);
+		(*exp).tipo=verificasimbolo(tbl,(*(*exp).chmet).id,t);
 		
 		pilha * p=p1;
 		//printf(" tamanho pilha pro while: %d  ",tamanhopilha(p));
@@ -310,7 +316,7 @@ void PercorreExp(mng_decfunc * f,mng_exp *exp,lista_simb* tbl){
 		printf("{chamada na expressao} \n %s", (*(*exp).chmet).id.name);
 		printf("(");
 		PercorreListexp(f,(*(*exp).chmet).listexp,tbl,NULL);
-		printf(")");
+		printf(")\n");
 
 	}
 	if((*exp).tipoexp == MNG_TIPEXP){
@@ -358,22 +364,23 @@ void PercorreOP(mng_decfunc * f,mng_op *op,lista_simb* tbl){
 
 void PercorreVar(mng_decfunc * f,mng_var *var,lista_simb* tbl){
 	printf("Perc Var");
+	mng_var* aux= var;
  	while(var != NULL){
 		printf(" Percorrendo Var: %d",var);
 		//printf("acol %d", (*var).qtdACOL);
 		//printf("\nnome da var:%s ",(*var).id.name);
-		if ((*var).qtdACOL != 0){
+		if ((*aux).qtdACOL != 0){
 			printf(" [");
-			if ((*var).exp != NULL){
+			if ((*aux).exp != NULL){
 				
-				PercorreExp(f,(*var).exp,tbl);
+				PercorreExp(f,(*aux).exp,tbl);
 				printf(" {expressão} ");
 
 			}
 			printf(" ]\n");
 		}
-		if((*var).var != NULL){
-			var = (*var).var;
+		if((*aux).var != NULL){
+			aux = (*aux).var;
 		}else{ break;}
 		
 		//printf("\nqtd de ACOL:%d ",(*var).qtdACOL);
@@ -419,9 +426,10 @@ void PercorreCmd(mng_decfunc* f,mng_cmd* cmd,lista_simb* tbl){
 	if((*aux).tipocmd == MNG_ATRIB){
 
 		tipo_no t=MNG_VAR;
-
-		verificasimbolo(tbl,(*(*(*aux).atrib).var).id,t);
-		printf("%s :=", (*(*(*aux).atrib).var).id.name);
+			//	printf("TAMANHO PILHA %d \n",tamanhopilha(p1));
+	//	verificasimbolo(tbl,(*(*(*aux).atrib).var).id,t);
+    	VerificavarACOL(tbl,(*(*(*aux).atrib).var).id,t, (*(*(*aux).atrib).var).qtdACOL);
+		printf("%s := %d", (*(*(*aux).atrib).var).id.name,tamanhopilha(p1));
 		PercorreExp(f,(*(*aux).atrib).exp,tbl);
 		
 
@@ -442,7 +450,7 @@ void PercorreCmd(mng_decfunc* f,mng_cmd* cmd,lista_simb* tbl){
 
 
 	if((*aux).tipocmd == MNG_RETURN){
-		
+		//printf("RETURN ");
 		if ((*aux).ret.tipret == RET_EXP){
 			
 			
@@ -467,9 +475,9 @@ void PercorreCmd(mng_decfunc* f,mng_cmd* cmd,lista_simb* tbl){
 		printf("%s", (*(*aux).chmet).id.name);
 		printf("(");
 	
-		pilha * p=p1;
+		//pilha * p=p1;
 		//printf("pilha %u",p);
-	///	printf(" tamanho pilha pro while: %d  ",tamanhopilha(p));
+		printf(" tamanho pilha pro while: %d  ",tamanhopilha(p1));
 	/*	while ((*p).topo!=NULL){
 //			verificasimbolo(tbl,(*(*aux).chmet).id,(*(*p).topo).tbl,t);
 		//	printf("Verificando!");
@@ -520,7 +528,7 @@ void PercorreArvore(mng_prg* arvore,lista_simb* tbl){
 	  			printf("function");
 				while (tamanhopilha(p1)>1){
 //					printf("POP!");
-pop(p1);
+                    pop(p1);
 				}				
 				insert(tabela,p1);
 //				printf("Percorrendo árvore( decfunc): \n");	
@@ -538,7 +546,7 @@ pop(p1);
 				PercorrePars((*(*(*arvore).dec).decfunc).pars, tblfunc);
 				printf(")");
 				imprimetipoPascal((*(*(*arvore).dec).decfunc).tip); printf(";\n");
-				
+				printf("TAMANHO PILHA %d \n",tamanhopilha(p1));
 				Percorrebl1((*(*arvore).dec).decfunc, (*(*(*arvore).dec).decfunc).bloco,tblfunc);		
 //				printf("Imprimindo lista da funcao: ");imprimirlista(tblfunc);			
 		//		printf("decfunc analisada: \n");	

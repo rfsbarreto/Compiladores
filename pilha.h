@@ -57,6 +57,18 @@ void pop(pilha* p1){
 	return;
 }
 
+void pop1(pilha* p1){
+	if (!vazia(p1)){	
+		//Comandos de correção da referência,quando a pilha não está vazia	
+		dado* d;
+		d=(*p1).topo;
+		(*p1).topo=(*(*p1).topo).ant;  //Desempilhando o elemento do topo
+		free(d);
+	}else
+		//printf("Pilha vazia!!\n");	
+	return;
+}
+
 //Função que checa se a pilha está vazia
 int vazia (pilha* p){
 	return ((*p).topo==NULL);

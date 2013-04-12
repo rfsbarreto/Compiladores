@@ -1,10 +1,11 @@
 int a;
-
+int b;
 void f() {
 	int a;
 	
 
-	a = a + b;
+	a = a;
+	b=a;
 
 }
  
